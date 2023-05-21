@@ -7,9 +7,10 @@
 </template>
 <script setup lang="ts">
 import { Movies } from "~~/types";
-
+const props = defineProps<{
+  data: any;
+}>();
 let image: any;
-const { data } = await useFetch("/api/getData");
 </script>
 
 <style scoped>
