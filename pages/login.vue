@@ -17,7 +17,7 @@ const sendData = async () => {
 
   try {
     const response: any = await $fetch("/api/users", options);
-    console.log(response.result);
+
     if (response) {
       navigateTo("/browse");
     }
