@@ -1,0 +1,3 @@
+<template>
+  <MovieCard> </MovieCard>
+</template>
