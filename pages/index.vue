@@ -56,6 +56,9 @@ const sections: Section[] = [
     reverse: true,
   },
 ];
+// definePageMeta({
+//   middleware: "auth",
+// });
 </script>
 
 <template>
