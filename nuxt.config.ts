@@ -11,7 +11,7 @@ export default defineNuxtConfig({
 
     public: {
       firebase: {
-        apiKey: "",
+        apiKey: process.env.FIREBASE_API_KEY,
         authDomain: "",
         projectId: "",
         storageBucket: "",
