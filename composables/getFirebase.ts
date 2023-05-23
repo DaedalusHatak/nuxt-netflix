@@ -1,10 +1,11 @@
-import { log } from "console";
+
 import {
   getAuth,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   onAuthStateChanged,
 } from "firebase/auth";
+import { useAuthStore } from "~/stores/auth";
 
 export const createUser = async (email: string, password: string) => {
   const auth = getAuth();
@@ -19,29 +20,31 @@ export const createUser = async (email: string, password: string) => {
 export const signIn = async (email: string, password: string) => {
   const auth = getAuth();
   const credentials = await signInWithEmailAndPassword(auth, email, password);
-
+  const authStore = useAuthStore();
+  authStore.setAuthenticated(true);
+navigateTo('/browse')
   return credentials;
 };
+
 export const initUser = async () => {
   const auth = getAuth();
   const firebaseUser = useFirebaseUser();
   // @ts-ignore
-  firebaseUser.value = auth.currentUser;
+  // firebaseUser.value = auth.currentUser;
   // @ts-ignore
-  console.log(firebaseUser.value);
-  const userCookie = useCookie("userCookie");
+  const authStore = useAuthStore();
+ 
   onAuthStateChanged(auth, (user) => {
     if (user) {
-      // User is signed in, see docs for a list of available properties
-      // https://firebase.google.com/docs/reference/js/firebase.User
+      authStore.setAuthenticated(true);
       //@ts-ignore
       firebaseUser.value = user;
-      // ...
+      
     } else {
-      // User is signed out
-      // ...
+
     }
+
   });
+
   // @ts-ignore
-  console.log(firebaseUser);
 };
