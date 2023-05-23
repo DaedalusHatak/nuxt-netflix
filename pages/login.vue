@@ -34,7 +34,7 @@ const sendData = async () => {
 </script>
 
 <template>
-  <img class="hero-img" src="@/assets/hero.jpg" alt="" />
+  <img class="hero-img" src="@/assets/background.png" alt="" />
   <div class="shadow-hero-image"></div>
   <div class="hero-wrapper">
     <nav>

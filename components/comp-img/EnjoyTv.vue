@@ -1,16 +1,8 @@
 <template>
-    <img src="@/assets/tv.png" alt="" />
-      <div class="video-screen">
-        <video
-          data-uia="video"
-          autoplay="true"
-          playsinline="true"
-          muted="true"
-          loop="true"
-        >
-          <source src="@/assets/video.mp4" type="video/mp4" />
-        </video>
-        </div>
+  <img src="@/assets/pot2.png" alt="" />
+  <div class="video-screen">
+    <img src="@/assets/video2.jpg" alt="" />
+  </div>
 </template>
 
 <style scoped>
@@ -25,7 +17,8 @@
   left: 49.5%;
   transform: translate(-50%, -50%);
 }
-img{
-    z-index: 1;
+img {
+  z-index: 1;
   width: 100%;
-}</style>
+}
+</style>

@@ -1,37 +1,31 @@
 <script setup lang="ts">
-import GetStartedForm from '@/components/GetStartedForm.vue';
-import { RouterLink } from 'vue-router';
-
+import GetStartedForm from "@/components/GetStartedForm.vue";
+import { RouterLink } from "vue-router";
 </script>
 
 <template>
-        <img
-      class="hero-img"
-      src="@/assets/hero.jpg"
-      alt=""
-    />
-    <div class="shadow-hero-image"></div>
-    <div class="hero-wrapper">
-      <nav>
-        <span class="logo-span"
-          ><img src="@/assets/daedalus.png" alt="">
-        </span>
-        <RouterLink to="/login"  class="sign-in-button">Sign In</RouterLink>
-      </nav>
-      <div class="flex-hero">
-        <div class="info">  <h1>THIS IS NOT NETFLIX PAGE</h1>
-          <h1>IT IS ONLY PORTFOLIO PURPOSE</h1>
-          <h3>DON'T USE YOUR ACTUAL NETFLIX DATA</h3>
-        </div>
-        <div class="header-hero">
-       
-          <h1>Unlimited movies, TV shows, and more</h1>
-      
-          <p class="subtitle-hero">Watch anywhere. Cancel anytime.</p>
-         <GetStartedForm/>
-        </div>
+  <img class="hero-img" src="@/assets/background.png" alt="" />
+
+  <div class="shadow-hero-image"></div>
+  <div class="hero-wrapper">
+    <nav>
+      <span class="logo-span"><img src="@/assets/daedalus.png" alt="" /> </span>
+      <RouterLink to="/login" class="sign-in-button">Sign In</RouterLink>
+    </nav>
+    <div class="flex-hero">
+      <div class="info">
+        <h1>THIS IS NOT NETFLIX PAGE</h1>
+        <h1>IT IS ONLY PORTFOLIO PURPOSE</h1>
+        <h3>DON'T USE YOUR ACTUAL NETFLIX DATA</h3>
+      </div>
+      <div class="header-hero">
+        <h1>Unlimited movies, TV shows, and more</h1>
+
+        <p class="subtitle-hero">Watch anywhere. Cancel anytime.</p>
+        <GetStartedForm />
       </div>
     </div>
+  </div>
 </template>
 <style scoped lang="scss">
 @media screen and (min-width: 600px) {
@@ -49,44 +43,42 @@ import { RouterLink } from 'vue-router';
     max-width: calc(66.66666666666666% - 6rem);
   }
 }
-.info{
-  color:gold;
+.info {
+  color: gold;
 
-inset: 0;
-margin: auto;
-text-align: center;
- h1{
-  font-size:2.5rem;
-  font-family:fantasy;
-  letter-spacing: 0.2ch;
-  text-decoration:underline;
-  font-weight: 600;
- }
- h3{
-  font-size: 2rem;
-  padding-top: 1rem;
-  font-weight: 600;
- }
+  inset: 0;
+  margin: auto;
+  text-align: center;
+  h1 {
+    font-size: 2.5rem;
+    font-family: fantasy;
+    letter-spacing: 0.2ch;
+    text-decoration: underline;
+    font-weight: 600;
+  }
+  h3 {
+    font-size: 2rem;
+    padding-top: 1rem;
+    font-weight: 600;
+  }
 }
 @media (min-width: 720px) {
-
-  .info{
+  .info {
     position: absolute;
     inset: 0;
     top: 70px;
-    h1{
-  font-size:2.8rem;
-  font-family:fantasy;
-  letter-spacing: 0.2ch;
-  text-decoration:underline;
-  font-weight: 600;
- }
- h3{
-  font-size: 2rem;
-  font-weight: 600;
- }
+    h1 {
+      font-size: 2.8rem;
+      font-family: fantasy;
+      letter-spacing: 0.2ch;
+      text-decoration: underline;
+      font-weight: 600;
+    }
+    h3 {
+      font-size: 2rem;
+      font-weight: 600;
+    }
   }
-  
 }
 nav {
   display: flex;
@@ -103,9 +95,7 @@ nav {
   margin-right: auto;
 }
 .hero-image {
-
   background: rgb(0 0 0 / 40%);
-
 }
 .hero-wrapper {
   margin: auto;
@@ -113,10 +103,10 @@ nav {
 .hero-img {
   height: 100%;
   width: 100%;
-  
+
   position: absolute;
   object-fit: cover;
-  transform: scale(1.25) translateY(-10%);
+  transform: scale(1) translateX();
   overflow: hidden;
 }
 .flex-hero {
@@ -125,10 +115,10 @@ nav {
   padding: 9.875rem 0 4rem;
   min-height: 43.75rem;
 }
-a{
-    display: flex;
-    align-items: center;
-    text-decoration: none;
+a {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
 }
 .shadow-hero-image {
   background: rgb(0 0 0 / 40%);
@@ -155,7 +145,6 @@ a{
   margin: 1rem 0 0;
 }
 
-
 .logo {
   width: 9.25rem;
   height: 2.5rem;
@@ -163,8 +152,6 @@ a{
   fill: currentColor;
   display: block;
 }
-
-
 
 .sign-in-button {
   z-index: 1000;
@@ -186,5 +173,4 @@ a{
   background: rgb(229, 9, 20);
   color: rgb(255, 255, 255);
 }
-
 </style>

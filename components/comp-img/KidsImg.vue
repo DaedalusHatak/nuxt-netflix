@@ -1,10 +1,9 @@
 <template>
-    <img src="@/assets/kids.png" alt="" />
-
+  <img src="@/assets/kid.png" alt="" />
 </template>
 
 <style scoped>
-img{
+img {
   width: 100%;
 }
 </style>
