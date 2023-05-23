@@ -92,11 +92,11 @@ section {
 section::after {
   content: "";
 
-  width: 200%;
+  width: calc(100vw + 1.5rem);
   height: 0.2rem;
   bottom: -0.2rem;
   background-color: rgb(51, 26, 187, 0.8);
-
+  overflow: hidden;
   z-index: 10;
   position: absolute;
   display: flex;
