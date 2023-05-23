@@ -1,10 +1,14 @@
 <template>
   <div class="flex-center">
+    Hello {{ user?.email }}
     <button @click="signOutUser()">DANG GO BACK FAAAAAST</button>
     <MovieCard class="mov" :data="data"> </MovieCard>
   </div>
 </template>
 <script setup lang="ts">
+import { AuthCredential, getAuth } from "firebase/auth";
+const auth = getAuth();
+const user = auth.currentUser;
 const { data } = await useFetch("/api/getData");
 // definePageMeta({
 //   middleware: "auth",
@@ -12,7 +16,8 @@ const { data } = await useFetch("/api/getData");
 </script>
 <style scoped>
 .flex-center {
-  padding: 0 5rem;
+  text-align: center;
+  padding: 2rem 5rem;
   display: flex;
   flex-direction: column;
 }

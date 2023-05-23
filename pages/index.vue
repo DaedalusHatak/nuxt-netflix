@@ -84,7 +84,9 @@ const sections: Section[] = [
 .movies {
   padding: 2rem;
 }
-
+.hero-image {
+  overflow: hidden;
+}
 section {
   position: relative;
   padding: 0 1.5rem;

@@ -50,14 +50,14 @@ import { RouterLink } from "vue-router";
   margin: auto;
   text-align: center;
   h1 {
-    font-size: 2.5rem;
+    font-size: 2rem;
     font-family: fantasy;
     letter-spacing: 0.2ch;
     text-decoration: underline;
     font-weight: 600;
   }
   h3 {
-    font-size: 2rem;
+    font-size: 1.5rem;
     padding-top: 1rem;
     font-weight: 600;
   }
@@ -94,16 +94,14 @@ nav {
 .logo-span {
   margin-right: auto;
 }
-.hero-image {
-  background: rgb(0 0 0 / 40%);
-}
+
 .hero-wrapper {
   margin: auto;
 }
 .hero-img {
   height: 100%;
   width: 100%;
-
+  transform: translateX(-1.5rem);
   position: absolute;
   object-fit: cover;
   transform: scale(1) translateX();
