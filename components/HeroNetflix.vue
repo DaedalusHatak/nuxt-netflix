@@ -14,9 +14,9 @@ import { RouterLink } from "vue-router";
     </nav>
     <div class="flex-hero">
       <div class="info">
-        <h1>THIS IS NOT NETFLIX PAGE</h1>
-        <h1>IT IS ONLY PORTFOLIO PURPOSE</h1>
-        <h3>DON'T USE YOUR ACTUAL NETFLIX DATA</h3>
+        <h1>THIS IS NOT OFFICAL PAGE</h1>
+        <h1>IT IS ONLY DEMONSTRATION PURPOSE</h1>
+        <h3>DON'T USE YOUR ACTUAL OFFICAL DATA</h3>
       </div>
       <div class="header-hero">
         <h1>Unlimited movies, TV shows, and more</h1>
@@ -68,7 +68,7 @@ import { RouterLink } from "vue-router";
     inset: 0;
     top: 70px;
     h1 {
-      font-size: 2.8rem;
+      font-size: 2.5rem;
       font-family: fantasy;
       letter-spacing: 0.2ch;
       text-decoration: underline;
