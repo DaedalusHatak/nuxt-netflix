@@ -1,9 +1,9 @@
-
 import {
   getAuth,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   onAuthStateChanged,
+  signOut,
 } from "firebase/auth";
 import { useAuthStore } from "~/stores/auth";
 
@@ -22,8 +22,17 @@ export const signIn = async (email: string, password: string) => {
   const credentials = await signInWithEmailAndPassword(auth, email, password);
   const authStore = useAuthStore();
   authStore.setAuthenticated(true);
-navigateTo('/browse')
+  navigateTo("/browse");
   return credentials;
+};
+
+export const signOutUser = async () => {
+  const auth = getAuth();
+  const result = await auth.signOut();
+  const authStore = useAuthStore();
+  authStore.setAuthenticated(false);
+  navigateTo("/");
+  return result;
 };
 
 export const initUser = async () => {
@@ -33,17 +42,14 @@ export const initUser = async () => {
   // firebaseUser.value = auth.currentUser;
   // @ts-ignore
   const authStore = useAuthStore();
- 
+
   onAuthStateChanged(auth, (user) => {
     if (user) {
       authStore.setAuthenticated(true);
       //@ts-ignore
       firebaseUser.value = user;
-      
     } else {
-
     }
-
   });
 
   // @ts-ignore
