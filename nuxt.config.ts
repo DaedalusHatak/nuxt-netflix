@@ -8,15 +8,7 @@ export default defineNuxtConfig({
     apiSecret: "",
     apiLink: "",
     imgLink: "",
-    firebase: {
-      apiKey: "",
-      authDomain: "",
-      projectId: "",
-      storageBucket: "",
-      messagingSenderId: "",
-      appId: "",
-      measurementId: "",
-    },
+
     public: {
       firebase: {
         apiKey: "",
