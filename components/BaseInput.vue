@@ -17,7 +17,7 @@ function updateValue() {
 </script>
 
 <template>
-  <div>
+  <div class="divInput">
     <input
       :class="props.background ? 'background' : ''"
       :type="props.type"
@@ -47,14 +47,17 @@ function updateValue() {
 .background {
   background-color: #333 !important;
 }
+.divInput {
+  height: 100%;
+}
 input {
   display: block;
   color: white;
   padding: 1.5rem 1rem 0.5rem;
   border: none;
   border-radius: 1rem;
-
   width: 100%;
+  height: 100%;
   background-clip: padding-box;
   appearance: none;
   background-color: transparent !important;
