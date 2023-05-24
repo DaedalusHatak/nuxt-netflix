@@ -1,16 +1,18 @@
 <template>
-  <div class="flex-center" >
-    <!-- Hello {{ currentUser }}
-    <button @click="signOutUser()">DANG GO BACK FAAAAAST</button> -->
+  <div class="flex-center">
+    <button @click="client.auth.signOut()">DANG GO BACK FAAAAAST</button>
     <MovieCard class="mov" :data="data"> </MovieCard>
   </div>
 </template>
 <script setup lang="ts">
-
+const client = await useSupabaseClient();
+const user = await useSupabaseUser();
 const { data } = await useFetch("/api/getData");
-// definePageMeta({
-//   middleware: "auth",
-// });
+watchEffect(() => {
+  if (!user.value) {
+    navigateTo("/");
+  }
+});
 </script>
 <style scoped>
 .flex-center {

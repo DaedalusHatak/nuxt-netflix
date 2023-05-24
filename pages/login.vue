@@ -1,17 +1,17 @@
 <script setup lang="ts">
-const supabase = useSupabaseClient()
-const loading = ref(false)
-const userEmail = ref('')
-const userPassword = ref('')
+const supabase = await useSupabaseClient();
+const user = await useSupabaseUser();
+const loading = ref(false);
+const userEmail = ref("");
+const userPassword = ref("");
 async function signInWithEmail() {
   const { data, error } = await supabase.auth.signInWithPassword({
     email: userEmail.value,
     password: userPassword.value,
-  })
-if(error){
-  alert('Something went wrong, check your data!')
-}
-else navigateTo('/browse')
+  });
+  if (error) {
+    alert("Something went wrong, check your data!");
+  } else if (data) navigateTo("/browse");
 }
 // const handleLogin = async () => {
 //   try {
@@ -25,6 +25,11 @@ else navigateTo('/browse')
 //     loading.value = false
 //   }
 // }
+watchEffect(() => {
+  if (user.value) {
+    navigateTo("/browse");
+  }
+});
 </script>
 
 <template>
