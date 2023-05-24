@@ -21,7 +21,7 @@ export const signIn = async (email: string, password: string) => {
   const auth = getAuth();
   const credentials = await signInWithEmailAndPassword(auth, email, password);
   const authStore = useAuthStore();
-  authStore.setAuthenticated(true);
+  authStore.setAuthenticated(true, auth.currentUser);
   navigateTo("/browse");
   return credentials;
 };
@@ -30,7 +30,7 @@ export const signOutUser = async () => {
   const auth = getAuth();
   const result = await auth.signOut();
   const authStore = useAuthStore();
-  authStore.setAuthenticated(false);
+  authStore.setAuthenticated(false, auth.currentUser);
   navigateTo("/");
   return result;
 };
@@ -45,10 +45,11 @@ export const initUser = async () => {
 
   onAuthStateChanged(auth, (user) => {
     if (user) {
-      authStore.setAuthenticated(true);
+      authStore.setAuthenticated(true, user);
       //@ts-ignore
       firebaseUser.value = user;
     } else {
+      authStore.setAuthenticated(false,null)
     }
   });
 

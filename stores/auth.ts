@@ -1,10 +1,16 @@
 import { defineStore } from 'pinia'
 export const useAuthStore = defineStore("auth", () => {
   const isAuthenticated = ref(false)
-  function setAuthenticated(a:any) {
+  const userData = ref();
+  function setAuthenticated(a:any,b:any) {
+    const data = b;
     isAuthenticated.value = a
+    if(isAuthenticated.value === true)
+    {
+      userData.value = data.email;
+    }
   }
-  return { isAuthenticated, setAuthenticated }
+  return { userData,isAuthenticated, setAuthenticated }
 },
   {
     persist: {
