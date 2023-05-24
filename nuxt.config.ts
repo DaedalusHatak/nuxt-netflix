@@ -2,7 +2,7 @@
 export default defineNuxtConfig({
   css: ["~/assets/main.css", "~/assets/base.css"],
   // plugins: ['~/plugins/firebase.ts'],
-  modules: ["@pinia/nuxt", "@pinia-plugin-persistedstate/nuxt"],
+  modules: ["@pinia/nuxt", "@pinia-plugin-persistedstate/nuxt",'@nuxtjs/supabase'],
 
   runtimeConfig: {
     apiSecret: "",

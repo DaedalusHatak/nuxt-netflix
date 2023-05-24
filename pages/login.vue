@@ -1,36 +1,30 @@
 <script setup lang="ts">
-import BaseInput from "@/components/BaseInput.vue";
-const emailInput = ref<string>("");
-const password = ref<string>("");
-let isValid: any;
-const sendData = async () => {
-  await signIn(emailInput.value, password.value);
-};
-// const sendData = async () => {
-//   const emailValue = emailInput.value; // Assuming you have the email value available
-
-//   const options: any = {
-//     method: "POST",
-//     headers: {
-//       "Content-Type": "application/json", // Set the content type header to JSON
-//     },
-//     body: JSON.stringify({ email: emailValue, user: isValid }), // Stringify the request body
-//   };
-
+const supabase = useSupabaseClient()
+const loading = ref(false)
+const userEmail = ref('')
+const userPassword = ref('')
+async function signInWithEmail() {
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email: userEmail.value,
+    password: userPassword.value,
+  })
+if(error){
+  alert('Something went wrong, check your data!')
+}
+else navigateTo('/browse')
+}
+// const handleLogin = async () => {
 //   try {
-//     const response: any = await $fetch("/api/users", options);
-
-//     if (response.result) {
-//       navigateTo("/browse");
-//     }
-//   } catch (error) {
-//     console.error("Error fetching data:", error);
+//     loading.value = true
+//     const { error } = await supabase.auth.signInWithOtp({ email: email.value })
+//     if (error) throw error
+//     alert('Check your email for the login link!')
+//   } catch (error:any) {
+//     alert(error.error_description || error.message)
+//   } finally {
+//     loading.value = false
 //   }
-//   // ...
-// };
-// definePageMeta({
-//   middleware: "auth",
-// });
+// }
 </script>
 
 <template>
@@ -44,10 +38,10 @@ const sendData = async () => {
       <div class="form-hero">
         <div class="login-form">
           <h1>Sign In</h1>
-          <form @submit.prevent="sendData()" name="login">
+          <form @submit.prevent="signInWithEmail" name="login">
             <div>
               <BaseInput
-                v-model="emailInput"
+                v-model="userEmail"
                 name="Email or phone number"
                 type="email"
                 :background="true"
@@ -55,7 +49,7 @@ const sendData = async () => {
             </div>
             <div>
               <BaseInput
-                v-model="password"
+                v-model="userPassword"
                 name="Password"
                 type="password"
                 :background="true"
