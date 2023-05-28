@@ -1,10 +1,22 @@
 <script setup lang="ts">
 import BaseInput from "@/components/BaseInput.vue";
+import { NuxtH3 } from "nuxt-elements";
 const emailInput = ref<string>("");
 const password = ref<string>("");
 let isValid: any;
 const sendData = async () => {
-  await signIn(emailInput.value, password.value);
+  await signIn(emailInput.value, password.value)
+    .then((user) => {
+      return user.user.getIdToken();
+    })
+    .then((idToken) => {
+      const csrfToken = useCookie("token");
+      useFetch("/api/user", { method: "POST", body: { csrfToken, idToken } });
+    })
+    .then((res) => {
+      console.log(res);
+      navigateTo("/browse");
+    });
 };
 // const sendData = async () => {
 //   const emailValue = emailInput.value; // Assuming you have the email value available

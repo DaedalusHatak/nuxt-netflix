@@ -1,15 +1,13 @@
 <template>
-  <div class="flex-center" >
-    Hello {{ currentUser }}
-    <button @click="signOutUser()">DANG GO BACK FAAAAAST</button>
+  <div class="flex-center">
+    <button @click="logOut()">DANG GO BACK FAAAAAST</button>
     <MovieCard class="mov" :data="data"> </MovieCard>
   </div>
 </template>
 <script setup lang="ts">
-import { useAuthStore } from "~/stores/auth";
-
-const currentUser = useAuthStore().userData;
-console.log(currentUser)
+async function logOut() {
+  console.log("test");
+}
 const { data } = await useFetch("/api/getData");
 // definePageMeta({
 //   middleware: "auth",

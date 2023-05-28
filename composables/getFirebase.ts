@@ -45,13 +45,14 @@ export const initUser = async () => {
 
   onAuthStateChanged(auth, (user) => {
     if (user) {
-      authStore.setAuthenticated(true, user);
-      //@ts-ignore
-      firebaseUser.value = user;
+      console.log("initUser");
     } else {
-      authStore.setAuthenticated(false,null)
     }
   });
-
+  console.log("initUser");
+  // auth.currentUser.getIdToken(true).then((idToken) => {
+  //   const csrfToken = useCookie("token");
+  //   useFetch("/api/user", { method: "POST", body: { csrfToken, idToken } });
+  // });
   // @ts-ignore
 };

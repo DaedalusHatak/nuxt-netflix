@@ -13,16 +13,15 @@
 //     return navigateTo("/login");
 //   }
 // });
-import { useAuthStore } from "~/stores/auth"
-export default defineNuxtRouteMiddleware((to, from) => {
-  const authStore = useAuthStore()
-  console.log(authStore.isAuthenticated)
-  if (authStore.isAuthenticated && to.path === "/") {
-         return navigateTo("/browse", { replace: true });
-       } else if (authStore.isAuthenticated && to.path === "/login") {
-         return navigateTo("/browse", { replace: true });
-       } else if (!authStore.isAuthenticated && to.path === "/browse") {
-         return navigateTo("/login", { replace: true });
- 
+import { useAuthStore } from "~/stores/auth";
+export default defineNuxtRouteMiddleware(async (to, from) => {
+  const test = useCookie("token");
+  console.log("middleware cookie", test.value);
+  if (test.value && to.path === "/") {
+    return navigateTo("/browse", { replace: true });
+  } else if (test.value && to.path === "/login") {
+    return navigateTo("/browse", { replace: true });
+  } else if (!test.value && to.path === "/browse") {
+    return navigateTo("/login", { replace: true });
   }
-})
+});
