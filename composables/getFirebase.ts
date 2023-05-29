@@ -46,7 +46,7 @@ export const initUser = () => {
         });
         const router = useRoute();
         console.log(router.path);
-        if (router.path === "/browse") {
+        if (router.path === "/browse" && !scrfToken.value) {
           navigateTo("/login");
         }
       }
