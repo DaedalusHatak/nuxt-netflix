@@ -42,7 +42,7 @@ export const initUser =  () => {
 			} else {
         console.log('uyser else')
 				await useFetch("/api/keepLogged", { method: "POST", body: {token:null,isToken:false } })
-        navigateTo('/login')
+       
 				
 	
 			}
