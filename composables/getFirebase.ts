@@ -1,58 +1,65 @@
 import {
-  getAuth,
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  onAuthStateChanged,
-  signOut,
-} from "firebase/auth";
-import { useAuthStore } from "~/stores/auth";
+	getAuth,
+	createUserWithEmailAndPassword,
+	signInWithEmailAndPassword,
+	onAuthStateChanged,
+	signOut,
+} from 'firebase/auth';
 
 export const createUser = async (email: string, password: string) => {
-  const auth = getAuth();
-  const credentials = await createUserWithEmailAndPassword(
-    auth,
-    email,
-    password
-  );
-  navigateTo("/browse");
-  return credentials;
+	const auth = getAuth();
+	const credentials = await createUserWithEmailAndPassword(
+		auth,
+		email,
+		password
+	);
+	navigateTo('/browse');
+	return credentials;
 };
 export const signIn = async (email: string, password: string) => {
-  const auth = getAuth();
-  const credentials = await signInWithEmailAndPassword(auth, email, password);
-  const authStore = useAuthStore();
-  authStore.setAuthenticated(true, auth.currentUser);
-  navigateTo("/browse");
-  return credentials;
+	const auth = getAuth();
+	const credentials = await signInWithEmailAndPassword(auth, email, password);
+
+	navigateTo('/browse');
+	return credentials;
+};
+
+export const initUser =  () => {
+	const auth = getAuth();
+
+	const scrfToken = useCookie('token');
+	onAuthStateChanged(auth, async (user) => {
+		if (user) {
+			const tok = await user.getIdToken();
+			let response;
+	
+			if (scrfToken.value === tok) {
+				await useFetch('/api/keepLogged', {
+					method: 'POST',
+					body: { token: scrfToken, isToken: true },
+				})
+     
+			} else {
+        console.log('uyser else')
+				await useFetch("/api/keepLogged", { method: "POST", body: {token:null,isToken:false } })
+        navigateTo('/login')
+				
+	
+			}
+		} 
+    
+    else {
+		}
+	});
 };
 
 export const signOutUser = async () => {
-  const auth = getAuth();
-  const result = await auth.signOut();
-  const authStore = useAuthStore();
-  authStore.setAuthenticated(false, auth.currentUser);
-  navigateTo("/");
-  return result;
-};
+	const auth = getAuth();
+	const result = await auth.signOut();
+	const authToken = null;
+	const scrfToken = useCookie('token');
+	await useFetch('/api/auth', { method: 'POST', body: { scrfToken, authToken } });
 
-export const initUser = async () => {
-  const auth = getAuth();
-  const firebaseUser = useFirebaseUser();
-  // @ts-ignore
-  // firebaseUser.value = auth.currentUser;
-  // @ts-ignore
-  const authStore = useAuthStore();
-
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      console.log("initUser");
-    } else {
-    }
-  });
-  console.log("initUser");
-  // auth.currentUser.getIdToken(true).then((idToken) => {
-  //   const csrfToken = useCookie("token");
-  //   useFetch("/api/user", { method: "POST", body: { csrfToken, idToken } });
-  // });
-  // @ts-ignore
+	navigateTo('/');
+	return result;
 };

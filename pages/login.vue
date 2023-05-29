@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import BaseInput from "@/components/BaseInput.vue";
 import { NuxtH3 } from "nuxt-elements";
+import auth from "~/server/api/auth";
 const emailInput = ref<string>("");
 const password = ref<string>("");
 let isValid: any;
@@ -9,15 +10,16 @@ const sendData = async () => {
     .then((user) => {
       return user.user.getIdToken();
     })
-    .then((idToken) => {
-      const csrfToken = useCookie("token");
-      useFetch("/api/user", { method: "POST", body: { csrfToken, idToken } });
+    .then(async (authToken) => {
+      const scrfToken = useCookie("token");
+      await useFetch("/api/auth", { method: "POST", body: { scrfToken, authToken } });
     })
-    .then((res) => {
+    .then(async (res) => {
       console.log(res);
       navigateTo("/browse");
     });
 };
+
 // const sendData = async () => {
 //   const emailValue = emailInput.value; // Assuming you have the email value available
 

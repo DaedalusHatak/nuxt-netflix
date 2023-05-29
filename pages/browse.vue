@@ -1,13 +1,12 @@
 <template>
   <div class="flex-center">
-    <button @click="logOut()">DANG GO BACK FAAAAAST</button>
+    <button @click="signOutUser()">DANG GO BACK FAAAAAST</button>
     <MovieCard class="mov" :data="data"> </MovieCard>
   </div>
 </template>
 <script setup lang="ts">
-async function logOut() {
-  console.log("test");
-}
+
+
 const { data } = await useFetch("/api/getData");
 // definePageMeta({
 //   middleware: "auth",
