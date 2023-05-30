@@ -4,16 +4,16 @@ import BaseInput from './BaseInput.vue';
 defineProps({
     isMax: String,
 });
-
+const emailRegister = ref('')
 </script>
 
 <template>
 
 <div class="get-started">
             <h3>Ready to watch? Enter your email to create or restart your membership.</h3>
-            <form :style="isMax ? `max-width:${isMax}` : ''" action="">
+            <form @submit.prevent="createUser(emailRegister)" :style="isMax ? `max-width:${isMax}` : ''" action="">
               <div class="input">
-                <BaseInput type="email" name="Email Address"  :background="false"
+                <BaseInput v-model="emailRegister" type="email" name="Email Address"  :background="false"
              />
 
               </div>

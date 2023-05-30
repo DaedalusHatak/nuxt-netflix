@@ -1,7 +1,5 @@
 <script setup lang="ts">
 import BaseInput from "@/components/BaseInput.vue";
-import { NuxtH3 } from "nuxt-elements";
-import auth from "~/server/api/auth";
 const emailInput = ref<string>("");
 const password = ref<string>("");
 let isValid: any;
@@ -19,32 +17,6 @@ const sendData = async () => {
       navigateTo("/browse");
     });
 };
-
-// const sendData = async () => {
-//   const emailValue = emailInput.value; // Assuming you have the email value available
-
-//   const options: any = {
-//     method: "POST",
-//     headers: {
-//       "Content-Type": "application/json", // Set the content type header to JSON
-//     },
-//     body: JSON.stringify({ email: emailValue, user: isValid }), // Stringify the request body
-//   };
-
-//   try {
-//     const response: any = await $fetch("/api/users", options);
-
-//     if (response.result) {
-//       navigateTo("/browse");
-//     }
-//   } catch (error) {
-//     console.error("Error fetching data:", error);
-//   }
-//   // ...
-// };
-// definePageMeta({
-//   middleware: "auth",
-// });
 </script>
 
 <template>

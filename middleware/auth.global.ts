@@ -22,9 +22,11 @@ export default defineNuxtRouteMiddleware( async (to, from) => {
   const test =  useCookie("token");
   // @ts-ignore
   const app = useNuxtApp()
-
+const local = localStorage.getItem('emailForSignIn');
+console.log(local)
 if(app){
-  if (test.value && to.path === "/") {
+  if(local) {return callWithNuxt(app, () => navigateTo('/confirm'))}
+  else if (test.value && to.path === "/") {
     return callWithNuxt(app, () => navigateTo('/browse'))
   } else if (test.value && to.path === "/login") {
     return callWithNuxt(app, () => navigateTo('/browse'))
