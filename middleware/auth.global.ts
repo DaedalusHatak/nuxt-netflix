@@ -1,37 +1,35 @@
-// export default defineNuxtRouteMiddleware(async (to, from) => {
-//   const firebaseUser = useFirebaseUser();
-// //   console.log("Middleware firebaseUser")
-// // console.log(firebaseUser)
 
+import { getAuth } from "firebase-admin/auth";
 import { callWithNuxt } from "nuxt/app";
 
-// console.log("Middleware value of firebaseUser")
-//   console.log(firebaseUser.value)
-//   if (firebaseUser.value && to.path === "/") {
-//     return navigateTo("/browse");
-//   } else if (firebaseUser.value && to.path === "/login") {
-//     return navigateTo("/browse");
-//   } else if (!firebaseUser.value && to.path === "/browse") {
-//     return navigateTo("/login");
-//   }
-// });
 
-export default defineNuxtRouteMiddleware( async (to, from) => {
-  if (process.server) return
-  if (process.client) return
-  const test =  useCookie("token");
-  // @ts-ignore
-  const app = useNuxtApp()
-const local = localStorage.getItem('emailForSignIn');
-console.log(local)
-if(app){
-  if(local) {return callWithNuxt(app, () => navigateTo('/confirm'))}
-  else if (test.value && to.path === "/") {
-    return callWithNuxt(app, () => navigateTo('/browse'))
-  } else if (test.value && to.path === "/login") {
-    return callWithNuxt(app, () => navigateTo('/browse'))
-  } else if (!test.value && to.path === "/browse") {
-    return callWithNuxt(app, () => navigateTo('/login'))
-  }
+export default defineNuxtRouteMiddleware(async (to, from) => {
+const test =  useCookie("token");
+if(process.server){
+let papa;
+const isAuthorised = ref();
+
+   if(test.value){
+await $fetch('/api/ser').then((set)=>{
+  return papa =  set;
+})
+   }
+
+if(papa){
+  console.log('if')
+  if(to.path !== "/browse"){
+    console.log('if if ')
+    return navigateTo('/browse')}
+  
+  
 }
+else if(!papa && to.path === "/browse"){
+  console.log('else')
+  return navigateTo('/login')
+}
+
+   }
+
+
+
 });

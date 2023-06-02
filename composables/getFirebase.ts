@@ -20,10 +20,10 @@ export const createUser = async (email: string) => {
 
 };
 export const signIn = async (email: string, password: string) => {
+  console.log('signIn')
   const auth = getAuth();
   const credentials = await signInWithEmailAndPassword(auth, email, password);
-
-  navigateTo("/browse");
+  navigateTo('/browse')
   return credentials;
 };
 
