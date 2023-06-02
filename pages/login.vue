@@ -14,7 +14,7 @@ const sendData = async () => {
     })
     .then(async (res) => {
       console.log('res',res);
-
+      return navigateTo('/browse')
     });
 };
 </script>
