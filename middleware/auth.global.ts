@@ -5,7 +5,7 @@ import { callWithNuxt } from "nuxt/app";
 
 export default defineNuxtRouteMiddleware(async (to, from) => {
 const test =  useCookie("token");
-if(process.server){
+
 let papa;
 const isAuthorised = ref();
 
@@ -28,7 +28,7 @@ else if(!papa && to.path === "/browse"){
   return navigateTo('/login')
 }
 
-   }
+
 
 
 
