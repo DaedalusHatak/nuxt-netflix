@@ -13,8 +13,8 @@ const sendData = async () => {
       await useFetch("/api/auth", { method: "POST", body: { scrfToken, authToken } });
     })
     .then(async (res) => {
-      console.log(res);
-      navigateTo("/browse");
+      console.log('res',res);
+
     });
 };
 </script>
