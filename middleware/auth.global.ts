@@ -1,15 +1,15 @@
 
-import { getAuth } from "firebase-admin/auth";
-import { callWithNuxt } from "nuxt/app";
-
 
 export default defineNuxtRouteMiddleware(async (to, from) => {
+
+
 const test =  useCookie("token");
 
 let papa;
 
-   if(test.value){
+  
 await $fetch('/api/ser',{method:'POST',body:{test:test.value}}).then((set)=>{
+  console.log('fetch')
   return papa =  set;
 })
 if(papa){
@@ -24,7 +24,7 @@ else if(!papa && to.path === "/browse"){
  
   return navigateTo('/login')
 }
-   }
+ 
 
 
 

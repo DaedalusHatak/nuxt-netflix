@@ -3,6 +3,8 @@ import BaseInput from "@/components/BaseInput.vue";
 const emailInput = ref<string>("");
 const password = ref<string>("");
 let isValid: any;
+const proc = process.client;
+const prop = process.server;
 const sendData = async () => {
   await signIn(emailInput.value, password.value)
     .then((user) => {
@@ -11,10 +13,11 @@ const sendData = async () => {
     .then(async (authToken) => {
       const scrfToken = useCookie("token");
       await useFetch("/api/auth", { method: "POST", body: { scrfToken, authToken } });
+      navigateTo('/browse')
     })
-    .then(async (res) => {
+    .then((res) => {
       console.log('res',res);
-      return navigateTo('/browse')
+     
     });
 };
 </script>
@@ -30,7 +33,7 @@ const sendData = async () => {
       <div class="form-hero">
         <div class="login-form">
           <h1>Sign In</h1>
-          <form @submit.prevent="sendData()" name="login">
+          <form v-if="proc" @submit.prevent="sendData()" name="login">
             <div>
               <BaseInput
                 v-model="emailInput"

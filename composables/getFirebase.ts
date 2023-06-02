@@ -23,7 +23,7 @@ export const signIn = async (email: string, password: string) => {
   console.log('signIn')
   const auth = getAuth();
   const credentials = await signInWithEmailAndPassword(auth, email, password);
-  navigateTo('/browse')
+  
   return credentials;
 };
 
