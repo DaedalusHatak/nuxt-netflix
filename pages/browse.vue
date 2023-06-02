@@ -1,12 +1,12 @@
 <script setup lang="ts">
-const prop = process.server;
+
 
 const { data } = await useFetch("/api/getData");
 // definePageMeta({
 //   middleware: "auth",
 // });
 </script>
-<template v-if="prop">
+<template>
   <div class="flex-center">
     <button @click="signOutUser()">DANG GO BACK FAAAAAST</button>
     <MovieCard class="mov" :data="data"> </MovieCard>

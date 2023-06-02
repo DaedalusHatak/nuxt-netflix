@@ -4,7 +4,6 @@ const emailInput = ref<string>("");
 const password = ref<string>("");
 let isValid: any;
 const proc = process.client;
-const prop = process.server;
 const sendData = async () => {
   await signIn(emailInput.value, password.value)
     .then((user) => {
