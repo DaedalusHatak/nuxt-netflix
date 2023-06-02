@@ -20,6 +20,7 @@
     "@pinia/nuxt": "^0.4.11",
     "body-parser": "^1.20.2",
     "firebase": "^9.22.0",
+    "firebase-admin": "^11.9.0",
     "node-jsonwebtoken": "^0.0.1",
     "nux": "^2.1.1",
     "nuxi": "^3.5.0",
