@@ -1,8 +1,10 @@
 export default defineEventHandler(async (event) => {
-    const {scrfToken,authToken } = await readBody(event);
-    const baba = await setCookie(event,'token',authToken);
-    console.log('baba auth')
-return true;
+  const { scrfToken, idToken } = await readBody(event);
+  if (!idToken) {
+    deleteCookie(event, "__token");
+  } else {
+    setCookie(event, "session", idToken);
+  }
 
-  });
-  
+  return true;
+});

@@ -9,14 +9,18 @@ const sendData = async () => {
     .then((user) => {
       return user.user.getIdToken();
     })
-    .then(async (authToken) => {
+    .then(async (idToken) => {
       const scrfToken = useCookie("token");
-      await useFetch("/api/auth", { method: "POST", body: { scrfToken, authToken } });
-      navigateTo('/browse')
+      await useFetch("/api/signIn", {
+        method: "POST",
+        body: { scrfToken, idToken },
+      });
     })
     .then((res) => {
-      console.log('res',res);
-     
+      navigateTo("/browse");
+    })
+    .catch(() => {
+      navigateTo("/login");
     });
 };
 </script>
