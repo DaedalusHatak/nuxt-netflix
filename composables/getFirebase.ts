@@ -23,44 +23,14 @@ export const signIn = async (email: string, password: string) => {
   return credentials;
 };
 
-// export const initUser = async () => {
-//   const auth = getAuth();
-//   const scrfToken = useCookie("session");
-//   onAuthStateChanged(auth, async (user) => {
-//     if (user) {
-//       const tok = await user.getIdToken();
-//       let response;
-
-//       if (scrfToken.value === tok) {
-//         await useFetch("/api/keepLogged", {
-//           method: "POST",
-//           body: { token: scrfToken, isToken: true },
-//         });
-//       } else {
-//         console.log("uyser else");
-//         await useFetch("/api/keepLogged", {
-//           method: "POST",
-//           body: { token: null, isToken: false },
-//         });
-//         const router = useRoute();
-//         console.log(router.path);
-//         if (router.path === "/browse" && !scrfToken.value) {
-//           navigateTo("/login");
-//         }
-//       }
-//     } else {
-//     }
-//   });
-// };
-
 export const signOutUser = async () => {
   const auth = getAuth();
   const result = await auth.signOut();
-  const idToken = undefined;
-  const scrfToken = useCookie("__token");
-  await useFetch("/api/auth", {
+
+  const idToken = useCookie("__token");
+  await useFetch("/api/signOut", {
     method: "POST",
-    body: { scrfToken, idToken },
+    body: { idToken },
   });
 
   navigateTo("/");

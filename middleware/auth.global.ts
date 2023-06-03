@@ -1,12 +1,13 @@
 export default defineNuxtRouteMiddleware(async (to, from) => {
   const test = useCookie("__token");
   let firebase;
-  await $fetch("/api/ser", { method: "POST", body: { test: test.value } }).then(
-    (set) => {
-      firebase = set;
-      return firebase;
-    }
-  );
+  await $fetch("/api/checkSession", {
+    method: "POST",
+    body: { test: test.value },
+  }).then((set) => {
+    firebase = set;
+    return firebase;
+  });
   if (firebase) {
     if (to.path !== "/browse") {
       return navigateTo("/browse");
