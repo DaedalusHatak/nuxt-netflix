@@ -1,6 +1,4 @@
 <script setup lang="ts">
-
-
 const { data } = await useFetch("/api/getData");
 // definePageMeta({
 //   middleware: "auth",
@@ -8,7 +6,8 @@ const { data } = await useFetch("/api/getData");
 </script>
 <template>
   <div class="flex-center">
-    <button @click="signOutUser()">DANG GO BACK FAAAAAST</button>
+    <button @click="signOutUser()">Sign Out</button>
+    <button @click="navigateTo('/')">Go Home, should not take you there</button>
     <MovieCard class="mov" :data="data"> </MovieCard>
   </div>
 </template>
