@@ -18,8 +18,14 @@ export const createUser = async (email: string) => {
 export const signIn = async (email: string, password: string) => {
   console.log("signIn");
   const auth = getAuth();
-  const credentials = await signInWithEmailAndPassword(auth, email, password);
-
+  const credentials = await signInWithEmailAndPassword(
+    auth,
+    email,
+    password
+  ).catch((err) => {
+    alert("Check your data!");
+    return err;
+  });
   return credentials;
 };
 

@@ -3,11 +3,18 @@ import BaseInput from "@/components/BaseInput.vue";
 const emailInput = ref<string>("");
 const password = ref<string>("");
 let isValid: any;
+const isSent = ref<boolean>(false);
 const proc = process.client;
 const sendData = async () => {
+  isSent.value = true;
   await signIn(emailInput.value, password.value)
     .then((user) => {
-      return user.user.getIdToken();
+      if (user.user) {
+        return user.user.getIdToken();
+      } else {
+        isSent.value = false;
+        return;
+      }
     })
     .then(async (idToken) => {
       const scrfToken = useCookie("token");
@@ -53,7 +60,12 @@ const sendData = async () => {
                 :background="true"
               />
             </div>
-            <button class="get-started-button">Sign In</button>
+            <button class="get-started-button">
+              <span v-if="!isSent">Sign In</span>
+              <div v-else class="loader">
+                <span class="loader-circle"></span>
+              </div>
+            </button>
           </form>
         </div>
         <div class="reg-link">
@@ -66,6 +78,27 @@ const sendData = async () => {
 </template>
 
 <style scoped lang="scss">
+.loader {
+  border: 15px solid #f3f3f3; /* Light grey */
+  border-top: 15px solid #3498db; /* Blue */
+  border-radius: 100%;
+  position: relative;
+  height: 100%;
+
+  animation: spin 2s linear infinite;
+}
+.loader span {
+  background-color: rgb(51, 26, 187);
+  display: block;
+  position: absolute;
+  inset: 0;
+  left: -16px;
+  top: -16px;
+  border-radius: 100%;
+  height: 32px;
+  width: 32px;
+  transform: scale(0.75, 0.75);
+}
 h1 {
   text-align: left;
   margin-bottom: 50px;
@@ -178,7 +211,14 @@ form {
   color: rgb(255, 255, 255);
   border-radius: 1rem;
 }
-
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
 @media screen and (min-width: 600px) {
   nav {
     max-width: calc(100% - 4rem);

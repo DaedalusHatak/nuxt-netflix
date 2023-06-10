@@ -10,12 +10,7 @@ export default defineNuxtPlugin(async (nuxtApp) => {
     const app = initializeApp({ credential: cert(firebaseConfig) });
     console.log("server firebase");
     const auth = getAuth();
-    const token = useCookie("session");
-    // @ts-ignore
 
-    if (token.value) {
-      const dupa = auth.verifySessionCookie(token.value, true);
-    } else {
-    }
+    // @ts-ignore
   }
 });

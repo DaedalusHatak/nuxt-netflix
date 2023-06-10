@@ -9,6 +9,7 @@ export default defineEventHandler(async (event) => {
     .verifySessionCookie(idToken)
     .then((decodedClaims) => {
       deleteCookie(event, "__token");
+
       return auth.revokeRefreshTokens(decodedClaims.sub);
     })
     .catch((err) => {
