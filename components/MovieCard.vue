@@ -13,18 +13,23 @@ const props = defineProps<{
 let image: any;
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .movies {
   display: grid;
+  grid-template-columns: repeat(5, auto); 
   justify-self: center;
-  grid-template-columns: 1fr;
+
+
   gap: 2rem;
+div{
+  max-width: fit-content;
+}
 }
 img {
   width: 100%;
   height: auto;
 }
-@media (min-width: 600px) {
+/* @media (min-width: 600px) {
   .movies {
     display: grid;
     justify-self: center;
@@ -37,5 +42,5 @@ img {
     justify-self: center;
     grid-template-columns: 1fr 1fr 1fr;
   }
-}
+} */
 </style>

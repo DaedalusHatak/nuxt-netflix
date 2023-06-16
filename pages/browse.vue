@@ -15,7 +15,7 @@ const { data } = await useFetch("/api/getData");
 <style scoped>
 .flex-center {
   text-align: center;
-  padding: 2rem 5rem;
+  padding: 2rem 3rem;
   display: flex;
   flex-direction: column;
 }
