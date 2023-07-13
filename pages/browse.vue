@@ -8,11 +8,21 @@ const { data } = await useFetch("/api/getData");
   <div class="flex-center">
     <button @click="signOutUser()">Sign Out</button>
     <button @click="navigateTo('/')">Go Home, should not take you there</button>
-    <MovieCard class="mov" :data="data"> </MovieCard>
+    <div class="movie-group">
+    <MovieCard :data="data"> </MovieCard>
+    </div>
+    <div class="movie-group">
+    <MovieCard :data="data"> </MovieCard>
+    </div>
   </div>
 </template>
 
 <style scoped>
+.movie-group{
+  display:flex;
+  justify-content: center;
+ width: 100%;
+}
 .flex-center {
   text-align: center;
   padding: 2rem 3rem;
