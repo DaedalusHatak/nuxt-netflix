@@ -8,7 +8,9 @@ const { data } = await useFetch("/api/getData");
   <div class="flex-center">
     <button @click="signOutUser()">Sign Out</button>
     <button @click="navigateTo('/')">Go Home, should not take you there</button>
-    <MovieCard class="mov" :data="data"> </MovieCard>
+    <div class="movie-wrapper">
+      <MovieCard class="mov" :data="data"> </MovieCard>
+    </div>
   </div>
 </template>
 
