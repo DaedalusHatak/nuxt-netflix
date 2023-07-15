@@ -2,21 +2,19 @@
 const items = ref([{id:1,name:'foo'},{id:2,name:'boo'}])
 const selected = ref(new Set<number>());
 
+function checkSelect(){
+	if(items.value.every(item => selected.value.has(item.id))){
+		return selected.value.clear();
+	}else{return items.value.forEach(item => selected.value.add(item.id))
+		
+		
+	}
+}
+const selectAll = computed(()=>{
 
-const selectAll = computed({
-get: ()=>{
-if(items.value.every(item => selected.value.has(item.id))) {
-	return true;
-}
-},
-set: (test)=>{
-	if(test){
-		items.value.forEach(item => selected.value.add(item.id))
-	}
-	else{
-		selected.value.clear();
-	}
-}
+checkSelect()
+
+
 })
 </script>
 

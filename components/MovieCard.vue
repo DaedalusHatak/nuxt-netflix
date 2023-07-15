@@ -21,6 +21,7 @@
     <div @click="forward()" class="handle right-handle"></div>
   </div>
 </template>
+
 <script setup lang="ts">
 import { Transform } from "stream";
 import { Movies } from "~~/types";
@@ -65,8 +66,10 @@ function back() {
     padding: 0.25rem;
   }
 }
+
 img {
   width: 100%;
+  display: block;
   height: auto;
   aspect-ratio: 16/9;
 }
