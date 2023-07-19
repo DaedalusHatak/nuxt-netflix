@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div @click="back()" class="handle left-handle"></div>
+    <div v-if="wasTriggered" @click="back()" class="handle left-handle"></div>
 
     <div
       class="slider-wrapper"
@@ -33,13 +33,19 @@ const props = defineProps<{
   size: number;
 }>();
 let image: any;
+//Defines which direction Carousel will move (1) -> Right or (-1) -> Left
 const carouselMove = ref(0);
+//Defines if carousel was triggered allowing user to go back and creating infinite loop
 const wasTriggered = ref(0);
+//Defines how many elements should be shown
 const screenVariable = ref<number>(props.size);
+//Returns right flex-basis (how much elements at DOM)
 const flexBasis = computed(() => {
   return 100 / screenVariable.value;
 });
+//copy of array
 const slides = ref([...props.data.results]);
+//Adds proper styling based on buttons that were clicked and if its 1st click or not
 const transform = computed(() => {
   if (wasTriggered.value === 0) {
     return "transform: translate3d(0%,0px,0px)";
@@ -51,6 +57,7 @@ const transform = computed(() => {
     return "transform: translate3d(0%,0px,0px)";
   else return "transform: translate3d(-100%,0px,0px)";
 });
+//Forward button with cutting first X elements and putting them at the end
 function forward() {
   carouselMove.value = 1;
   if (wasTriggered.value < 2) {
@@ -73,6 +80,7 @@ function forward() {
     }, 750);
   }
 }
+//Forward button with cutting last X elements and putting them at the start
 
 function back() {
   console.log(carouselMove.value);
@@ -86,7 +94,7 @@ function back() {
     carouselMove.value = 0;
   }, 750);
 }
-//TODO: Add different sizes using s/m/l/xl to define how many elements are shown
+//Sets variable based on defined props and screen sizes
 function setVariable() {
   if (window.matchMedia("(max-width: 640px)").matches) {
     screenVariable.value = props.size;
@@ -117,7 +125,7 @@ function setVariable() {
       props.sm
     ) {
       screenVariable.value = props.sm;
-    } else if (window.innerWidth < 640 && props.size) {
+    } else {
       console.log(screenVariable.value);
       screenVariable.value = props.size;
     }
