@@ -3,18 +3,18 @@
     <div @click="back()" class="handle left-handle"></div>
 
     <div
-      class="movies"
-      :class="test === 1 ? 'animate' : ''"
+      class="slider-wrapper"
+      :class="carouselMove === 1 || carouselMove === -1 ? 'animate' : ''"
       v-if="data"
-      :style="{
-        transform:
-          test === 1
-            ? 'translate3d(-200%,0px,0px)'
-            : 'translate3d(-100%,0px,0px)',
-      }"
+      :style="transform"
     >
-      <div class="slider" v-for="movie in data.results" :key="movie.id">
-        <img v-if="movie" :src="movie.imageLink" alt="Movie Image" />
+      <div
+        class="slider-element"
+        :style="{ flexBasis: `${flexBasis}%` }"
+        v-for="slide in slides"
+        :key="slide.id"
+      >
+        <img v-if="slide" :src="slide.imageLink" alt="Slide Image" />
       </div>
     </div>
 
@@ -23,50 +23,128 @@
 </template>
 
 <script setup lang="ts">
-import { Transform } from "stream";
-import { Movies } from "~~/types";
-const test = ref(0);
-let image: any;
 const props = defineProps<{
   data: any;
+  sm?: number;
+  md?: number;
+  lg?: number;
+  xl?: number;
+  xxl?: number;
+  size: number;
 }>();
-
+let image: any;
+const carouselMove = ref(0);
+const wasTriggered = ref(0);
+const screenVariable = ref<number>(props.size);
+const flexBasis = computed(() => {
+  return 100 / screenVariable.value;
+});
+const slides = ref([...props.data.results]);
+const transform = computed(() => {
+  if (wasTriggered.value === 0) {
+    return "transform: translate3d(0%,0px,0px)";
+  } else if (carouselMove.value === 1 && wasTriggered.value === 1) {
+    return "transform: translate3d(-100%,0px,0px)";
+  } else if (carouselMove.value === 1) {
+    return "transform: translate3d(-200%,0px,0px)";
+  } else if (carouselMove.value === -1)
+    return "transform: translate3d(0%,0px,0px)";
+  else return "transform: translate3d(-100%,0px,0px)";
+});
 function forward() {
-  test.value = 1;
-  console.log(test.value);
+  carouselMove.value = 1;
+  if (wasTriggered.value < 2) {
+    wasTriggered.value++;
+  }
 
-  setTimeout(() => {
-    if (test.value === 1) {
-      for (let i = 0; i < 4; i++) {
-        const slide = props.data.results.shift();
-        props.data.results.push(slide);
-      }
+  if (wasTriggered.value === 2) {
+    console.log(carouselMove.value);
+    for (let i = 0; i < screenVariable.value; i++) {
+      const slide = slides.value[i];
+
+      slides.value.push(slide);
     }
-    test.value = 0;
-  }, 1000);
+    setTimeout(() => {
+      for (let i = 0; i < screenVariable.value; i++) {
+        const slide = slides.value.shift();
+      }
 
-  console.log(test.value);
+      carouselMove.value = 0;
+    }, 750);
+  }
 }
 
 function back() {
-  if (test.value > 0) test.value--;
-  else test.value = 4;
+  console.log(carouselMove.value);
+  carouselMove.value = -1;
+  setTimeout(() => {
+    for (let i = 0; i < screenVariable.value; i++) {
+      const slide = slides.value.pop();
+      slides.value.unshift(slide);
+    }
+
+    carouselMove.value = 0;
+  }, 750);
 }
+//TODO: Add different sizes using s/m/l/xl to define how many elements are shown
+function setVariable() {
+  if (window.matchMedia("(max-width: 640px)").matches) {
+    screenVariable.value = props.size;
+  } else {
+    if (window.innerWidth >= 1536 && props.xxl) {
+      screenVariable.value = props.xxl;
+    } else if (
+      window.innerWidth >= 1280 &&
+      window.innerWidth < 1536 &&
+      props.xl
+    ) {
+      screenVariable.value = props.xl;
+    } else if (
+      window.innerWidth >= 1024 &&
+      window.innerWidth < 1280 &&
+      props.lg
+    ) {
+      screenVariable.value = props.lg;
+    } else if (
+      window.innerWidth >= 768 &&
+      window.innerWidth < 1024 &&
+      props.md
+    ) {
+      screenVariable.value = props.md;
+    } else if (
+      window.innerWidth >= 640 &&
+      window.innerWidth < 768 &&
+      props.sm
+    ) {
+      screenVariable.value = props.sm;
+    } else if (window.innerWidth < 640 && props.size) {
+      console.log(screenVariable.value);
+      screenVariable.value = props.size;
+    }
+  }
+}
+onMounted(() => {
+  setVariable();
+  window.addEventListener("resize", setVariable);
+});
+onBeforeUnmount(() => {
+  window.removeEventListener("resize", setVariable);
+});
 </script>
 
 <style scoped lang="scss">
 .animate {
   transition: all 0.75s ease 0s;
 }
-.movies {
+.slider-wrapper {
   display: flex;
-  .slider {
-    flex: 0 0 25%;
-    width: 25%;
-    padding: 0.25rem;
-  }
 }
+.slider-element {
+  flex-grow: 0;
+  flex-shrink: 0;
 
+  padding: 0.25rem;
+}
 img {
   width: 100%;
   display: block;

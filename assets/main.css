@@ -16,5 +16,6 @@ body {
   overflow-x: hidden;
 }
 main {
+  overflow-x: hidden;
   min-height: 100vh;
 }

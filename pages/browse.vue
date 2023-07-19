@@ -9,7 +9,16 @@ const { data } = await useFetch("/api/getData");
     <button @click="signOutUser()">Sign Out</button>
     <button @click="navigateTo('/')">Go Home, should not take you there</button>
     <div class="movie-wrapper">
-      <MovieCard class="mov" :data="data"> </MovieCard>
+      <MovieCard
+        :size="3"
+        :sm="4"
+        :md="5"
+        :lg="6"
+        :xl="7"
+        :xxl="8"
+        :data="data"
+      >
+      </MovieCard>
     </div>
   </div>
 </template>
