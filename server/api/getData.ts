@@ -8,10 +8,11 @@ export default defineEventHandler(async (event) => {
   const moviesWithImages = await Promise.all(
     results.map(async (movie: any) => {
       const imageLink = `${config.imgLink}${movie.backdrop_path}`;
-
+      const posterLink = `${config.imgLink}${movie.poster_path}`;
       return {
         ...movie,
         imageLink,
+        posterLink
       };
     })
   );
