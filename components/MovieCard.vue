@@ -1,9 +1,12 @@
 <template>
   <div>
-    <div v-if="wasTriggered" @click="back()" class="handle left-handle"></div>
+    <div v-if="wasTriggered && !isMobile" @click="back()"  class="handle left-handle"></div>
 
     <div
       class="slider-wrapper"
+	  @touchstart="touchStart"
+	  @touchmove="touchMove"
+	  @touchend="touchEnd"
       :class="carouselMove === 1 || carouselMove === -1 ? 'animate' : ''"
       v-if="data"
       :style="transform"
@@ -18,11 +21,12 @@
       </div>
     </div>
 
-    <div @click="forward()" class="handle right-handle"></div>
+    <div v-if="!isMobile" @click="forward()" class="handle right-handle"></div>
   </div>
 </template>
 
 <script setup lang="ts">
+
 const props = defineProps<{
   data: any;
   sm?: number;
@@ -33,8 +37,14 @@ const props = defineProps<{
   size: number;
 }>();
 let image: any;
+//Defines start and end point for TouchEvent
+const touchMovement = ref({start: 0,end:0});
+//Defines if screen is smaller than 640px
+const isMobile=ref<boolean>()
 //Defines which direction Carousel will move (1) -> Right or (-1) -> Left
 const carouselMove = ref(0);
+//Defines a variable that prevents any action untill transition is finished
+const isTransitioning = ref(false)
 //Defines if carousel was triggered allowing user to go back and creating infinite loop
 const wasTriggered = ref(0);
 //Defines how many elements should be shown
@@ -57,10 +67,13 @@ const transform = computed(() => {
     return "transform: translate3d(0%,0px,0px)";
   else return "transform: translate3d(-100%,0px,0px)";
 });
-//Forward button with cutting first X elements and putting them at the end
+//Forward Button/Touch with cutting first X elements and putting them at the end
+//
 function forward() {
   carouselMove.value = 1;
-  if (wasTriggered.value < 2) {
+if(!isTransitioning.value){
+	isTransitioning.value = true;
+	if (wasTriggered.value < 2) {
     wasTriggered.value++;
   }
 
@@ -75,64 +88,94 @@ function forward() {
       for (let i = 0; i < screenVariable.value; i++) {
         const slide = slides.value.shift();
       }
-
+	  isTransitioning.value = false;
       carouselMove.value = 0;
     }, 750);
   }
+  else{
+	setTimeout(()=>{
+		isTransitioning.value = false;
+	},750)
+  }
+  
 }
-//Forward button with cutting last X elements and putting them at the start
+}
+//Backward Button/Touch with cutting last X elements and putting them at the start
 
 function back() {
-  console.log(carouselMove.value);
+
   carouselMove.value = -1;
-  setTimeout(() => {
+  if(!isTransitioning.value){
+	isTransitioning.value = true
+	setTimeout(() => {
     for (let i = 0; i < screenVariable.value; i++) {
       const slide = slides.value.pop();
       slides.value.unshift(slide);
     }
-
+	isTransitioning.value = false;
     carouselMove.value = 0;
   }, 750);
+  }
+}
+
+//Sets start value to X user touched
+function touchStart(event:any){
+touchMovement.value.start = event.touches[0].clientX
+}
+//Sets end value for X user finished touching
+function touchMove(event:any){
+	touchMovement.value.end = event.touches[0].clientX
+}
+//Triggers forward() or back() function depending which direction movement occured
+function touchEnd(event:any){
+	if(touchMovement.value.start > touchMovement.value.end)
+forward();
+else if(wasTriggered.value) back();
 }
 //Sets variable based on defined props and screen sizes
+//Sets second variable to true or false if screen is smaller than 640px
 function setVariable() {
-  if (window.matchMedia("(max-width: 640px)").matches) {
-    screenVariable.value = props.size;
-  } else {
     if (window.innerWidth >= 1536 && props.xxl) {
+		isMobile.value = false;
       screenVariable.value = props.xxl;
     } else if (
       window.innerWidth >= 1280 &&
       window.innerWidth < 1536 &&
       props.xl
     ) {
+		isMobile.value = false;
       screenVariable.value = props.xl;
     } else if (
       window.innerWidth >= 1024 &&
       window.innerWidth < 1280 &&
       props.lg
     ) {
+		isMobile.value = false;
       screenVariable.value = props.lg;
     } else if (
       window.innerWidth >= 768 &&
       window.innerWidth < 1024 &&
       props.md
     ) {
+		isMobile.value = false;
       screenVariable.value = props.md;
     } else if (
+
       window.innerWidth >= 640 &&
       window.innerWidth < 768 &&
       props.sm
     ) {
+		isMobile.value = false;
       screenVariable.value = props.sm;
-    } else {
-      console.log(screenVariable.value);
+    } else{
+		isMobile.value = true;
       screenVariable.value = props.size;
-    }
+
   }
 }
 onMounted(() => {
   setVariable();
+
   window.addEventListener("resize", setVariable);
 });
 onBeforeUnmount(() => {
@@ -157,7 +200,7 @@ img {
   width: 100%;
   display: block;
   height: auto;
-  aspect-ratio: 16/9;
+
 }
 .handle {
   width: 3rem;
