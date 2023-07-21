@@ -1,31 +1,37 @@
 <template>
 	<div>
+
 		<button
 			v-if="wasTriggered && !isMobile"
 			@click="back()"
 			@mouseover="hover = true"
 			@mouseleave="hover = false"
 			class="handle left-handle"
-      aria-label="Show previous movies"
+			aria-label="Show previous movies"
 			><img v-if="hover" src="@/assets/chevron-left-solid.svg" alt=""
 		/></button>
-
+		<div v-else class="handle left-handle"></div>
 		<div
-			class="slider-wrapper"
+			v-if="data"
+			:class="carouselMove === 1 || carouselMove === -1 ? 'animate' : ''"
+			:style="transform"
 			@touchstart="touchStart"
 			@touchmove="touchMove"
 			@touchend="touchEnd"
-			:class="carouselMove === 1 || carouselMove === -1 ? 'animate' : ''"
-			v-if="data"
-			:style="transform"
+			class="slider-wrapper"
 		>
 			<div
-				class="slider-element"
-				:style="{ flexBasis: `${flexBasis}%` }"
 				v-for="slide in slides"
 				:key="slide.id"
+				:style="{ flexBasis: `${flexBasis}%` }"
+				class="slider-element"
 			>
-				<nuxt-img v-if="slide" format="webp" quality="10"  loading="lazy"  :src="slide.imageLink" alt="Slide Image" />
+				<nuxt-img
+					v-if="slide"
+					:src="slide.imageLink"
+					quality="10"
+					alt="Slide Image"
+				/>
 			</div>
 		</div>
 
@@ -35,10 +41,10 @@
 			@mouseleave="hover = false"
 			@click="forward()"
 			class="handle right-handle"
-      aria-label="Show more movies"
+			aria-label="Show more movies"
 			><img v-if="hover" src="@/assets/chevron-right-solid.svg" alt="" />
 		</button>
-    <div></div>
+		<div v-else class="handle right-handle"></div>
 	</div>
 </template>
 
@@ -93,9 +99,7 @@ function forward() {
 		if (wasTriggered.value < 2) {
 			wasTriggered.value++;
 		}
-
 		if (wasTriggered.value === 2) {
-			console.log(carouselMove.value);
 			for (let i = 0; i < screenVariable.value; i++) {
 				const slide = slides.value[i];
 
@@ -177,9 +181,9 @@ function setVariable() {
 		screenVariable.value = props.size;
 	}
 }
-onBeforeMount(()=>{
-  setVariable();
-})
+onBeforeMount(() => {
+	setVariable();
+});
 onMounted(() => {
 	setVariable();
 	isTouchDevice();
@@ -217,7 +221,7 @@ img {
 	z-index: 5;
 	position: absolute;
 	background-color: #202020;
-	opacity: 0.5;
+	opacity: 0.6;
 }
 .handle:hover {
 	opacity: 0.8;
