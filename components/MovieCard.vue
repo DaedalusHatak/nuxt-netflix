@@ -10,7 +10,7 @@
 			aria-label="Show previous movies"
 			><img v-if="hover" src="@/assets/chevron-left-solid.svg" alt=""
 		/></button>
-		<div v-else class="handle left-handle"></div>
+		<div v-else-if="isMobile && wasTriggered" class="handle left-handle"></div>
 		<div
 			v-if="data"
 			:class="carouselMove === 1 || carouselMove === -1 ? 'animate' : ''"
