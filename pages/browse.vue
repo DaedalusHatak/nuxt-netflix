@@ -27,11 +27,15 @@ const { data } = await useLazyFetch("/api/getData");
 </template>
 
 <style scoped>
+/* .movie-wrapper{
+  overflow: hidden;
+} */
 .flex-center {
   text-align: center;
   padding: 2rem 3rem;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 button {
   display: inline-flex;
