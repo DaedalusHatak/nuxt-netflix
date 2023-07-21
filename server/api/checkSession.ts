@@ -11,7 +11,7 @@ export default defineEventHandler(async (event) => {
         return (res = true);
       })
       .catch((err) => {
-        console.log(err);
+       
         return (res = false);
       });
   }
