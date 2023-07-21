@@ -1,8 +1,20 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+app:{head:{
+  charset: 'utf-8',
+  viewport: 'width=device-width, initial-scale=1',
+  title:'Daedalus',
+  meta:[{name:'keywords', content:'HTML, CSS, JavaScript, Vue.js, Nuxt.js'},{name:"author",content:'Paweł Kiciński'}],
+  htmlAttrs:{lang:'en'}
+
+}},
+nitro:{
+  compressPublicAssets: true
+},
   css: ["~/assets/main.css", "~/assets/base.css"],
   // plugins: ['~/plugins/firebase.ts'],
   modules: ["@pinia/nuxt", "@pinia-plugin-persistedstate/nuxt"],
+  
   dev: true,
   runtimeConfig: {
     apiSecret: "",
