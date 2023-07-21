@@ -5,9 +5,9 @@ const password = ref<string>("");
 let isValid: any;
 const isSent = ref<boolean>(false);
 const proc = process.client;
-const sendData = async () => {
+const sendData = async (email:string,password:string) => {
   isSent.value = true;
-  await signIn(emailInput.value, password.value)
+  await signIn(email,password)
     .then((user) => {
       if (user.user) {
         return user.user.getIdToken();
@@ -43,7 +43,7 @@ const sendData = async () => {
       <div class="form-hero">
         <div class="login-form">
           <h1>Sign In</h1>
-          <form v-if="proc" @submit.prevent="sendData()" name="login">
+          <form v-if="proc" @submit.prevent="sendData(emailInput,password)" name="login">
             <div>
               <BaseInput
                 v-model="emailInput"
@@ -66,10 +66,17 @@ const sendData = async () => {
                 <span class="loader-circle"></span>
               </div>
             </button>
+            
           </form>
+          <button @click="sendData('test@test.com','test1234')" class="get-started-button">
+              <span v-if="!isSent">Test login</span>
+              <div v-else class="loader">
+                <span class="loader-circle"></span>
+              </div>
+            </button>
         </div>
         <div class="reg-link">
-          New to Netflix?
+          New to Daedalus?
           <NuxtLink to="/">Sign up now</NuxtLink>.
         </div>
       </div>
