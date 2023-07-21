@@ -25,7 +25,7 @@
 				v-for="slide in slides"
 				:key="slide.id"
 			>
-				<img loading="lazy" v-if="slide" :src="slide.imageLink" alt="Slide Image" />
+				<nuxt-img v-if="slide" format="webp" quality="10"  loading="lazy"  :src="slide.imageLink" alt="Slide Image" />
 			</div>
 		</div>
 
