@@ -5,6 +5,9 @@ const { data } = await useFetch("/api/getData");
 // });
 </script>
 <template>
+  <Head>
+    <Meta name="description" content="Movie database" />
+  </Head>
   <div class="flex-center">
     <button @click="signOutUser()">Sign Out</button>
     <button @click="navigateTo('/')">Go Home, should not take you there</button>
