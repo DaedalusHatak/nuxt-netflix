@@ -26,10 +26,9 @@
 				:style="{ flexBasis: `${flexBasis}%` }"
 				class="slider-element"
 			>
-				<nuxt-img
+				<img
 					v-if="slide"
 					:src="slide.imageLink"
-					quality="10"
 					alt="Slide Image"
 				/>
 			</div>
