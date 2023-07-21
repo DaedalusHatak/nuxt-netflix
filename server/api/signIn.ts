@@ -1,6 +1,6 @@
 import { getAuth } from "firebase-admin/auth";
 
-export default defineEventHandler(async (event) => {
+export default defineEventHandler(async (event:any) => {
   const { idToken, csrfToken } = await readBody(event);
   const auth = getAuth();
   const expiresIn = 60 * 60 * 24 * 14 * 1000;

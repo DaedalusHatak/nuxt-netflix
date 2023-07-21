@@ -1,5 +1,5 @@
 import { Movies } from "../../types";
-export default defineEventHandler(async (event) => {
+export default defineEventHandler(async (event:any) => {
   const config = useRuntimeConfig();
   const data: Movies = await $fetch(config.apiLink);
   const results = data.results;
