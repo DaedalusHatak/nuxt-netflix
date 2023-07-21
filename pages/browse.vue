@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { data } = await useLazyFetch("/api/getData");
+const { data } = await useFetch("/api/getData");
 // definePageMeta({
 //   middleware: "auth",
 // });

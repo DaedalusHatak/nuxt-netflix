@@ -21,6 +21,7 @@
 			class="slider-wrapper"
 		>
 			<div
+			v-if="slides"
 				v-for="slide in slides"
 				:key="slide.id"
 				:style="{ flexBasis: `${flexBasis}%` }"
@@ -76,7 +77,7 @@ const flexBasis = computed(() => {
 	return 100 / screenVariable.value;
 });
 //copy of array
-const slides = ref([...props.data.results]);
+const slides =  ref();
 //Adds proper styling based on buttons that were clicked and if its 1st click or not
 const transform = computed(() => {
 	if (wasTriggered.value === 0) {
@@ -127,7 +128,7 @@ function back() {
 		setTimeout(() => {
 			for (let i = 0; i < screenVariable.value; i++) {
 				const slide = slides.value.pop();
-				slides.value.unshift(slide);
+				slides.value.unshift(slide!);
 			}
 			isTransitioning.value = false;
 			carouselMove.value = 0;
@@ -184,6 +185,7 @@ onBeforeMount(() => {
 	setVariable();
 });
 onMounted(() => {
+	slides.value = [...props.data.results]
 	setVariable();
 	isTouchDevice();
 	window.addEventListener('resize', setVariable);

@@ -1,6 +1,6 @@
 import { getAuth } from "firebase-admin/auth";
 
-export default defineEventHandler(async (event) => {
+export default defineEventHandler(async (event:any) => {
   const { test } = await readBody(event);
   let papa;
   let res = false;

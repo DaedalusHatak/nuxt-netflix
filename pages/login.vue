@@ -1,7 +1,11 @@
 <script setup lang="ts">
 import BaseInput from "@/components/BaseInput.vue";
+const isPageReady = ref<boolean>(false);
 const emailInput = ref<string>("");
 const password = ref<string>("");
+onMounted(()=>{
+  isPageReady.value=true;
+})
 let isValid: any;
 const isSent = ref<boolean>(false);
 const proc = process.client;
@@ -60,7 +64,7 @@ const sendData = async (email:string,password:string) => {
                 :background="true"
               />
             </div>
-            <button class="get-started-button">
+            <button v-if="isPageReady" class="get-started-button">
               <span v-if="!isSent">Sign In</span>
               <div v-else class="loader">
                 <span class="loader-circle"></span>
@@ -68,7 +72,7 @@ const sendData = async (email:string,password:string) => {
             </button>
             
           </form>
-          <button @click="sendData('test@test.com','test1234')" class="get-started-button">
+          <button v-if="isPageReady" @click="sendData('test@test.com','test1234')" class="get-started-button">
               <span v-if="!isSent">Test login</span>
               <div v-else class="loader">
                 <span class="loader-circle"></span>
