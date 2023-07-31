@@ -20,10 +20,14 @@ async function apiCall(movies: string[]) {
 onNuxtReady(async () => {
   apiCall(arrOfPaths.value);
 });
-onBeforeMount(async () => {});
-// definePageMeta({
-//   middleware: "auth",
-// });
+const currElement = ref();
+function currElementHandler(e: any) {
+  currElement.value = e;
+}
+const currPosition = ref();
+function currPositionHandler(e: any) {
+  currPosition.value = e;
+}
 </script>
 <template>
   <Head>
@@ -33,8 +37,10 @@ onBeforeMount(async () => {});
     <button @click="signOutUser()">Sign Out</button>
     <button @click="navigateTo('/')">Go Home, should not take you there</button>
     <div class="movie-wrapper">
-      <MovieCard
+      <MovieCarousel
         v-for="movie in arrOfMovies"
+        @hov-element="currElementHandler"
+        @position-element="currPositionHandler"
         :size="3"
         :sm="4"
         :md="5"
@@ -43,8 +49,14 @@ onBeforeMount(async () => {});
         :xxl="8"
         :data="movie"
       >
-      </MovieCard>
+      </MovieCarousel>
     </div>
+    <MovieCard
+      v-if="currElement"
+      @mouseleave="currElement = null"
+      :slide="currElement"
+      :position="currPosition"
+    ></MovieCard>
   </div>
 </template>
 
