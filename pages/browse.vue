@@ -28,6 +28,31 @@ const currPosition = ref();
 function currPositionHandler(e: any) {
   currPosition.value = e;
 }
+const scaledWidth = ref();
+const centerPosition = computed(() => {
+  let x, y, width;
+
+  x = currPosition.value.x + currPosition.value.width / 2;
+  y = currPosition.value.y + currPosition.value.height / 2 + window.scrollY;
+  width = scaledWidth.value
+
+
+  return { x, y, width };
+});
+function onBeforeEnter(){
+  scaledWidth.value = currPosition.value.width
+}
+function onEnter(){
+  scaledWidth.value = currPosition.value.width * 1.55;
+}
+function onLeave(){
+  scaledWidth.value = currPosition.value.width;
+}
+function onMouseLeave(){
+  scaledWidth.value = null;
+  currElement.value = null
+}
+
 </script>
 <template>
   <Head>
@@ -51,16 +76,26 @@ function currPositionHandler(e: any) {
       >
       </MovieCarousel>
     </div>
-    <MovieCard
+    <transition @enter="onEnter" @before-enter="onBeforeEnter" @leave="onLeave">
+      <MovieCard
+    
       v-if="currElement"
-      @mouseleave="currElement = null"
+      
+      @mouseleave="onMouseLeave()"
+      :style="{
+      left: `${centerPosition.x}px`,
+      top: `${centerPosition.y}px`,
+      width: `${centerPosition.width}px`,
+    }"
       :slide="currElement"
       :position="currPosition"
     ></MovieCard>
+    </transition>
   </div>
 </template>
 
 <style scoped>
+
 .movie-wrapper {
   display: grid;
   gap: 50px;
