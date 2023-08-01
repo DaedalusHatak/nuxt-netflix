@@ -24,6 +24,7 @@
         v-if="slides"
         v-for="slide in slides"
         @mouseover="currElement($event, slide)"
+        @mouseleave="hoverElement = null"
         :key="slide.id"
         :style="{ flexBasis: `${flexBasis}%` }"
         class="slider-element"
@@ -48,9 +49,21 @@
 
 <script setup lang="ts">
 function currElement(e: Event, slide: any) {
-  //@ts-ignore
-  emit("positionElement", e.target.getBoundingClientRect());
-  emit("hovElement", slide);
+  const touchDevice = isTouchDevice();
+
+ if(!touchDevice){
+  hoverElement.value = slide;
+   //@ts-ignore
+ emit("positionElement", e.target.getBoundingClientRect());
+setTimeout(()=>{
+   
+
+  
+   
+  emit("hovElement", hoverElement.value);
+
+},750)
+ }
 }
 const emit = defineEmits<{
   (e: "hovElement", value: any): void;
@@ -68,6 +81,8 @@ const props = defineProps<{
 //Defines if hover occurs
 const hoverButtons = ref<boolean>();
 const hoverElement = ref();
+const isHovered = ref();
+
 //Defines start and end point for TouchEvent
 const touchMovement = ref({ start: 0, end: 0 });
 //Defines if screen is smaller than 640px
@@ -155,8 +170,9 @@ function touchMove(event: any) {
 }
 //Triggers forward() or back() function depending which direction movement occured
 function touchEnd(event: any) {
-  if (touchMovement.value.start > touchMovement.value.end) forward();
-  else if (wasTriggered.value) back();
+
+  if (touchMovement.value.start > touchMovement.value.end && touchMovement.value.end > 0) forward();
+  else if (touchMovement.value.start < touchMovement.value.end && touchMovement.value.end > 0)  back();
 }
 //Sets variable based on defined props and screen sizes
 //Sets second variable to true or false if screen is smaller than 640px
@@ -191,7 +207,6 @@ function setVariable() {
 }
 onMounted(() => {
   slides.value = [...props.data.results];
-  console.log(slides.value);
   setVariable();
   isTouchDevice();
   window.addEventListener("resize", setVariable);
