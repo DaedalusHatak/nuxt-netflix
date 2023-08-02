@@ -6,7 +6,6 @@ const password = ref<string>("");
 onMounted(()=>{
   isPageReady.value=true;
 })
-let isValid: any;
 const isSent = ref<boolean>(false);
 const proc = process.client;
 const sendData = async (email:string,password:string) => {
