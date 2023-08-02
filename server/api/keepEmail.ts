@@ -1,4 +1,6 @@
-export default defineEventHandler(async (event:any) => {
+import type { H3Event } from 'h3'
+
+export default defineEventHandler(async (event:H3Event) => {
     const {email,isToken } = await readBody(event);
     const cookieOptions = {
 

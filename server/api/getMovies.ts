@@ -1,5 +1,6 @@
-import { Movies } from "../../types";
-export default defineEventHandler(async (event: any) => {
+import { Movie, Movies } from "../../types";
+import type { H3Event } from 'h3'
+export default defineEventHandler(async (event:H3Event) => {
   const movieLink = await readBody(event);
   const data: Movies = await $fetch(
     `https://api.themoviedb.org${movieLink}?api_key=c54e012f26022e6ad00735cc83d37781`
@@ -7,8 +8,8 @@ export default defineEventHandler(async (event: any) => {
   const results = data.results;
 
   // Fetch all images for each movie
-  const moviesWithImages = await Promise.all(
-    results.map(async (movie: any) => {
+  const moviesWithImages:Movie[] = await Promise.all(
+    results.map(async (movie: Movie) => {
       let image;
       let poster;
       if (movie.backdrop_path) {

@@ -8,20 +8,12 @@
 </template>
 
 <script setup lang="ts">
+import { Movie } from 'types';
+
 const props = defineProps<{
-	slide: any;
-	position: any;
+	slide: Movie;
+	position: DOMRect;
 }>();
-const scaledWidth = ref(props.position.width);
-const centerPosition = computed(() => {
-	let x, y, width;
-
-	x = props.position.x + props.position.width / 2;
-	y = props.position.y + props.position.height / 2 + window.scrollY;
-	width = scaledWidth.value;
-
-	return { x, y, width };
-});
 </script>
 
 <style scoped lang="scss">

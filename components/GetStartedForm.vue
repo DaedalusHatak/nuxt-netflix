@@ -4,7 +4,7 @@ import BaseInput from './BaseInput.vue';
 defineProps({
     isMax: String,
 });
-const emailRegister = ref('')
+const emailRegister = ref<string>('')
 </script>
 
 <template>

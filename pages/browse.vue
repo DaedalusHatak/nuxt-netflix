@@ -1,12 +1,13 @@
 <script setup lang="ts">
-const { data } = await useFetch('/api/getData');
+import { Movie, Movies } from 'types';
+
 const arrOfPaths = ref<string[]>([
 	'/3/movie/popular',
 	'/3/movie/top_rated',
 	'/3/tv/popular',
 	'/3/tv/top_rated',
 ]);
-const arrOfMovies = ref<any[]>([]);
+const arrOfMovies = ref<Movie>([]);
 async function apiCall(movies: string[]) {
 	let l = 0;
 	for (const i of movies) {
@@ -16,27 +17,31 @@ async function apiCall(movies: string[]) {
 		});
 		arrOfMovies.value.push(data.value);
 	}
+	console.log(arrOfMovies.value);
 }
 onNuxtReady(async () => {
 	apiCall(arrOfPaths.value);
 });
 const currElement = ref();
-function currElementHandler(e: any) {
+function currElementHandler(e: Movie) {
 	currElement.value = e;
 }
 const currPosition = ref();
-function currPositionHandler(e: any) {
+function currPositionHandler(e: DOMRect) {
 	currPosition.value = e;
 }
-const scaledWidth = ref();
+const scaledWidth = ref<number>();
 const centerPosition = computed(() => {
-	let x, y, width;
+	let x, y, width: number;
 
 	x = currPosition.value.x + currPosition.value.width / 2;
 	y = currPosition.value.y + currPosition.value.height / 2 + window.scrollY;
-	width = scaledWidth.value;
+	if (scaledWidth.value) {
+		width = scaledWidth.value;
+		return { x, y, width };
+	}
 
-	return { x, y, width };
+	return { x, y };
 });
 function onBeforeEnter() {
 	scaledWidth.value = currPosition.value.width;
@@ -48,8 +53,8 @@ function onLeave() {
 	scaledWidth.value = currPosition.value.width;
 }
 function onMouseLeave() {
-	scaledWidth.value = null;
-	currElement.value = null;
+	scaledWidth.value = undefined;
+	currElement.value = undefined;
 }
 </script>
 <template>
@@ -78,14 +83,13 @@ function onMouseLeave() {
 			<MovieCard
 				v-if="currElement"
 				@mouseleave="onMouseLeave()"
-        :slide="currElement"
+				:slide="currElement"
 				:position="currPosition"
 				:style="{
 					left: `${centerPosition.x}px`,
 					top: `${centerPosition.y}px`,
 					width: `${centerPosition.width}px`,
 				}"
-
 			></MovieCard>
 		</transition>
 	</div>

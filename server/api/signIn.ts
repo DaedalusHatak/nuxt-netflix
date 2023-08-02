@@ -1,6 +1,7 @@
+import type { H3Event } from 'h3'
 import { getAuth } from "firebase-admin/auth";
 
-export default defineEventHandler(async (event:any) => {
+export default defineEventHandler(async (event:H3Event) => {
   const { idToken, csrfToken } = await readBody(event);
   const auth = getAuth();
   const expiresIn = 60 * 60 * 24 * 14 * 1000;
