@@ -1,141 +1,164 @@
 <script setup lang="ts">
-import { Movie, Movies } from 'types';
+import { ImageCarousel } from "vue-multi-slider";
+import "vue-multi-slider/style.css";
+import { Movie, Movies } from "../types";
 
 const arrOfPaths = ref<string[]>([
-	'/3/movie/popular',
-	'/3/movie/top_rated',
-	'/3/tv/popular',
-	'/3/tv/top_rated',
+  "/3/movie/popular",
+  "/3/movie/top_rated",
+  "/3/tv/popular",
+  "/3/tv/top_rated",
+]);
+const arrOfHeaders = ref<string[]>([
+  "Popular movies",
+  "Top rated movies",
+  "Popular TV series",
+  "Top rated TV series",
 ]);
 const arrOfMovies = ref<Movie>([]);
 async function apiCall(movies: string[]) {
-	let l = 0;
-	for (const i of movies) {
-		const { data } = await useFetch('/api/getMovies', {
-			method: 'POST',
-			body: i,
-		});
-		arrOfMovies.value.push(data.value);
-	}
-	console.log(arrOfMovies.value);
+  let l = 0;
+  for (const i of movies) {
+    const { data } = await useFetch("/api/getMovies", {
+      method: "POST",
+      body: i,
+    });
+    arrOfMovies.value.push(data.value);
+  }
+  console.log(arrOfMovies.value);
 }
 onNuxtReady(async () => {
-	apiCall(arrOfPaths.value);
+  apiCall(arrOfPaths.value);
 });
 const currElement = ref();
 function currElementHandler(e: Movie) {
-	currElement.value = e;
+  currElement.value = e;
 }
 const currPosition = ref();
 function currPositionHandler(e: DOMRect) {
-	currPosition.value = e;
+  currPosition.value = e;
 }
 const scaledWidth = ref<number>();
 const centerPosition = computed(() => {
-	let x, y, width: number;
+  let x, y, width: number;
 
-	x = currPosition.value.x + currPosition.value.width / 2;
-	y = currPosition.value.y + currPosition.value.height / 2 + window.scrollY;
-	if (scaledWidth.value) {
-		width = scaledWidth.value;
-		return { x, y, width };
-	}
+  x = currPosition.value.x + currPosition.value.width / 2;
+  y = currPosition.value.y + currPosition.value.height / 2 + window.scrollY;
+  if (scaledWidth.value) {
+    width = scaledWidth.value;
+    return { x, y, width };
+  }
 
-	return { x, y };
+  return { x, y };
 });
 function onBeforeEnter() {
-	scaledWidth.value = currPosition.value.width;
+  scaledWidth.value = currPosition.value.width;
 }
 function onEnter() {
-	scaledWidth.value = currPosition.value.width * 1.55;
+  scaledWidth.value = currPosition.value.width * 1.55;
 }
 function onLeave() {
-	scaledWidth.value = currPosition.value.width;
+  scaledWidth.value = currPosition.value.width;
 }
 function onMouseLeave() {
-	scaledWidth.value = undefined;
-	currElement.value = undefined;
+  scaledWidth.value = undefined;
+  currElement.value = undefined;
 }
 </script>
 <template>
-	<Head>
-		<Meta name="description" content="Movie database" />
-	</Head>
-	<div class="flex-center">
-		<button @click="signOutUser()">Sign Out</button>
-		<button @click="navigateTo('/')">Go Home, should not take you there</button>
-		<div class="movie-wrapper">
-			<MovieCarousel
-				v-for="movie in arrOfMovies"
-				@hov-element="currElementHandler"
-				@position-element="currPositionHandler"
-				:size="2"
-				:sm="3"
-				:md="4"
-				:lg="5"
-				:xl="6"
-				:xxl="7"
-				:data="movie"
-			>
-			</MovieCarousel>
-		</div>
-		<transition @enter="onEnter" @before-enter="onBeforeEnter" @leave="onLeave">
-			<MovieCard
-				v-if="currElement"
-				@mouseleave="onMouseLeave()"
-				:slide="currElement"
-				:position="currPosition"
-				:style="{
-					left: `${centerPosition.x}px`,
-					top: `${centerPosition.y}px`,
-					width: `${centerPosition.width}px`,
-				}"
-			></MovieCard>
-		</transition>
-	</div>
+  <Head>
+    <Meta name="description" content="Movie database" />
+  </Head>
+  <div class="flex-center">
+    <button @click="signOutUser()">Sign Out</button>
+    <button @click="navigateTo('/')">Go Home, should not take you there</button>
+    <div class="movie-wrapper">
+      <section
+        class="movie-section"
+        v-for="(movie, id) in arrOfMovies"
+        :key="id"
+      >
+        <h2>{{ arrOfHeaders.at(id) }}</h2>
+        <ImageCarousel
+          @hov-element="currElementHandler"
+          @position-element="currPositionHandler"
+          :size="2"
+          :sm="3"
+          :md="4"
+          :lg="5"
+          :overflow="true"
+          :button-padding="-3"
+          :button-width="3"
+          :button-visibile="true"
+          :xl="6"
+          :xxl="7"
+          :data="movie.results"
+        />
+      </section>
+    </div>
+    <transition @enter="onEnter" @before-enter="onBeforeEnter" @leave="onLeave">
+      <MovieCard
+        v-if="currElement"
+        @mouseleave="onMouseLeave()"
+        :slide="currElement"
+        :position="currPosition"
+        :style="{
+          left: `${centerPosition.x}px`,
+          top: `${centerPosition.y}px`,
+          width: `${centerPosition.width}px`,
+        }"
+      ></MovieCard>
+    </transition>
+  </div>
 </template>
 
 <style scoped>
+h2 {
+  font-size: 2rem;
+}
 .movie-wrapper {
-	display: grid;
-	gap: 50px;
+  display: grid;
+  gap: 50px;
+}
+.movie-section {
+  text-align: left;
 }
 .flex-center {
-	text-align: center;
-	padding: 2rem 1rem;
-	display: flex;
-	flex-direction: column;
-	overflow: hidden;
+  text-align: center;
+  padding: 2rem 1rem;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 button {
-	display: inline-flex;
-	align-self: center;
-	align-items: center;
-	justify-content: center;
-	writing-mode: horizontal-tb !important;
-	width: 100%;
-	max-width: 30rem;
-	margin-top: 1rem;
-	flex: 0 0 auto;
-	border: 0px;
-	margin-bottom: 5rem;
-	font-size: 1.5rem;
-	font-weight: 500;
-	min-height: 3.5rem;
-	padding: 0.75rem 1.5rem;
-	background: rgb(51, 26, 187, 0.9);
-	cursor: pointer;
-	color: rgb(255, 255, 255);
-	border-radius: 1rem;
+  display: inline-flex;
+  align-self: center;
+  align-items: center;
+  justify-content: center;
+  writing-mode: horizontal-tb !important;
+  width: 100%;
+  max-width: 30rem;
+  margin-top: 1rem;
+  flex: 0 0 auto;
+  border: 0px;
+  margin-bottom: 5rem;
+  font-size: 1.5rem;
+  font-weight: 500;
+  min-height: 3.5rem;
+  padding: 0.75rem 1.5rem;
+  background: rgb(51, 26, 187, 0.9);
+  cursor: pointer;
+  color: rgb(255, 255, 255);
+  border-radius: 1rem;
 }
 
 @media screen and (min-width: 420px) {
-	.flex-center {
-		text-align: center;
-		padding: 2rem 3rem;
-		display: flex;
-		flex-direction: column;
-		overflow: hidden;
-	}
+  .flex-center {
+    text-align: center;
+    padding: 2rem 3rem;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
 }
 </style>
