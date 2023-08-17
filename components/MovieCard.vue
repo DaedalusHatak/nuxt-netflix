@@ -1,6 +1,6 @@
 <template>
 	<div class="hovered">
-		<img :src="props.slide.image" :alt="props.slide.title || props.slide.name" />
+		<img :src="props.slide.image" :alt="props.slide.title || props.slide.name" width="250" height="120"/>
 		<div class="info">
 			<p>{{ props.slide.title || props.slide.name }}</p>
 		</div>
