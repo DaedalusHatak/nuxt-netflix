@@ -16,11 +16,28 @@ checkSelect()
 
 
 })
+
+const scaledWidth = ref()
+function onBeforeEnter() {
+  scaledWidth.value = 100;
+}
+function onEnter() {
+  scaledWidth.value = 100 * 1.55;
+}
+function onLeave() {
+  scaledWidth.value = 100;
+
+}
+const hover = ref();
 </script>
 
 <template>
 	<div class="centered"
+	
 		>
+<Transition @enter="onEnter" @before-enter="onBeforeEnter" @leave="onLeave">
+	<div @mouseenter="hover = true" @mouseleave="hover = false" class="box" :style="{width:`${scaledWidth}px`}"><p v-if="hover">blablabla</p></div>
+</Transition>
         <div
 			><input v-model="selectAll"  type="checkbox" name="all" /> <label for="all">isAll?</label></div
 		>
@@ -37,6 +54,19 @@ checkSelect()
 </template>
 
 <style scoped lang="scss">
+.v-enter-active,
+.v-leave-active {
+	transition: all 1s ease;
+}
+.v-enter-from,
+.v-leave-to {
+  width: 100;
+}
+.box{
+	width:100px;
+	height:100px;
+	background-color: red;
+}
 .centered {
 	margin: 0 auto;
 	display: flex;

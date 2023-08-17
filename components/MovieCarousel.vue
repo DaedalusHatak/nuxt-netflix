@@ -23,13 +23,13 @@
 			<div
 				v-if="slides"
 				v-for="slide in slides"
-				@mouseover="currElement($event, slide)"
-				@mouseleave="hoverElement = undefined"
+				
 				:key="slide.id"
 				:style="{ flexBasis: `${flexBasis}%` }"
 				class="slider-element"
 			>
-				<img v-if="slide" :src="slide.image" :alt="slide.title" />
+				<img @mouseover="currElement($event, slide)"
+				@mouseleave="cancelHover()" v-if="slide" :src="slide.image" :alt="slide.title" />
 			</div>
 		</div>
 
@@ -48,18 +48,25 @@
 </template>
 
 <script setup lang="ts">
-import { Movie, Movies, TouchMovement } from 'types';
+import { Movie, Movies, TouchMovement } from '../types';
 
+let hoverTimer:any;
 function currElement(e: MouseEvent, slide: Movie) {
 	const touchDevice = isTouchDevice();
 	const target = e.target as HTMLButtonElement;
 	if (!touchDevice) {
 		hoverElement.value = slide;
-		if (e.target) emit('positionElement', target.getBoundingClientRect());
-		setTimeout(() => {
+		
+		hoverTimer = setTimeout(() => {
 			if (hoverElement.value) emit('hovElement', hoverElement.value);
-		}, 750);
+			if (e.target && hoverElement.value) emit('positionElement', target.getBoundingClientRect());
+	
+		}, 550);
 	}
+}
+function cancelHover(){
+	console.log('unhover')
+	clearTimeout(hoverTimer)
 }
 const emit = defineEmits<{
 	(e: 'hovElement', value: Movie): void;

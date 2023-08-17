@@ -2,13 +2,13 @@
 	<div class="hovered">
 		<img :src="props.slide.image" :alt="slide.title" />
 		<div class="info">
-			{{ props.slide.title || props.slide.name }}
+			<p>{{ props.slide.title || props.slide.name }}</p>
 		</div>
 	</div>
 </template>
 
 <script setup lang="ts">
-import { Movie } from 'types';
+import { Movie } from '../types';
 
 const props = defineProps<{
 	slide: Movie;
@@ -17,22 +17,28 @@ const props = defineProps<{
 </script>
 
 <style scoped lang="scss">
-.v-enter-active,
-.v-leave-active {
-	transition: width 1s ease;
+.hovered{
+	--scale-size: 1.55;
 }
-
+.info{
+	background-color: orange;
+}
+p{
+	font-size: calc( 1rem / var(--scale-size));
+	// transform:  scale( calc(1 / var(--scale-size)));
+}
 .hovered {
 	position: absolute;
-
+transform:  translate(-50%,-50%) scale(var(--scale-size));
 	display: grid;
 	grid-template-rows: 1fr 1fr;
-	transform: translate(-50%, -50%);
 	z-index: 25;
-	background-color: red;
+
 }
 
 img {
+	display: block;
+	object-fit: cover;
 	width: 100%;
 	height: auto;
 }
