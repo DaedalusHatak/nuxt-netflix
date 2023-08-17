@@ -7463,10 +7463,10 @@ vue-devtools-stub@^0.1.0:
   resolved "https://registry.npmjs.org/vue-devtools-stub/-/vue-devtools-stub-0.1.0.tgz"
   integrity sha512-RutnB7X8c5hjq39NceArgXg28WZtZpGc3+J16ljMiYnFhKvd8hITxSWQSQ5bvldxMDU6gG5mkxl1MTQLXckVSQ==
 
-vue-multi-slider@^0.1.4:
-  version "0.1.4"
-  resolved "https://registry.yarnpkg.com/vue-multi-slider/-/vue-multi-slider-0.1.4.tgz#da17323cec6c3f172ca04be292f2605c651e534e"
-  integrity sha512-c6K9rJGYG7XYG+mUZY28YcW0RiEru0oTLY9U0PRKWr3QuSF3WxFthH69yQ8NnSiIgYh8bRcanYuHUSPY2wgX6A==
+vue-multi-slider@^0.1.6:
+  version "0.1.6"
+  resolved "https://registry.yarnpkg.com/vue-multi-slider/-/vue-multi-slider-0.1.6.tgz#a74ff0ac20c0cb1ba3b3270ca02ceb2544bcb6d7"
+  integrity sha512-uX7ATl2A7C51mxoDb20uq9md4oTLB7mCn0WIKzRGqjw02JVJUcMsxp4g/yDiJdj84hvvD2Ss9Ig9ChUY5D91hA==
   dependencies:
     vite-plugin-dts "^3.4.0"
     vue "^3.3.4"
