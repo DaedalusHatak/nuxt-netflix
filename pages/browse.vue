@@ -25,7 +25,6 @@ async function apiCall(movies: string[]) {
 		});
 		arrOfMovies.value.push(data.value);
 	}
-	console.log(arrOfMovies.value);
 }
 
 onNuxtReady(async () => {
@@ -33,7 +32,7 @@ onNuxtReady(async () => {
 
 });
 
-console.log(getStore())
+getStore();
 const currElement = ref();
 function currElementHandler(e: Movie) {
 	isHovering.value = true;

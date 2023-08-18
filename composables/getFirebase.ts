@@ -1,4 +1,5 @@
 
+import { Auth } from "firebase/auth";
 import {
   getAuth,
   createUserWithEmailAndPassword,
@@ -7,23 +8,30 @@ import {
   signOut,
   sendSignInLinkToEmail,
 } from "firebase/auth";
-import { getDatabase } from "firebase/database";
-import { collection, getDocs, getFirestore } from "firebase/firestore"; 
-import { Firestore } from "firebase/firestore";
-import firebaseClient from "~/plugins/firebase.client";
+import { collection, getDocs } from "firebase/firestore"; 
+
+
 
 
 export const getStore = async ()=>{
-  const db = undefined;
-  console.log(db)
-
-if(db){
+  const firestore = useState('db').value
+  const auth = useState('auth').value
+  let test;
+if(auth){
+  if(auth.currentUser.uid === "LqwEo234qif0TJy1G8gleOQqDEf2")
+  console.log('fuck your mom')
+}
+if(firestore){
+  
   //@ts-ignore
-  const querySnapshot = await getDocs(collection(db, "users"));
-  console.log(querySnapshot)
-  querySnapshot.forEach((doc) => {
-    console.log(`${doc.id} => ${doc.data()}`);
-  });
+  const querySnapshot = await getDocs(collection(firestore, "avatar"));
+console.log(querySnapshot)
+  querySnapshot.forEach(doc => {
+    if(doc.id === "users")
+    test = doc.data();
+  })
+
+
 }
 }
 
