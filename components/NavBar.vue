@@ -34,7 +34,6 @@ ul {
   padding: 0;
 }
 nav {
-  position: absolute;
   background-color: dimgray;
   width: 100%;
   margin: 0 auto;
