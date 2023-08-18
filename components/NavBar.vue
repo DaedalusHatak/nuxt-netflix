@@ -1,35 +1,43 @@
 <script setup lang="ts">
+const props = defineProps<{
+  av: any;
+}>();
 </script>
 
 <template>
-   
-        <nav>
-      <div class="navbar">
-        <span class="logo-span"><img src="@/assets/daedalus.png" alt="" /> </span>
+  <nav>
+    <div class="navbar">
+      <span class="logo-span"><img src="@/assets/daedalus.png" alt="" /> </span>
       <ul>
-        <RouterLink to="/browse" >Main Page</RouterLink>
-        <RouterLink to="/series" >Series</RouterLink>
-        <RouterLink to="/movies" >Movies</RouterLink>
-        <RouterLink to="/new-popular" >New and popular</RouterLink>
-    </ul>
-     <div class="profile"> <img src="@/assets/b4de99f7-a208-4d76-8af4-cbd845ec298dimage_2023-02-13_031629650.png" alt=""></div>
-      </div>
-    </nav>
+        <RouterLink to="/browse">Main Page</RouterLink>
+        <RouterLink to="/series">Series</RouterLink>
+        <RouterLink to="/movies">Movies</RouterLink>
+        <RouterLink to="/new-popular">New and popular</RouterLink>
+      </ul>
 
+      <div v-if="props.av" class="profile">
+        <p>{{ props.av.email }}</p>
+        <img :src="`_nuxt/assets/img/${props.av.avatar}`" alt="" />
+      </div>
+    </div>
+  </nav>
 </template>
 
 <style scoped lang="scss">
-ul{
-    display: flex;
-    list-style-type: none;
-    gap: 30px;
-    padding: 0;
+p {
+  font-size: 12px;
 }
-nav{
-
-    background-color: dimgray;
-    width: 100%;
-    margin: 0 auto;
+ul {
+  display: flex;
+  list-style-type: none;
+  gap: 30px;
+  padding: 0;
+}
+nav {
+  position: absolute;
+  background-color: dimgray;
+  width: 100%;
+  margin: 0 auto;
 }
 .navbar {
   display: grid;
@@ -42,19 +50,18 @@ nav{
   width: 100%;
   left: 0;
   right: 0;
-
 }
-.profile{
-
-    height: 32px;
+.profile {
+  display: flex;
+  height: 40px;
+  align-items: center;
 }
 
-
-img{
-    align-self: center;
-    display: block;
-    height: 100%;
-    width: auto;
+img {
+  align-self: center;
+  display: block;
+  height: 100%;
+  width: auto;
 }
 @media screen and (min-width: 600px) {
   .navbar {

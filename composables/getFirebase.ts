@@ -1,4 +1,3 @@
-
 import { Auth } from "firebase/auth";
 import {
   getAuth,
@@ -8,32 +7,25 @@ import {
   signOut,
   sendSignInLinkToEmail,
 } from "firebase/auth";
-import { collection, getDocs } from "firebase/firestore"; 
+import { Firestore, collection, getDocs } from "firebase/firestore";
 
+export const getStore = async () => {
+  const firestore = useState("db").value as Firestore;
+  const auth: Auth = useState("auth").value as Auth;
+  let test: any;
+  if (auth.currentUser && firestore) {
+    const querySnapshot = await getDocs(collection(firestore, "avatar"));
+    querySnapshot.forEach((doc) => {
+      if (doc.id === "users") test = doc.data();
+    });
 
-
-
-export const getStore = async ()=>{
-  const firestore = useState('db').value
-  const auth = useState('auth').value
-  let test;
-if(auth){
-  if(auth.currentUser.uid === "LqwEo234qif0TJy1G8gleOQqDEf2")
-  console.log('fuck your mom')
-}
-if(firestore){
-  
-  //@ts-ignore
-  const querySnapshot = await getDocs(collection(firestore, "avatar"));
-console.log(querySnapshot)
-  querySnapshot.forEach(doc => {
-    if(doc.id === "users")
-    test = doc.data();
-  })
-
-
-}
-}
+    for (const l in test) {
+      if (l === auth.currentUser.uid) {
+        return { avatar: test[l], email: auth.currentUser.email };
+      }
+    }
+  }
+};
 
 export const createUser = async (email: string) => {
   const actionCodeSettings = {
