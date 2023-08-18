@@ -27,9 +27,13 @@ async function apiCall(movies: string[]) {
 	}
 	console.log(arrOfMovies.value);
 }
+
 onNuxtReady(async () => {
 	apiCall(arrOfPaths.value);
+
 });
+
+console.log(getStore())
 const currElement = ref();
 function currElementHandler(e: Movie) {
 	isHovering.value = true;
@@ -91,6 +95,7 @@ function setHeader(id:string | number){
 	<Head>
 		<Meta name="description" content="Movie database" />
 	</Head>
+	<NavBar></NavBar>
 	<div class="flex-center">
 		<button @click="signOutUser()">Sign Out</button>
 		<button @click="navigateTo('/')">Go Home, should not take you there</button>
@@ -149,7 +154,8 @@ function setHeader(id:string | number){
 	width: 100px;
 }
 h2 {
-	font-size: 2rem;
+	
+	font-size: 2vw;
 }
 .movie-wrapper {
 	display: grid;
@@ -194,6 +200,11 @@ button {
 		display: flex;
 		flex-direction: column;
 		overflow: hidden;
+	}
+}
+@media screen and (max-width: 800px) {
+	h2 {
+		font-size: 16px;
 	}
 }
 </style>

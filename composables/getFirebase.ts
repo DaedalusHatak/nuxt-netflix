@@ -1,3 +1,4 @@
+
 import {
   getAuth,
   createUserWithEmailAndPassword,
@@ -6,6 +7,25 @@ import {
   signOut,
   sendSignInLinkToEmail,
 } from "firebase/auth";
+import { getDatabase } from "firebase/database";
+import { collection, getDocs, getFirestore } from "firebase/firestore"; 
+import { Firestore } from "firebase/firestore";
+import firebaseClient from "~/plugins/firebase.client";
+
+
+export const getStore = async ()=>{
+  const db = undefined;
+  console.log(db)
+
+if(db){
+  //@ts-ignore
+  const querySnapshot = await getDocs(collection(db, "users"));
+  console.log(querySnapshot)
+  querySnapshot.forEach((doc) => {
+    console.log(`${doc.id} => ${doc.data()}`);
+  });
+}
+}
 
 export const createUser = async (email: string) => {
   const actionCodeSettings = {
