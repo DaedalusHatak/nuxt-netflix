@@ -50,7 +50,13 @@ const centerPosition = computed(() => {
 
   if (currPosition.value) {
     x = currPosition.value.x + currPosition.value.width / 2;
-    y = currPosition.value.y + currPosition.value.height / 2 + window.scrollY;
+    // 86 is from navbar moving it down a little
+    y = currPosition.value.top + window.scrollY;
+    // y =
+    //   currPosition.value.y +
+    //   currPosition.value.height / 2 +
+    //   window.scrollY -
+    //   86;
     if (scaledWidth.value) {
       width = scaledWidth.value;
       return { x, y, width };
