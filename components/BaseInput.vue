@@ -17,30 +17,28 @@ function updateValue() {
 </script>
 
 <template>
-  <div>
-    <input
-      :class="props.background ? 'background' : ''"
-      :type="props.type"
-      v-model="inputData"
-      @input="updateValue()"
-      name="test"
-      @focusout="
-        inputData === '' || inputData === undefined
-          ? (isActive = false)
-          : (isActive = true)
-      "
-      @change="inputData === '' ? (isActive = false) : (isActive = true)"
-      @focusin="isActive = true"
-      :is-active="isActive"
-      :autocomplete="props.type === 'password' ? 'current-password' : 'email'"
-      :id="props.type"
-      minlength="5"
-      maxlength="50"
-    />
-    <label :class="isActive ? 'label-active' : 'label'" :for="props.type">{{
-      props.name
-    }}</label>
-  </div>
+  <input
+    :class="props.background ? 'background' : ''"
+    :type="props.type"
+    v-model="inputData"
+    @input="updateValue()"
+    name="test"
+    @focusout="
+      inputData === '' || inputData === undefined
+        ? (isActive = false)
+        : (isActive = true)
+    "
+    @change="inputData === '' ? (isActive = false) : (isActive = true)"
+    @focusin="isActive = true"
+    :is-active="isActive"
+    :autocomplete="props.type === 'password' ? 'current-password' : 'email'"
+    :id="props.type"
+    minlength="5"
+    maxlength="50"
+  />
+  <label :class="isActive ? 'label-active' : 'label'" :for="props.type">{{
+    props.name
+  }}</label>
 </template>
 
 <style scoped lang="scss">
