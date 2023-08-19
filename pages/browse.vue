@@ -48,8 +48,8 @@ onNuxtReady(async () => {
   apiCall(arrOfPaths.value);
 });
 function updatePhoto(photo: string) {
-  getStore(photo);
   firestoreClient.value.avatar = photo;
+  getStore(photo);
 }
 const currElement = ref();
 function currElementHandler(e: Movie) {
