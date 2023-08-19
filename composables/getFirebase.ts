@@ -1,4 +1,4 @@
-import { Auth } from "firebase/auth";
+import { Auth, updateProfile } from "firebase/auth";
 import {
   getAuth,
   createUserWithEmailAndPassword,
@@ -9,22 +9,9 @@ import {
 } from "firebase/auth";
 import { Firestore, collection, getDocs } from "firebase/firestore";
 
-export const getStore = async () => {
-  const firestore = useState("db").value as Firestore;
+export const getStore = async (photo: any) => {
   const auth: Auth = useState("auth").value as Auth;
-  let test: any;
-  if (auth.currentUser && firestore) {
-    const querySnapshot = await getDocs(collection(firestore, "avatar"));
-    querySnapshot.forEach((doc) => {
-      if (doc.id === "users") test = doc.data();
-    });
-
-    for (const l in test) {
-      if (l === auth.currentUser.uid) {
-        return { avatar: test[l], email: auth.currentUser.email };
-      }
-    }
-  }
+  updateProfile(auth.currentUser!, { photoURL: photo });
 };
 
 export const createUser = async (email: string) => {

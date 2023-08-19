@@ -1,18 +1,19 @@
 export default defineNuxtRouteMiddleware(async (to, from) => {
   const test = useCookie("__token");
-  let firebase;
+  let session: boolean = false;
   await $fetch("/api/checkSession", {
     method: "POST",
     body: { test: test.value },
-  }).then((set) => {
-    firebase = set;
-    return firebase;
+  }).then((isSession) => {
+    session = isSession;
+
+    return session;
   });
-  if (firebase) {
+  if (session) {
     if (to.path !== "/browse") {
       return navigateTo("/browse");
     }
-  } else if (!firebase && to.path === "/browse") {
+  } else if (!session && to.path === "/browse") {
     return navigateTo("/login");
   }
 });

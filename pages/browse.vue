@@ -2,9 +2,13 @@
 import { ImageCarousel } from "vue-multi-slider";
 import "vue-multi-slider/style.css";
 import { Movie } from "../types";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
-const firestoreClient = ref();
-const avatar = ref<string>();
+const firestoreClient = ref({
+  avatar: "",
+  email: "",
+});
+const avatar = ref<any>();
 const arrOfPaths = ref<string[]>([
   "/3/movie/popular",
   "/3/movie/top_rated",
@@ -30,11 +34,23 @@ async function apiCall(movies: string[]) {
 }
 
 onNuxtReady(async () => {
-  apiCall(arrOfPaths.value);
-  firestoreClient.value = await getStore();
-  avatar.value = await firestoreClient.value.avatar;
-});
+  const auth = getAuth();
 
+  await onAuthStateChanged(auth, (user) => {
+    if (user) {
+      firestoreClient.value = {
+        avatar: user.photoURL!,
+        email: user.email!,
+      };
+    }
+  });
+  console.log(firestoreClient.value);
+  apiCall(arrOfPaths.value);
+});
+function updatePhoto(photo: string) {
+  getStore(photo);
+  firestoreClient.value.avatar = photo;
+}
 const currElement = ref();
 function currElementHandler(e: Movie) {
   isHovering.value = true;
@@ -98,7 +114,8 @@ function setHeader(id: string | number) {
   <NavBar :av="firestoreClient"></NavBar>
   <div class="flex-center">
     <button @click="signOutUser()">Sign Out</button>
-    <button @click="navigateTo('/')">Go Home, should not take you there</button>
+    <button @click="updatePhoto('raiden.png')">Raiden</button>
+    <button @click="updatePhoto('kokomi.png')">kokomi</button>
     <div class="movie-wrapper">
       <section class="movie-section" v-for="(movie, index) in arrOfMovies">
         <h2>{{ setHeader(index) }}</h2>

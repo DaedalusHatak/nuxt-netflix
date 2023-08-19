@@ -1,7 +1,7 @@
-import type { H3Event } from 'h3'
+import type { H3Event } from "h3";
 import { getAuth } from "firebase-admin/auth";
 
-export default defineEventHandler(async (event:H3Event) => {
+export default defineEventHandler(async (event: H3Event) => {
   const { test } = await readBody(event);
   let papa;
   let res = false;
@@ -12,7 +12,6 @@ export default defineEventHandler(async (event:H3Event) => {
         return (res = true);
       })
       .catch((err) => {
-       
         return (res = false);
       });
   }

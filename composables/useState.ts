@@ -1,1 +1,2 @@
-export const useFirebaseUser = () => useState("firebaseUser");
+import { ref } from "vue";
+import { UserData } from "~/types";
