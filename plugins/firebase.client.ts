@@ -1,7 +1,7 @@
 import { FirebaseApp, initializeApp } from "firebase/app";
 import { Auth, getAuth } from "firebase/auth";
 import { RuntimeConfig } from "nuxt/schema";
-import { FirebaseClient } from "../types";
+import { FirebaseClient } from "~/types";
 import { getFirestore } from "firebase/firestore";
 
 export default defineNuxtPlugin(async (nuxtApp) => {

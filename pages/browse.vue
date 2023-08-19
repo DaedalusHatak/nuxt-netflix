@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ImageCarousel } from "vue-multi-slider";
 import "vue-multi-slider/style.css";
-import { Movie } from "../types";
+import { Movie } from "~/types";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 const firestoreClient = ref({
