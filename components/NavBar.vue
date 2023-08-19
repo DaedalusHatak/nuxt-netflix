@@ -17,7 +17,7 @@ const props = defineProps<{
 
       <div v-if="props.av" class="profile">
         <p>{{ props.av.email }}</p>
-        <img :src="`_nuxt/assets/img/${props.av.avatar}`" alt="" />
+        <img :src="`/img/${props.av.avatar}`" alt="" />
       </div>
     </div>
   </nav>
