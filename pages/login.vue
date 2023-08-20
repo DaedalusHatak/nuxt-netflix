@@ -3,14 +3,14 @@ import BaseInput from "@/components/BaseInput.vue";
 const isPageReady = ref<boolean>(false);
 const emailInput = ref<string>("");
 const password = ref<string>("");
-onMounted(()=>{
-  isPageReady.value=true;
-})
+onMounted(() => {
+  isPageReady.value = true;
+});
 const isSent = ref<boolean>(false);
 const proc = process.client;
-const sendData = async (email:string,password:string) => {
+const sendData = async (email: string, password: string) => {
   isSent.value = true;
-  await signIn(email,password)
+  await signIn(email, password)
     .then((user) => {
       if (user.user) {
         return user.user.getIdToken();
@@ -46,7 +46,11 @@ const sendData = async (email:string,password:string) => {
       <div class="form-hero">
         <div class="login-form">
           <h1>Sign In</h1>
-          <form v-if="proc" @submit.prevent="sendData(emailInput,password)" name="login">
+          <form
+            v-if="proc"
+            @submit.prevent="sendData(emailInput, password)"
+            name="login"
+          >
             <div>
               <BaseInput
                 v-model="emailInput"
@@ -69,14 +73,17 @@ const sendData = async (email:string,password:string) => {
                 <span class="loader-circle"></span>
               </div>
             </button>
-            
           </form>
-          <button v-if="isPageReady" @click="sendData('test@test.com','test1234')" class="get-started-button">
-              <span v-if="!isSent">Test login</span>
-              <div v-else class="loader">
-                <span class="loader-circle"></span>
-              </div>
-            </button>
+          <button
+            v-if="isPageReady"
+            @click="sendData('test@test.com', 'test1234')"
+            class="get-started-button"
+          >
+            <span v-if="!isSent">Test login</span>
+            <div v-else class="loader">
+              <span class="loader-circle"></span>
+            </div>
+          </button>
         </div>
         <div class="reg-link">
           New to Daedalus?

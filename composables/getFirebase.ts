@@ -1,4 +1,4 @@
-import { Auth, updateProfile } from "firebase/auth";
+import { Auth, updatePassword, updateProfile } from "firebase/auth";
 import {
   getAuth,
   createUserWithEmailAndPassword,
@@ -10,17 +10,19 @@ import {
 import { Firestore, collection, getDocs } from "firebase/firestore";
 
 export const getStore = async (photo: any) => {
-  const auth: Auth = useState("auth").value as Auth;
+  const auth = getAuth();
   updateProfile(auth.currentUser!, { photoURL: photo });
 };
 
-export const createUser = async (email: string) => {
-  const actionCodeSettings = {
-    url: "http://localhost:3000/",
-    handleCodeInApp: true,
-  };
+export const createUser = async (email: string, password: string) => {
   const auth = getAuth();
-  sendSignInLinkToEmail(auth, email, actionCodeSettings);
+  await createUserWithEmailAndPassword(auth, email, password);
+  await navigateTo("/login");
+};
+export const updateUser = async (pass: string) => {
+  const auth = getAuth();
+  updatePassword(auth.currentUser!, pass);
+  navigateTo("/browse");
 };
 export const signIn = async (email: string, password: string) => {
   console.log("signIn");

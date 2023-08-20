@@ -1,19 +1,19 @@
 export default defineNuxtRouteMiddleware(async (to, from) => {
   const test = useCookie("__token");
-  let session: boolean = false;
+  let sessione: boolean = false;
   await $fetch("/api/checkSession", {
     method: "POST",
     body: { test: test.value },
   }).then((isSession) => {
-    session = isSession;
+    sessione = isSession;
 
-    return session;
+    return sessione;
   });
-  if (session) {
+  if (sessione) {
     if (to.path !== "/browse") {
       return navigateTo("/browse");
     }
-  } else if (!session && to.path === "/browse") {
+  } else if (!sessione && to.path === "/browse") {
     return navigateTo("/login");
   }
 });

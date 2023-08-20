@@ -12,6 +12,7 @@
     "@nuxt/image": "^1.0.0-rc.1",
     "@nuxt/types": "^2.17.1",
     "@nuxt/typescript-runtime": "^3.0.1",
+    "@sidebase/nuxt-session": "^0.2.7",
     "@types/node": "^20",
     "nuxt": "^3.6.5"
   },

@@ -4,44 +4,51 @@ import { ref } from "vue";
 const props = defineProps<{
   name: string;
   type: string;
-
+  modelValue: string;
   background: boolean;
 }>();
 
 const isActive = ref<boolean>(false);
-const inputData = ref<string>();
-const emit = defineEmits(["update:modelValue"]);
-function updateValue() {
-  emit("update:modelValue", inputData.value);
+defineEmits(["update:modelValue"]);
+
+if (!props.modelValue) {
+  isActive.value = true;
 }
 </script>
 
 <template>
-  <input
-    :class="props.background ? 'background' : ''"
-    :type="props.type"
-    v-model="inputData"
-    @input="updateValue()"
-    name="test"
-    @focusout="
-      inputData === '' || inputData === undefined
-        ? (isActive = false)
-        : (isActive = true)
-    "
-    @change="inputData === '' ? (isActive = false) : (isActive = true)"
-    @focusin="isActive = true"
-    :is-active="isActive"
-    :autocomplete="props.type === 'password' ? 'current-password' : 'email'"
-    :id="props.type"
-    minlength="5"
-    maxlength="50"
-  />
-  <label :class="isActive ? 'label-active' : 'label'" :for="props.type">{{
-    props.name
-  }}</label>
+  <div class="base-input">
+    <input
+      :class="props.background ? 'background' : ''"
+      :type="props.type"
+      :value="props.modelValue"
+      @input="
+        $emit('update:modelValue', ($event.target as HTMLInputElement).value)
+      "
+      name="test"
+      @focusout="
+        props.modelValue === '' || props.modelValue === undefined
+          ? (isActive = false)
+          : (isActive = true)
+      "
+      @change="props.modelValue === '' ? (isActive = false) : (isActive = true)"
+      @focusin="isActive = true"
+      :is-active="isActive"
+      :autocomplete="props.type === 'password' ? 'current-password' : 'email'"
+      :id="props.type"
+      minlength="5"
+      maxlength="50"
+    />
+    <label :class="isActive ? 'label-active' : 'label'" :for="props.type">{{
+      props.name
+    }}</label>
+  </div>
 </template>
 
 <style scoped lang="scss">
+.base-input {
+  width: 100%;
+}
 .background {
   background-color: #333 !important;
 }
@@ -51,7 +58,7 @@ input {
   padding: 1.5rem 1rem 0.5rem;
   border: none;
   border-radius: 1rem;
-
+  height: 100%;
   width: 100%;
   background-clip: padding-box;
   appearance: none;
