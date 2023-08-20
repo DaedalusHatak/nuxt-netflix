@@ -11,7 +11,7 @@ const props = defineProps<{
 const isActive = ref<boolean>(false);
 defineEmits(["update:modelValue"]);
 
-if (!props.modelValue) {
+if (props.modelValue) {
   isActive.value = true;
 }
 </script>
