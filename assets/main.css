@@ -5,17 +5,14 @@
 
   line-height: 1.12em;
 }
-#__nuxt {
+main {
   background-color: rgb(15, 11, 15);
   color: white;
   margin: 0 auto;
-
+  min-height: 100vh;
   font-weight: normal;
 }
 body {
   overflow-x: hidden;
 }
-main {
 
-  min-height: 100vh;
-}
