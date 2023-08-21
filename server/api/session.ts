@@ -1,5 +1,5 @@
 
-import { H3Event } from "h3";
+import { H3Event,useSession,updateSession } from "h3";
 
 export default defineEventHandler(async (event: H3Event) => {
     const {email} = await readBody(event);
@@ -9,12 +9,12 @@ export default defineEventHandler(async (event: H3Event) => {
        
         session = await updateSession(event,{password:''},{email:email})
         console.log('if',session)
-        return session
+
     }
     else{
         session = await useSession(event,{password:''})
         console.log('else',session)
-        return session
+        
     }
-
+    return session
 })
