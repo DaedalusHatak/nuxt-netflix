@@ -1,11 +1,10 @@
 <script setup lang="ts">
 const password = ref();
 const email = ref();
-onNuxtReady(async () => {
-  const { session } = await useSession();
-  console.log(session.value);
-  email.value = session.value?.email;
-});
+const {data} = await useFetch('/api/session')
+if(data.value.email){
+    email.value = data.value.email
+  }
 </script>
 
 <template>

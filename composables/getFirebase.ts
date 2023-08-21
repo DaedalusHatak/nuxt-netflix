@@ -17,6 +17,7 @@ export const getStore = async (photo: any) => {
 export const createUser = async (email: string, password: string) => {
   const auth = getAuth();
   await createUserWithEmailAndPassword(auth, email, password);
+  await $fetch('/api/session',{method:"POST", body:{email:''}})
   await navigateTo("/login");
 };
 export const updateUser = async (pass: string) => {

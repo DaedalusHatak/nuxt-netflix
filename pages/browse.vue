@@ -39,7 +39,7 @@ onNuxtReady(async () => {
   await onAuthStateChanged(auth, (user) => {
     if (user) {
       firestoreClient.value = {
-        avatar: user.photoURL!,
+        avatar: user.photoURL || 'raiden.png',
         email: user.email!,
       };
     }

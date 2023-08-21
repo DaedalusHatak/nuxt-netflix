@@ -1,5 +1,4 @@
 export const updateEmail = async (email: any) => {
-  const { session, update } = await useSession();
-  await update({ email: email });
+ await $fetch('/api/session',{method:"POST",body:{email:email}})
   await navigateTo("/confirm");
 };

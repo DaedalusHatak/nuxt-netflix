@@ -2,15 +2,14 @@
 import BaseInput from "./BaseInput.vue";
 
 const emailRegister = ref<string>("");
-
+  const {data} = await useFetch('/api/session')
+  if(data.value.email){
+    emailRegister.value = data.value.email
+  }
 defineProps({
   isMax: String,
 });
-onNuxtReady(async () => {
-  const { session } = await useSession();
-  emailRegister.value = session.value?.email;
-  console.log(emailRegister.value);
-});
+
 </script>
 
 <template>

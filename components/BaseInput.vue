@@ -7,13 +7,16 @@ const props = defineProps<{
   modelValue: string;
   background: boolean;
 }>();
-
-const isActive = ref<boolean>(false);
-defineEmits(["update:modelValue"]);
-
-if (props.modelValue) {
+const isActive = ref(false);
+const checkIsActive = computed(()=>{
+  if (props.modelValue) {
   isActive.value = true;
 }
+else isActive.value = false;
+})
+defineEmits(["update:modelValue"]);
+
+
 </script>
 
 <template>
@@ -33,7 +36,7 @@ if (props.modelValue) {
       "
       @change="props.modelValue === '' ? (isActive = false) : (isActive = true)"
       @focusin="isActive = true"
-      :is-active="isActive"
+      :is-active="checkIsActive"
       :autocomplete="props.type === 'password' ? 'current-password' : 'email'"
       :id="props.type"
       minlength="5"
