@@ -20,12 +20,6 @@ export default defineNuxtConfig({
   css: ["~/assets/main.css", "~/assets/base.css"],
   // plugins: ['~/plugins/firebase.ts'],
 
-  modules: ["@sidebase/nuxt-session"],
-  session: {
-    session: {
-      expiryInSeconds: 60 * 60 * 24,
-    },
-  },
   dev: true,
   runtimeConfig: {
     apiSecret: "",

@@ -2,7 +2,7 @@
 const password = ref();
 const email = ref();
 const {data} = await useFetch('/api/session')
-if(data.value.email){
+if(data.value?.email){
     email.value = data.value.email
   }
 </script>

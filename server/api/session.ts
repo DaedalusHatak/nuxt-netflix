@@ -2,19 +2,19 @@
 import { H3Event,useSession,updateSession } from "h3";
 
 export default defineEventHandler(async (event: H3Event) => {
-    // const {email} = await readBody(event);
-    // let session;
+    const session = useSession<{email?:string}>(event,{password:'123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123'});
+if(event.node.req.method === "POST"){
+    const {email} = await readBody(event)
+    ;(await session).update({email: email})
+}
 
-    // if(email){
+
+
+
        
-    //     session = await updateSession(event,{password:''},{email:email})
-    //     console.log('if',session)
 
-    // }
-    // else{
-    //     session = await useSession(event,{password:''})
-    //     console.log('else',session)
-        
-    // }
-    return true
+
+
+
+    return (await session).data
 })
