@@ -16,5 +16,5 @@ export default defineEventHandler(async (event: H3Event) => {
         console.log('else',session)
         
     }
-    return session
+    return true
 })
