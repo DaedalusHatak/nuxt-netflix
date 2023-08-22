@@ -3,15 +3,9 @@ import BaseInput from "./BaseInput.vue";
 
 const emailRegister = ref<string>("");
 
-  const {data} = await useFetch('/api/session')
-  if(data.value?.email){
-    emailRegister.value = data.value.email
-  }
-
 defineProps({
   isMax: String,
 });
-
 </script>
 
 <template>

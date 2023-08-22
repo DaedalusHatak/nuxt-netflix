@@ -1,3 +1,4 @@
+import { FirebaseError } from "firebase/app";
 import { Auth, updatePassword, updateProfile } from "firebase/auth";
 import {
   getAuth,
@@ -16,9 +17,18 @@ export const getStore = async (photo: any) => {
 
 export const createUser = async (email: string, password: string) => {
   const auth = getAuth();
-  await createUserWithEmailAndPassword(auth, email, password);
-  await $fetch('/api/session',{method:"POST", body:{email:''}})
-  await navigateTo("/login");
+  try {
+    const createuser = await createUserWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
+    await $fetch("/api/session", { method: "POST", body: { email: "" } });
+  } catch (err) {
+    if (err instanceof FirebaseError) {
+      return err.message;
+    }
+  }
 };
 export const updateUser = async (pass: string) => {
   const auth = getAuth();
