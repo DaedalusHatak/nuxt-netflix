@@ -38,6 +38,7 @@ nav {
   background-color: white;
   width: 100%;
   margin: 0 auto;
+  border-bottom: 1px solid #e6e6e6;
 }
 .navbar {
   display: grid;
@@ -50,7 +51,7 @@ nav {
   width: 100%;
   left: 0;
   right: 0;
-  border-bottom: 1px solid #e6e6e6;
+ 
 }
 
 

@@ -19,7 +19,10 @@ export default defineNuxtConfig({
   },
   css: ["~/assets/main.css", "~/assets/base.css"],
   // plugins: ['~/plugins/firebase.ts'],
-
+components:[{
+  path: '~/components',
+  pathPrefix: false,
+}],
   dev: true,
   runtimeConfig: {
     apiSecret: "",

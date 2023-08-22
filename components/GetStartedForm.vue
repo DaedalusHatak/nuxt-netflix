@@ -20,7 +20,7 @@ defineProps({
       Ready to watch? Enter your email to create or restart your membership.
     </h3>
     <form
-      @submit.prevent="updateEmail(emailRegister)"
+      @submit.prevent="updateUserSession(emailRegister)"
       :style="isMax ? `max-width:${isMax}` : ''"
       action=""
     >
@@ -29,7 +29,7 @@ defineProps({
           v-model="emailRegister"
           type="email"
           name="Email Address"
-          :background="false"
+          :background="true"
         />
       </div>
       <button class="get-started-button">

@@ -1,7 +1,7 @@
 @import "./base.css";
 
 * {
-  font-family: sans-serif;
+  font-family: Netflix Sans,Helvetica Neue,Segoe UI,Roboto,Ubuntu,sans-serif;
 
   line-height: 1.12em;
 }
