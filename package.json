@@ -9,30 +9,21 @@
     "postinstall": "nuxt prepare"
   },
   "devDependencies": {
-    "@nuxt/image": "^1.0.0-rc.1",
-    "@nuxt/types": "^2.17.1",
     "@nuxt/typescript-runtime": "^3.0.1",
-    "@sidebase/nuxt-session": "^0.2.7",
     "@types/node": "^20",
     "nuxt": "^3.6.5"
   },
   "dependencies": {
     "@nuxt/kit": "^3.6.5",
-    "@pinia-plugin-persistedstate/nuxt": "^1.1.1",
-    "@pinia/nuxt": "^0.4.11",
     "body-parser": "^1.20.2",
     "firebase": "^10.2.0",
     "firebase-admin": "^11.10.1",
     "node-jsonwebtoken": "^0.0.1",
     "nux": "^2.1.1",
     "nuxi": "^3.6.5",
-    "nuxt-elements": "^4.20.69",
     "nuxt3": "^3.7.0-28204774.4e538a03",
-    "pinia": "^2.1.6",
-    "sass": "^1.66.0",
-    "vite-plugin-vsharp": "^1.4.2",
-    "vue-multi-slider": "^0.1.6",
-    "vuefire": "^3.1.15"
+    "sass": "^1.66.1",
+    "vue-multi-slider": "^0.1.6"
   },
   "overrides": {
     "vue": "latest"
