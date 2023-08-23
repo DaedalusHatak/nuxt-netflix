@@ -29,6 +29,21 @@ async function apiCall(movies: string[]) {
       method: "POST",
       body: i,
     });
+
+if(i === "/3/tv/popular" || i === "/3/tv/top_rated"){
+  const dat = await useFetch("/api/getGenres", {
+      method: "POST",
+      body: "tv",
+    });
+    console.log((dat))
+}
+else{
+  const dat = await useFetch("/api/getGenres", {
+      method: "POST",
+      body: "movie",
+    });
+    console.log((dat))
+}
     arrOfMovies.value.push(data.value);
   }
 }

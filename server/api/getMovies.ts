@@ -30,6 +30,29 @@ export default defineEventHandler(async (event: H3Event) => {
       };
     })
   );
+
+  const moviesWithGenres: Movie[] = await Promise.all(
+    results.map(async (movie: Movie) => {
+      let image;
+      let poster;
+      if (movie.backdrop_path) {
+        image = `${config.imgLink}${movie.backdrop_path}`;
+      } else {
+        image = "";
+      }
+      if (movie.poster_path) {
+        poster = `${config.imgLink}${movie.poster_path}`;
+      } else {
+        poster = "";
+      }
+      return {
+        ...movie,
+        image,
+        poster,
+      };
+    })
+  );
+
   const moviesWithNonEmptyImages = moviesWithImages.filter(
     (movie) => movie.image !== "" && movie.poster !== ""
   );
