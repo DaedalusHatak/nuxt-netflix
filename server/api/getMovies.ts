@@ -3,8 +3,9 @@ import type { H3Event } from "h3";
 export default defineEventHandler(async (event: H3Event) => {
   const config = useRuntimeConfig();
   const movieLink = await readBody(event);
+  console.log(movieLink);
   const data: Movies = await $fetch(
-    `https://api.themoviedb.org${movieLink}?api_key=c54e012f26022e6ad00735cc83d37781`
+    `https://api.themoviedb.org/${movieLink}?api_key=${config.apiSecret}`
   );
   const results = data.results;
 

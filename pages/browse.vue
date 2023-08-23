@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { ImageCarousel } from "vue-multi-slider";
-import "vue-multi-slider/style.css";
 import { Movie } from "~/types";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
@@ -8,12 +6,12 @@ const firestoreClient = ref({
   avatar: "",
   email: "",
 });
-const avatar = ref<any>();
+
 const arrOfPaths = ref<string[]>([
-  "/3/movie/popular",
-  "/3/movie/top_rated",
-  "/3/tv/popular",
-  "/3/tv/top_rated",
+  "3/movie/popular",
+  "3/movie/top_rated",
+  "3/tv/popular",
+  "3/tv/top_rated",
 ]);
 const arrOfHeaders = ref<string[]>([
   "Popular movies",
@@ -21,46 +19,17 @@ const arrOfHeaders = ref<string[]>([
   "Popular TV series",
   "Top rated TV series",
 ]);
-const arrOfMovies = ref<Movie>([]);
-async function apiCall(movies: string[]) {
-  let l = 0;
-  for (const i of movies) {
-    const { data } = await useFetch("/api/getMovies", {
-      method: "POST",
-      body: i,
-    });
-
-if(i === "/3/tv/popular" || i === "/3/tv/top_rated"){
-  const dat = await useFetch("/api/getGenres", {
-      method: "POST",
-      body: "tv",
-    });
-    console.log((dat))
-}
-else{
-  const dat = await useFetch("/api/getGenres", {
-      method: "POST",
-      body: "movie",
-    });
-    console.log((dat))
-}
-    arrOfMovies.value.push(data.value);
-  }
-}
-
 onNuxtReady(async () => {
   const auth = getAuth();
 
   await onAuthStateChanged(auth, (user) => {
     if (user) {
       firestoreClient.value = {
-        avatar: user.photoURL || 'raiden.png',
+        avatar: user.photoURL || "raiden.png",
         email: user.email!,
       };
     }
   });
-  console.log(firestoreClient.value);
-  apiCall(arrOfPaths.value);
 });
 function updatePhoto(photo: string) {
   firestoreClient.value.avatar = photo;
@@ -132,24 +101,17 @@ function setHeader(id: string | number) {
     <button @click="updatePhoto('raiden.png')">Raiden</button>
     <button @click="updatePhoto('kokomi.png')">kokomi</button>
     <div class="movie-wrapper">
-      <section class="movie-section" v-for="(movie, index) in arrOfMovies">
+      <section
+        class="movie-section"
+        v-for="(movie, index) in arrOfPaths"
+        :key="movie"
+      >
         <h2>{{ setHeader(index) }}</h2>
-        <ImageCarousel
-          @hov-element="currElementHandler"
-          @position-element="currPositionHandler"
-          :emit-image="true"
-          :size="2"
-          :sm="3"
-          :md="4"
-          :lg="5"
-          :overflow="true"
-          :button-padding="-3"
-          :button-width="3"
-          :button-visibile="true"
-          :xl="6"
-          :xxl="7"
-          :data="movie.results"
-        />
+        <p>{{ movie }}</p>
+        <Suspense>
+          <MovieList :list="movie" />
+          <template #fallback>Loading...</template>
+        </Suspense>
       </section>
     </div>
     <Transition
