@@ -1,4 +1,8 @@
 <script setup lang="ts">
+let runtime: any;
+onNuxtReady(() => {
+  runtime = useRuntimeConfig();
+});
 const isModal = ref<string>();
 const { data } = await useFetch("/api/session");
 console.log(data.value);
@@ -32,6 +36,7 @@ async function closeModal(e: any) {
   ></BaseModal>
   <div class="confirm-page">
     <NavBarRegistration> </NavBarRegistration>
+    <p v-if="runtime">{{ runtime.apierLink }}</p>
     <div class="centered">
       <FirstStep v-if="secondStep" @showModal="showModal" :data="data?.email" />
       <div class="register-info" v-else>
@@ -76,7 +81,7 @@ p {
   width: max-content;
   justify-content: center;
   align-items: center;
-
+  padding: 2rem;
   height: 100%;
   width: 100%;
   flex: 1;

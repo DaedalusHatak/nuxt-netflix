@@ -53,7 +53,7 @@ async function createUserForm() {
       v-model="password"
     />
     <button class="next-button">
-      <span v-if="!isSent">Next</span>
+      <span v-if="!isSent">Create</span>
       <div v-else class="loader">
         <span class="loader-circle"></span>
       </div>
@@ -104,7 +104,7 @@ button {
   align-items: center;
   justify-content: center;
   writing-mode: horizontal-tb !important;
-  width: max-content;
+  width: 100%;
   margin-top: 1rem;
   flex: 0 0 auto;
   border: 0px;

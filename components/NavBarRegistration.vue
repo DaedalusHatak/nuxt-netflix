@@ -1,16 +1,12 @@
-<script setup lang="ts">
-
-</script>
+<script setup lang="ts"></script>
 
 <template>
   <nav>
     <div class="navbar">
       <span class="logo-span"><img src="@/assets/daedalus.png" alt="" /> </span>
 
-
       <div class="profile">
         <RouterLink to="/login">Sign in</RouterLink>
-      
       </div>
     </div>
   </nav>
@@ -23,9 +19,8 @@ a {
   line-height: 90px;
   color: #333;
   text-decoration: none;
-
 }
-a:hover{
+a:hover {
   text-decoration: underline;
 }
 ul {
@@ -49,23 +44,20 @@ nav {
   height: 5.375rem;
   margin: auto;
   width: 100%;
+  max-width: calc(100% - 4rem);
   left: 0;
   right: 0;
- 
 }
-
 
 img {
   align-self: center;
   display: block;
-  height: 100%;
-  width: auto;
+  height: auto;
+  max-height: 64px;
+  width: 100%;
+  max-width: 185px;
 }
-@media screen and (min-width: 600px) {
-  .navbar {
-    max-width: calc(100% - 4rem);
-  }
-}
+
 @media screen and (min-width: 1280px) {
   .navbar {
     max-width: calc(83.33333333333334% - 6rem);

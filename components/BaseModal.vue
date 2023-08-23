@@ -48,7 +48,7 @@ function closeModal() {
 }
 
 .modal {
-  width: 100%;
+  width: calc(100% - 4rem);
   z-index: 999;
   background: #ffffff;
   border-radius: 15px;

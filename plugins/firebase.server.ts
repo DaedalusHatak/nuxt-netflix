@@ -5,7 +5,7 @@ import { FirebaseServer } from "~/types";
 
 export default defineNuxtPlugin(async (nuxtApp) => {
   const config: RuntimeConfig = useRuntimeConfig();
-  const firebaseConfig: FirebaseServer = config.public.firebaseAdmin;
+  const firebaseConfig = config.firebaseAdmin as FirebaseServer;
 
   // Initialize Firebase
   if (getApps().length == 0) {

@@ -1,4 +1,3 @@
-import tsu from "nuxt-elements";
 // https://nuxt.com/docs/api/configuration/nuxt-config
 
 export default defineNuxtConfig({
@@ -19,25 +18,27 @@ export default defineNuxtConfig({
   },
   css: ["~/assets/main.css", "~/assets/base.css"],
   // plugins: ['~/plugins/firebase.ts'],
-components:[{
-  path: '~/components',
-  pathPrefix: false,
-}],
+  components: [
+    {
+      path: "~/components",
+      pathPrefix: false,
+    },
+  ],
   dev: true,
   runtimeConfig: {
     apiSecret: "",
     apiLink: "",
+    apierLink: "wert",
     imgLink: "",
+    firebaseAdmin: {
+      projectId: process.env.FIREBASE_SA_PROJECT_ID,
 
+      privateKey: process.env.FIREBASE_PRIVATE_SA_KEY
+        ? process.env.FIREBASE_PRIVATE_SA_KEY.replace(/\\n/gm, "\n")
+        : undefined,
+      clientEmail: process.env.FIREBASE_SA_CLIENT_EMAIL,
+    },
     public: {
-      firebaseAdmin: {
-        projectId: process.env.FIREBASE_SA_PROJECT_ID,
-
-        privateKey: process.env.FIREBASE_PRIVATE_SA_KEY
-          ? process.env.FIREBASE_PRIVATE_SA_KEY.replace(/\\n/gm, "\n")
-          : undefined,
-        clientEmail: process.env.FIREBASE_SA_CLIENT_EMAIL,
-      },
       firebase: {
         apiKey: process.env.FIREBASE_API_KEY,
         authDomain: process.env.FIREBASE_AUTH_DOMAIN,
