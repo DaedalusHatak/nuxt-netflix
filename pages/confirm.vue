@@ -5,7 +5,6 @@ onNuxtReady(() => {
 });
 const isModal = ref<string>();
 const { data } = await useFetch("/api/session");
-console.log(data.value);
 const secondStep = ref(data.value?.secondStep);
 function updatePage() {
   updateUserSession(data.value?.email, true);
@@ -19,7 +18,6 @@ function showModal(e: any) {
   }
 }
 async function closeModal(e: any) {
-  console.log("close", e);
   if (e) {
     navigateTo("/login");
   } else {
