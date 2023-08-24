@@ -106,9 +106,7 @@ function setHeader(id: string | number) {
 			>
 				<h2>{{ setHeader(index) }}</h2>
 
- <MovieList :list="movie" />
-
-
+				<MovieList :list="movie" />
 			</section>
 		</div>
 		<Transition @before-enter="onBeforeEnter" @after-leave="onAfterLeave">

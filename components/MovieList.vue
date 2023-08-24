@@ -6,7 +6,7 @@ const props = defineProps<{
   list: string;
 }>();
 const def = ref('');
-const { data } = await useFetch(`/api/getMovies?_=${props.list}`,{lazy:true, default:()=>{def.value = "pending"}});
+const { pending,data } = await useFetch(`/api/getMovies?_=${props.list}`,{lazy:true, default:()=>{def.value = "pending"}});
 // const isHovering = ref();
 // const currElement = ref();
 // function currElementHandler(e: Movie) {
@@ -20,7 +20,7 @@ const { data } = await useFetch(`/api/getMovies?_=${props.list}`,{lazy:true, def
 </script>
 
 <template>
-  <div v-if="def">Loading...</div>
+  <div v-if="pending || def">Loading...</div>
 
   <ImageCarousel
   v-else
