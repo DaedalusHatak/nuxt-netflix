@@ -105,7 +105,6 @@ function setHeader(id: string | number) {
 				:key="movie"
 			>
 				<h2>{{ setHeader(index) }}</h2>
-				<p>{{ movie }}</p>
 
  <MovieList :list="movie" />
 

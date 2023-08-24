@@ -3,6 +3,7 @@ import BaseInput from "@/components/BaseInput.vue";
 const isPageReady = ref<boolean>(false);
 const emailInput = ref<string>("");
 const password = ref<string>("");
+const isError = ref<boolean>(false);
 onMounted(() => {
   isPageReady.value = true;
 });
@@ -10,32 +11,29 @@ const isSent = ref<boolean>(false);
 const proc = process.client;
 const sendData = async (email: string, password: string) => {
   isSent.value = true;
-  await signIn(email, password)
-    .then((user) => {
-      if (user.user) {
-        return user.user.getIdToken();
-      } else {
-        isSent.value = false;
-        return;
-      }
-    })
-    .then(async (idToken) => {
-      const scrfToken = useCookie("token");
+try{
+  const signingIn = await signIn(email,password)
+  if (signingIn.user){
+    const idToken = await signingIn.user.getIdToken();
+    const scrfToken = useCookie("token");
       await useFetch("/api/signIn", {
         method: "POST",
         body: { scrfToken, idToken },
       });
-    })
-    .then((res) => {
-      navigateTo("/browse");
-    })
-    .catch(() => {
-      navigateTo("/login");
-    });
+      await navigateTo('/browse')
+  }
+  
+}
+catch(err){
+  isSent.value = false;
+isError.value = true;
+}
+ 
 };
 </script>
 
 <template>
+  <BaseModal v-if="isError" @closeModal="isError = false" message="Wrong email or password. Check your data!"></BaseModal>
   <img class="hero-img" src="@/assets/background.png" alt="" />
   <div class="shadow-hero-image"></div>
   <div class="hero-wrapper">

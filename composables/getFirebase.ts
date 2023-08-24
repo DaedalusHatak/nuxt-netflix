@@ -36,16 +36,13 @@ export const updateUser = async (pass: string) => {
   navigateTo("/browse");
 };
 export const signIn = async (email: string, password: string) => {
-  console.log("signIn");
   const auth = getAuth();
   const credentials = await signInWithEmailAndPassword(
     auth,
     email,
     password
-  ).catch((err) => {
-    alert("Check your data!");
-    return err;
-  });
+  )
+
   return credentials;
 };
 

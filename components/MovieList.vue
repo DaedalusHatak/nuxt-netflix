@@ -20,7 +20,6 @@ const { data } = await useFetch(`/api/getMovies?_=${props.list}`,{lazy:true, def
 </script>
 
 <template>
-  {{ props.list }}
   <div v-if="def">Loading...</div>
 
   <ImageCarousel
