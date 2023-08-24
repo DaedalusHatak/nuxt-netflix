@@ -15,16 +15,19 @@ const props = defineProps<{
   list: string;
 }>();
 
-const { pending,data } = await useFetch(`/api/getMovies?_=${props.list}`);
+const { data } = await useFetch(`/api/getMovies?_=${props.list}`);
 
 
 </script>
 
 <template>
-  <div v-if="pending">Loading...</div>
+  <ClientOnly>
+
+    <template #fallback> Loading...</template>
+  </ClientOnly>
 
   <ImageCarousel
-  v-else
+
     :emit-image="true"
     :size="2"
     :sm="3"
@@ -39,4 +42,5 @@ const { pending,data } = await useFetch(`/api/getMovies?_=${props.list}`);
     :data="data!.results"
   />
 </template>
+
 <style scoped></style>
