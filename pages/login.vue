@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import BaseInput from "@/components/BaseInput.vue";
-
+const isPageReady = ref<boolean>(false);
 const emailInput = ref<string>("");
 const password = ref<string>("");
 const isError = ref<boolean>(false);
-
+onMounted(() => {
+  isPageReady.value = true;
+});
 const isSent = ref<boolean>(false);
-const proc = process.client;
 const sendData = async (email: string, password: string) => {
   isSent.value = true;
 try{
@@ -43,7 +44,6 @@ isError.value = true;
         <div class="login-form">
           <h1>Sign In</h1>
           <form
-            v-if="proc"
             @submit.prevent="sendData(emailInput, password)"
             name="login"
           >
@@ -63,7 +63,7 @@ isError.value = true;
                 :background="true"
               />
             </div>
-            <button  class="get-started-button">
+            <button v-if="isPageReady" class="get-started-button">
               <span v-if="!isSent">Sign In</span>
               <div v-else class="loader">
                 <span class="loader-circle"></span>
@@ -71,7 +71,7 @@ isError.value = true;
             </button>
           </form>
           <button
-            
+            v-if="isPageReady"
             @click="sendData('test@test.com', 'test1234')"
             class="get-started-button"
           >
