@@ -1,10 +1,7 @@
 <template>
   <main>
     <NuxtLayout>
-      <NuxtPage>
-        <Suspense>
-          <template #fallback> Loading... </template>
-        </Suspense></NuxtPage
+      <NuxtPage></NuxtPage
       >
     </NuxtLayout>
   </main>

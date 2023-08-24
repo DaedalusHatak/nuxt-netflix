@@ -5,12 +5,8 @@ import "vue-multi-slider/style.css";
 const props = defineProps<{
   list: string;
 }>();
-const { data: mov } = await useFetch("/api/getMovies", {
-  method: "POST",
-  body: props.list,
-});
-const movies = mov.value;
-console.log(movies?.results);
+const def = ref('');
+const { pending,data } = await useFetch(`/api/getMovies?_=${props.list}`,{lazy:true});
 // const isHovering = ref();
 // const currElement = ref();
 // function currElementHandler(e: Movie) {
@@ -25,7 +21,10 @@ console.log(movies?.results);
 
 <template>
   {{ props.list }}
+  <div v-if="pending">Loading...</div>
+
   <ImageCarousel
+  v-else
     :emit-image="true"
     :size="2"
     :sm="3"
@@ -37,7 +36,7 @@ console.log(movies?.results);
     :button-visibile="true"
     :xl="6"
     :xxl="7"
-    :data="mov!.results"
+    :data="data!.results"
   />
 </template>
 <style scoped></style>
