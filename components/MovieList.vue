@@ -1,12 +1,6 @@
 <script setup lang="ts">
 import { ImageCarousel } from "vue-multi-slider";
 import "vue-multi-slider/style.css";
-
-const props = defineProps<{
-  list: string;
-}>();
-const def = ref('');
-const { pending,data } = await useFetch(`/api/getMovies?_=${props.list}`,{lazy:true, default:()=>{def.value = "pending"}});
 // const isHovering = ref();
 // const currElement = ref();
 // function currElementHandler(e: Movie) {
@@ -17,10 +11,17 @@ const { pending,data } = await useFetch(`/api/getMovies?_=${props.list}`,{lazy:t
 // function currPositionHandler(e: DOMRect) {
 //   if (!currPosition.value) currPosition.value = e;
 // }
+const props = defineProps<{
+  list: string;
+}>();
+
+const { pending,data } = await useFetch(`/api/getMovies?_=${props.list}`);
+
+
 </script>
 
 <template>
-  <div v-if="pending || def">Loading...</div>
+  <div v-if="pending">Loading...</div>
 
   <ImageCarousel
   v-else
