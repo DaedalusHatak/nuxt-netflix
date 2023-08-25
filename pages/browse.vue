@@ -169,7 +169,7 @@ button {
 	font-weight: 500;
 	min-height: 3.5rem;
 	padding: 0.75rem 1.5rem;
-	background: rgb(51, 26, 187, 0.9);
+	background: #331abbe6;
 	cursor: pointer;
 	color: rgb(255, 255, 255);
 	border-radius: 1rem;

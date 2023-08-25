@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { ImageCarousel } from "vue-multi-slider";
-import "vue-multi-slider/style.css";
+
 // const isHovering = ref();
 // const currElement = ref();
 // function currElementHandler(e: Movie) {
@@ -21,13 +20,9 @@ const { data } = await useFetch(`/api/getMovies?_=${props.list}`);
 </script>
 
 <template>
-  <ClientOnly>
 
-    <template #fallback> Loading...</template>
-  </ClientOnly>
 
-  <ImageCarousel
-
+  <MovieCarousel
     :emit-image="true"
     :size="2"
     :sm="3"

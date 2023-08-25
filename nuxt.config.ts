@@ -16,8 +16,11 @@ export default defineNuxtConfig({
   nitro: {
     compressPublicAssets: true,
   },
+  modules: [
+    '@nuxt/image',
+  ],
   css: ["~/assets/main.css", "~/assets/base.css"],
-  // plugins: ['~/plugins/firebase.ts'],
+
   components: [
     {
       path: "~/components",
