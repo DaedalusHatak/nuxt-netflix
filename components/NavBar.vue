@@ -12,7 +12,7 @@ function updateScreenWidth() {
 }
 function updateNavOnScroll() {
 	scroll.value = window.scrollY;
-	console.log(scroll.value);
+	isHovered.value = false;
 }
 
 function hover() {
@@ -41,7 +41,7 @@ onMounted(() => {
 				<RouterLink to="/movies">Movies</RouterLink>
 				<RouterLink to="/new-popular">New and popular</RouterLink>
 			</ul>
-			<button v-if="scr <= 800" @mouseover="hover()" @mouseleave="unHover()"
+			<button v-if="scr <= 800" @click="hover()" @mouseover="hover()" @mouseleave="unHover()"
 				>Browse <span>▼</span></button
 			>
 
