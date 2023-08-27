@@ -1,192 +1,185 @@
 <script setup lang="ts">
-import { Movie } from '~/types';
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
-
-const firestoreClient = ref({
-	avatar: '',
-	email: '',
-});
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { useUserInfo } from "~/store/userInfo";
+import { Movie } from "~/types";
 
 const arrOfPaths = ref<string[]>([
-	'3/movie/popular',
-	'3/movie/top_rated',
-	'3/tv/popular',
-	'3/tv/top_rated',
+  "3/movie/popular",
+  "3/movie/top_rated",
+  "3/tv/popular",
+  "3/tv/top_rated",
 ]);
 const arrOfHeaders = ref<string[]>([
-	'Popular movies',
-	'Top rated movies',
-	'Popular TV series',
-	'Top rated TV series',
+  "Popular movies",
+  "Top rated movies",
+  "Popular TV series",
+  "Top rated TV series",
 ]);
-onNuxtReady(async () => {
-	const auth = getAuth();
+const userInfo = useUserInfo();
+const profile: any = userInfo.userInfo;
 
-	await onAuthStateChanged(auth, (user) => {
-		if (user) {
-			firestoreClient.value = {
-				avatar: user.photoURL || 'raiden.png',
-				email: user.email!,
-			};
-		}
-	});
+const firestoreClient = ref({
+  avatar: profile.photoURL,
+  email: profile.email,
 });
-function updatePhoto(photo: string) {
-	firestoreClient.value.avatar = photo;
-	getStore(photo);
+
+async function updatePhoto(photo: string) {
+  firestoreClient.value.avatar = photo;
+  await getStore(photo);
 }
 const currElement = ref();
 function currElementHandler(e: Movie) {
-	isHovering.value = true;
-	if (!currElement.value) currElement.value = e;
+  isHovering.value = true;
+  if (!currElement.value) currElement.value = e;
 }
 const currPosition = ref();
 function currPositionHandler(e: DOMRect) {
-	if (!currPosition.value) currPosition.value = e;
+  if (!currPosition.value) currPosition.value = e;
 }
 const scaledWidth = ref<number>();
 const centerPosition = computed(() => {
-	let x, y, width: number;
+  let x, y, width: number;
 
-	if (currPosition.value) {
-		x = currPosition.value.x + currPosition.value.width / 2;
-		// 86 is from navbar moving it down a little
-		y = currPosition.value.top + window.scrollY;
-		// y =
-		//   currPosition.value.y +
-		//   currPosition.value.height / 2 +
-		//   window.scrollY -
-		//   86;
-		if (scaledWidth.value) {
-			width = scaledWidth.value;
-			return { x, y, width };
-		}
+  if (currPosition.value) {
+    x = currPosition.value.x + currPosition.value.width / 2;
+    // 86 is from navbar moving it down a little
+    y = currPosition.value.top + window.scrollY;
+    // y =
+    //   currPosition.value.y +
+    //   currPosition.value.height / 2 +
+    //   window.scrollY -
+    //   86;
+    if (scaledWidth.value) {
+      width = scaledWidth.value;
+      return { x, y, width };
+    }
 
-		return { x, y };
-	}
+    return { x, y };
+  }
 });
 function onBeforeEnter() {
-	scaledWidth.value = currPosition.value.width;
+  scaledWidth.value = currPosition.value.width;
 }
 function onAfterLeave() {
-	currElement.value = undefined;
+  currElement.value = undefined;
 }
 function onMouseLeave() {
-	scaledWidth.value = 75;
-	setTimeout(() => {
-		isHovering.value = false;
-		currElement.value = undefined;
-		scaledWidth.value = 0;
-		currPosition.value = undefined;
-	}, 1);
+  scaledWidth.value = 75;
+  setTimeout(() => {
+    isHovering.value = false;
+    currElement.value = undefined;
+    scaledWidth.value = 0;
+    currPosition.value = undefined;
+  }, 1);
 }
 const isHovering = ref();
 
 function setHeader(id: string | number) {
-	if (typeof id === 'number') return arrOfHeaders.value[id];
-	else {
-		return '';
-	}
+  if (typeof id === "number") return arrOfHeaders.value[id];
+  else {
+    return "";
+  }
 }
 </script>
 <template>
-	<Head>
-		<Meta name="description" content="Movie database" />
-	</Head>
-	<NavBar :av="firestoreClient"></NavBar>
-	<div class="flex-center">
-		<button @click="signOutUser()">Sign Out</button>
-		<button @click="updatePhoto('raiden.png')">Raiden</button>
-		<button @click="updatePhoto('kokomi.png')">kokomi</button>
-		<div class="movie-wrapper">
-			<section
-				class="movie-section"
-				v-for="(movie, index) in arrOfPaths"
-				:key="movie"
-			>
-				<h2>{{ setHeader(index) }}</h2>
+  <Head>
+    <Meta name="description" content="Movie database" />
+  </Head>
+  <NavBar :av="firestoreClient"></NavBar>
 
-				<MovieList :list="movie" />
-			</section>
-		</div>
-		<Transition @before-enter="onBeforeEnter" @after-leave="onAfterLeave">
-			<MovieCard
-				class="trans"
-				v-if="isHovering && centerPosition"
-				@mouseleave="onMouseLeave()"
-				:slide="currElement"
-				:position="currPosition"
-				:style="{
-					left: `${centerPosition.x}px`,
-					top: `${centerPosition.y}px`,
-					width: `${centerPosition.width}px`,
-				}"
-			></MovieCard>
-		</Transition>
-	</div>
+  <div class="flex-center">
+    <p></p>
+    <button @click="updatePhoto('raiden.png')">Raiden</button>
+    <button @click="updatePhoto('kokomi.png')">kokomi</button>
+    <div class="movie-wrapper">
+      <section
+        class="movie-section"
+        v-for="(movie, index) in arrOfPaths"
+        :key="movie"
+      >
+        <h2>{{ setHeader(index) }}</h2>
+
+        <MovieList :list="movie" />
+      </section>
+    </div>
+    <Transition @before-enter="onBeforeEnter" @after-leave="onAfterLeave">
+      <MovieCard
+        class="trans"
+        v-if="isHovering && centerPosition"
+        @mouseleave="onMouseLeave()"
+        :slide="currElement"
+        :position="currPosition"
+        :style="{
+          left: `${centerPosition.x}px`,
+          top: `${centerPosition.y}px`,
+          width: `${centerPosition.width}px`,
+        }"
+      ></MovieCard>
+    </Transition>
+  </div>
 </template>
 
 <style scoped>
 .trans {
-	width: 70px;
+  width: 70px;
 
-	transition: all 0.25s ease-in;
+  transition: all 0.25s ease-in;
 }
 
 .v-leave-to {
-	width: 100px;
+  width: 100px;
 }
 h2 {
-	font-size: 2vw;
+  font-size: 2vw;
 }
 .movie-wrapper {
-	display: grid;
-	gap: 50px;
+  display: grid;
+  gap: 50px;
 }
 .movie-section {
-	text-align: left;
+  text-align: left;
 }
 .flex-center {
-	text-align: center;
-	padding: 2rem 1rem;
-	display: flex;
-	flex-direction: column;
-	overflow: hidden;
+  text-align: center;
+  padding: 2rem 1rem;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 button {
-	display: inline-flex;
-	align-self: center;
-	align-items: center;
-	justify-content: center;
-	writing-mode: horizontal-tb !important;
-	width: 100%;
-	max-width: 30rem;
-	margin-top: 1rem;
-	flex: 0 0 auto;
-	border: 0px;
-	margin-bottom: 5rem;
-	font-size: 1.5rem;
-	font-weight: 500;
-	min-height: 3.5rem;
-	padding: 0.75rem 1.5rem;
-	background: #331abbe6;
-	cursor: pointer;
-	color: rgb(255, 255, 255);
-	border-radius: 1rem;
+  display: inline-flex;
+  align-self: center;
+  align-items: center;
+  justify-content: center;
+  writing-mode: horizontal-tb !important;
+  width: 100%;
+  max-width: 30rem;
+  margin-top: 1rem;
+  flex: 0 0 auto;
+  border: 0px;
+  margin-bottom: 5rem;
+  font-size: 1.5rem;
+  font-weight: 500;
+  min-height: 3.5rem;
+  padding: 0.75rem 1.5rem;
+  background: #331abbe6;
+  cursor: pointer;
+  color: rgb(255, 255, 255);
+  border-radius: 1rem;
 }
 
 @media screen and (min-width: 420px) {
-	.flex-center {
-		text-align: center;
-		padding: 2rem 3rem;
-		display: flex;
-		flex-direction: column;
-		overflow: hidden;
-	}
+  .flex-center {
+    text-align: center;
+    padding: 2rem 3rem;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
 }
 @media screen and (max-width: 800px) {
-	h2 {
-		font-size: 16px;
-	}
+  h2 {
+    font-size: 16px;
+  }
 }
 </style>

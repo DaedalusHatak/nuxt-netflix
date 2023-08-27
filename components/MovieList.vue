@@ -1,5 +1,4 @@
 <script setup lang="ts">
-
 // const isHovering = ref();
 // const currElement = ref();
 // function currElementHandler(e: Movie) {
@@ -15,14 +14,11 @@ const props = defineProps<{
 }>();
 
 const { data } = await useFetch(`/api/getMovies?_=${props.list}`);
-
-
 </script>
 
 <template>
-
-
   <MovieCarousel
+    v-if="data?.results"
     :emit-image="true"
     :size="2"
     :sm="3"

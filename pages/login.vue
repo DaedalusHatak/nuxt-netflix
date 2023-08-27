@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import BaseInput from "@/components/BaseInput.vue";
+import { sign } from "crypto";
 const isPageReady = ref<boolean>(false);
 const emailInput = ref<string>("");
 const password = ref<string>("");
@@ -10,29 +11,30 @@ onMounted(() => {
 const isSent = ref<boolean>(false);
 const sendData = async (email: string, password: string) => {
   isSent.value = true;
-try{
-  const signingIn = await signIn(email,password)
-  if (signingIn.user){
-    const idToken = await signingIn.user.getIdToken();
-    const scrfToken = useCookie("token");
-      await useFetch("/api/signIn", {
+  try {
+    const signingIn = await signIn(email, password);
+    if (signingIn.user) {
+      const idToken = await signingIn.user.getIdToken();
+      const scrfToken = useCookie("__token");
+      const signIn = await useFetch("/api/signIn", {
         method: "POST",
-        body: { scrfToken, idToken },
+        body: { idToken },
       });
-      await navigateTo('/browse')
+      await navigateTo("/browse");
+    }
+  } catch (err) {
+    isSent.value = false;
+    isError.value = true;
   }
-  
-}
-catch(err){
-  isSent.value = false;
-isError.value = true;
-}
- 
 };
 </script>
 
 <template>
-  <BaseModal v-if="isError" @closeModal="isError = false" message="Wrong email or password. Check your data!"></BaseModal>
+  <BaseModal
+    v-if="isError"
+    @closeModal="isError = false"
+    message="Wrong email or password. Check your data!"
+  ></BaseModal>
   <img class="hero-img" src="@/assets/background.png" alt="" />
   <div class="shadow-hero-image"></div>
   <div class="hero-wrapper">
@@ -43,10 +45,7 @@ isError.value = true;
       <div class="form-hero">
         <div class="login-form">
           <h1>Sign In</h1>
-          <form
-            @submit.prevent="sendData(emailInput, password)"
-            name="login"
-          >
+          <form @submit.prevent="sendData(emailInput, password)" name="login">
             <div>
               <BaseInput
                 v-model="emailInput"

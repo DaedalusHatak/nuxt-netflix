@@ -16,9 +16,14 @@ export default defineNuxtConfig({
   nitro: {
     compressPublicAssets: true,
   },
-  modules: [
-    '@nuxt/image',
-  ],
+  modules: ["@nuxt/image", "@pinia/nuxt"],
+  pinia: {
+    autoImports: [
+      // automatically imports `defineStore`
+      "defineStore", // import { defineStore } from 'pinia'
+      ["defineStore", "definePiniaStore"], // import { defineStore as definePiniaStore } from 'pinia'
+    ],
+  },
   css: ["~/assets/main.css", "~/assets/base.css"],
 
   components: [

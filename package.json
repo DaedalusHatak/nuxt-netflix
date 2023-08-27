@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@nuxt/kit": "^3.6.5",
+    "@pinia/nuxt": "^0.4.11",
     "body-parser": "^1.20.2",
     "firebase": "^10.3.0",
     "firebase-admin": "^11.10.1",
@@ -23,6 +24,7 @@
     "nux": "^2.1.1",
     "nuxi": "^3.6.5",
     "nuxt3": "^3.7.0-28214761.b633764e",
+    "pinia": "^2.1.6",
     "sass": "^1.66.1",
     "vue-multi-slider": "^0.2.2"
   },

@@ -6,13 +6,14 @@ export default defineEventHandler(async (event: H3Event) => {
 
   let res = false;
   if (test) {
-   try{
-    const papa = await getAuth().verifySessionCookie(test, true)
-    res = true;
-   }
-   catch(err){
-    res = false;
-   }
+    try {
+      const papa = getAuth();
+      const verifySession = await papa.verifySessionCookie(test, true);
+      const user = papa.getUser(verifySession.uid);
+      return user;
+    } catch (err) {
+      res = false;
+    }
   }
-  return res;
+  return false;
 });

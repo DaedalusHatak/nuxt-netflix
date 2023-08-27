@@ -2,9 +2,11 @@
 const props = defineProps<{
   av: any;
 }>();
-
-const isHovered = ref();
+const isHoveredMenu = ref();
+const isHoveredProfile = ref();
+const isNavigating = ref(false);
 let timer: any;
+let timerProfile: any;
 const scr = ref();
 const scroll = ref();
 function updateScreenWidth() {
@@ -12,17 +14,37 @@ function updateScreenWidth() {
 }
 function updateNavOnScroll() {
   scroll.value = window.scrollY;
-  isHovered.value = false;
+  isHoveredMenu.value = false;
 }
 
 function hover() {
   clearTimeout(timer);
-  isHovered.value = true;
+  if (!isNavigating.value) {
+    isHoveredMenu.value = true;
+  }
 }
 function unHover() {
   timer = setTimeout(() => {
-    isHovered.value = false;
+    isHoveredMenu.value = false;
   }, 200);
+}
+function hoverProfile() {
+  clearTimeout(timerProfile);
+  if (!isNavigating.value) {
+    isHoveredProfile.value = true;
+  }
+}
+function unHoverProfile() {
+  timerProfile = setTimeout(() => {
+    isHoveredProfile.value = false;
+  }, 200);
+}
+async function signOut() {
+  isNavigating.value = true;
+  isHoveredMenu.value = false;
+  isHoveredProfile.value = false;
+  await signOutUser();
+  navigateTo("/");
 }
 onMounted(() => {
   scr.value = window.innerWidth;
@@ -35,33 +57,43 @@ onMounted(() => {
   <nav :style="{ backgroundColor: scroll ? '#331abbe6' : 'transparent' }">
     <div class="navbar">
       <img class="logo" src="@/assets/daedalus.png" alt="" />
-      <ul v-if="scr > 880">
+      <ul class="desktop-list">
         <RouterLink to="/browse">Main Page</RouterLink>
         <RouterLink to="/series">Series</RouterLink>
         <RouterLink to="/movies">Movies</RouterLink>
         <RouterLink to="/new-popular">New and popular</RouterLink>
       </ul>
-      <button
-        v-if="scr <= 880"
-        @click="hover()"
-        @mouseover="hover()"
-        @mouseleave="unHover()"
-      >
+      <button @click="hover()" @mouseover="hover()" @mouseleave="unHover()">
         Browse <span>▼</span>
       </button>
 
-      <div v-if="props.av" class="profile">
-        <p>{{ props.av.email }}</p>
-        <img :src="`/img/${props.av.avatar}`" alt="" />
+      <div
+        @click="hoverProfile()"
+        @mouseover="hoverProfile()"
+        @mouseleave="unHoverProfile()"
+        class="profile"
+      >
+        <img :src="`${props.av.avatar}`" />
       </div>
     </div>
     <div
+      v-if="isHoveredProfile"
+      @mouseleave="unHoverProfile()"
+      @mouseover="hoverProfile()"
       class="mobile-list"
-      v-if="isHovered"
+    >
+      <ul class="right">
+        <RouterLink to="/YourAccount">Account</RouterLink>
+        <a @click="signOut()" to="/">Logout</a>
+      </ul>
+    </div>
+    <div
+      class="mobile-list"
+      v-if="isHoveredMenu"
       @mouseleave="unHover()"
       @mouseover="hover()"
     >
-      <ul>
+      <ul class="left">
         <RouterLink to="/browse">Main Page</RouterLink>
         <RouterLink to="/series">Series</RouterLink>
         <RouterLink to="/movies">Movies</RouterLink>
@@ -73,6 +105,8 @@ onMounted(() => {
 
 <style scoped lang="scss">
 button {
+  display: none;
+  visibility: hidden;
   background: none;
   border: none;
   font-size: 1.25rem;
@@ -85,10 +119,42 @@ button {
     font-size: 0.75rem;
   }
 }
+.left {
+  left: 0;
+}
+.right {
+  right: 0;
+  transition: all;
+  opacity: 1;
+  transition-duration: 150ms;
+  display: flex;
+  position: absolute;
+  background-color: rgba(46, 41, 41, 0.9);
+
+  border: 1px solid hsla(0, 0%, 100%, 0.15);
+
+  color: #fff;
+  cursor: default;
+  font-size: 13px;
+  line-height: 21px;
+  min-width: 20vw;
+  z-index: 12;
+  flex-direction: column;
+  list-style-type: none;
+
+  gap: 0;
+  margin: 1rem;
+  text-align: center;
+  font-size: 20px;
+  a {
+    width: 100%;
+  }
+}
 p {
   font-size: 12px;
 }
 a {
+  cursor: pointer;
   transition: all 250ms;
   line-break: strict;
   width: max-content;
@@ -133,6 +199,7 @@ nav {
   height: 40px;
   align-items: center;
   justify-self: end;
+  cursor: pointer;
   grid-column-end: -1;
 }
 
@@ -155,11 +222,21 @@ img {
   .navbar {
     grid-template-columns: 30% 1fr max-content;
   }
+  button {
+    display: block;
+    visibility: visible;
+  }
   .mobile-list {
     width: 100%;
   }
   .profile {
     justify-self: end;
+  }
+  .right {
+    min-width: 35vw;
+  }
+  .desktop-list {
+    display: none;
   }
   ul {
     transition: all;
@@ -168,7 +245,6 @@ img {
     display: flex;
     position: absolute;
     background-color: rgba(46, 41, 41, 0.9);
-    left: 0;
 
     border: 1px solid hsla(0, 0%, 100%, 0.15);
 
@@ -176,7 +252,7 @@ img {
     cursor: default;
     font-size: 13px;
     line-height: 21px;
-    min-width: 60vw;
+    min-width: 50vw;
     z-index: 12;
     flex-direction: column;
     list-style-type: none;

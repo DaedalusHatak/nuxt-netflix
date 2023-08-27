@@ -1,15 +1,21 @@
+import { useUserInfo } from "~/store/userInfo";
+
 export default defineNuxtRouteMiddleware(async (to, from) => {
   const test = useCookie("__token");
-
-  const session:boolean = await $fetch("/api/checkSession", {
+  const { data } = await useFetch("/api/checkSession", {
     method: "POST",
     body: { test: test.value },
-  })
-  if (session) {
-    if (to.path !== "/browse") {
+  });
+  console.log(data.value);
+  const userInfo = useUserInfo();
+  userInfo.getUserInfo(data.value);
+  if (data.value) {
+    if (to.path === "/YourAccount") {
+      return;
+    } else if (to.path !== "/browse") {
       return navigateTo("/browse");
     }
-  } else if (!session && to.path === "/browse") {
+  } else if (!data.value && to.path === "/browse") {
     return navigateTo("/login");
   }
 });
