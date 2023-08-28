@@ -1,14 +1,17 @@
-import { useUserInfo } from "~/store/userInfo";
+import { userInfo } from "os";
+interface APISession {
+  photoURL: string,
+  email: string,
+}
 
 export default defineNuxtRouteMiddleware(async (to, from) => {
   const test = useCookie("__token");
-  const { data } = await useFetch("/api/checkSession", {
+  const { data } = await useFetch<APISession>("/api/checkSession", {
     method: "POST",
     body: { test: test.value },
   });
-  console.log(data.value);
-  const userInfo = useUserInfo();
-  userInfo.getUserInfo(data.value);
+  const userInfo = useState('userProfile')
+  userInfo.value = {photo: data.value!.photoURL, email: data.value!.email};
   if (data.value) {
     if (to.path === "/YourAccount") {
       return;

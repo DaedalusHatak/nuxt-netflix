@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { useUserInfo } from "~/store/userInfo";
 import { Movie } from "~/types";
 
 const arrOfPaths = ref<string[]>([
@@ -15,12 +14,13 @@ const arrOfHeaders = ref<string[]>([
   "Popular TV series",
   "Top rated TV series",
 ]);
-const userInfo = useUserInfo();
-const profile: any = userInfo.userInfo;
+const userProfile = useState('userProfile')
+
+console.log((userProfile.value))
 
 const firestoreClient = ref({
-  avatar: profile.photoURL,
-  email: profile.email,
+  avatar: userProfile.value.photo,
+  email: userProfile.value.email,
 });
 
 async function updatePhoto(photo: string) {

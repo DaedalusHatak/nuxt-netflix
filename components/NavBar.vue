@@ -56,7 +56,7 @@ onMounted(() => {
 <template>
   <nav :style="{ backgroundColor: scroll ? '#331abbe6' : 'transparent' }">
     <div class="navbar">
-      <img class="logo" src="@/assets/daedalus.png" alt="" />
+      <nuxt-img preload class="logo" src="daedalus.png" alt="" />
       <ul class="desktop-list">
         <RouterLink to="/browse">Main Page</RouterLink>
         <RouterLink to="/series">Series</RouterLink>
@@ -73,7 +73,7 @@ onMounted(() => {
         @mouseleave="unHoverProfile()"
         class="profile"
       >
-        <img :src="`${props.av.avatar}`" />
+        <nuxt-img preload :src="`${props.av.avatar}`" />
       </div>
     </div>
     <div
