@@ -1,6 +1,6 @@
 <template>
   <div class="hovered">
-    <img
+    <nuxt-img
       :src="props.slide.image"
       :alt="props.slide.title || props.slide.name"
       width="250"

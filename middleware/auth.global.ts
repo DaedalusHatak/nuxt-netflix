@@ -17,10 +17,10 @@ if(data.value){
   if (data.value) {
     if (to.path === "/YourAccount") {
       return;
-    } else if (to.path !== "/browse") {
+    } else if (!to.path.startsWith("/browse")) {
       return navigateTo("/browse");
     }
-  } else if (!data.value && to.path === "/browse") {
+  } else if (!data.value && to.path.startsWith("/browse")) {
     return navigateTo("/login");
   }
 });

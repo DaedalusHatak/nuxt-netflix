@@ -20,6 +20,7 @@ const { data } = await useFetch(`/api/getMovies?_=${props.list}`);
   <MovieCarousel
     v-if="data?.results"
     :emit-image="true"
+    :emit-image-delay="350"
     :size="2"
     :sm="3"
     :md="4"
@@ -30,6 +31,8 @@ const { data } = await useFetch(`/api/getMovies?_=${props.list}`);
     :button-visibile="true"
     :xl="6"
     :xxl="7"
+    @hov-element="$emit('hovElement', $event)"
+    @position-element="$emit('positionElement', $event)"
     :data="data!.results"
   />
 </template>

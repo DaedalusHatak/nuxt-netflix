@@ -59,9 +59,9 @@ onMounted(() => {
       <nuxt-img preload class="logo" src="daedalus.png" alt="" />
       <ul class="desktop-list">
         <RouterLink to="/browse">Main Page</RouterLink>
-        <RouterLink to="/series">Series</RouterLink>
-        <RouterLink to="/movies">Movies</RouterLink>
-        <RouterLink to="/new-popular">New and popular</RouterLink>
+        <RouterLink to="/browse/tv">Series</RouterLink>
+        <RouterLink to="/browse/movie">Movies</RouterLink>
+        <RouterLink to="/browse/popular">New and popular</RouterLink>
       </ul>
       <button @click="hover()" @mouseover="hover()" @mouseleave="unHover()">
         Browse <span>▼</span>
@@ -95,9 +95,9 @@ onMounted(() => {
     >
       <ul class="left">
         <RouterLink to="/browse">Main Page</RouterLink>
-        <RouterLink to="/series">Series</RouterLink>
-        <RouterLink to="/movies">Movies</RouterLink>
-        <RouterLink to="/new-popular">New and popular</RouterLink>
+        <RouterLink to="/browse/tv">Series</RouterLink>
+        <RouterLink to="/browse/movie">Movies</RouterLink>
+        <RouterLink to="/browse/popular">New and popular</RouterLink>
       </ul>
     </div>
   </nav>
