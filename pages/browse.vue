@@ -14,9 +14,8 @@ const arrOfHeaders = ref<string[]>([
   "Popular TV series",
   "Top rated TV series",
 ]);
-const userProfile = useState('userProfile')
+const userProfile = useProfile();
 
-console.log((userProfile.value))
 
 const firestoreClient = ref({
   avatar: userProfile.value.photo,

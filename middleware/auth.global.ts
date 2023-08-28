@@ -10,8 +10,10 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
     method: "POST",
     body: { test: test.value },
   });
-  const userInfo = useState('userProfile')
+  const userInfo = useProfile()
+if(data.value){
   userInfo.value = {photo: data.value!.photoURL, email: data.value!.email};
+}
   if (data.value) {
     if (to.path === "/YourAccount") {
       return;

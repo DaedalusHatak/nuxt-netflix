@@ -1,3 +1,8 @@
 import { ref } from "vue";
 import { UserData } from "~/types";
-export const useProfile = () => useState<string>("userProfile", () => "");
+interface UserProfile{
+    photo:string,
+    email:string
+}
+const userProfile = {photo:"",email:""}
+export const useProfile = () => useState<UserProfile>("userProfile", () => userProfile);
