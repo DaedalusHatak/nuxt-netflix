@@ -86,12 +86,15 @@ function setHeader(id: string | number) {
   </Head>
   <NavBar :av="firestoreClient"></NavBar>
 
+
   <div class="flex-center">
     <p></p>
     <button @click="updatePhoto('raiden.png')">Raiden</button>
     <button @click="updatePhoto('kokomi.png')">kokomi</button>
     <div class="movie-wrapper">
+      <NuxtPage/>
       <section
+      v-if="!$route.params.id"
         class="movie-section"
         v-for="(movie, index) in arrOfPaths"
         :key="movie"
