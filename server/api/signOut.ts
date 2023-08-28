@@ -1,16 +1,16 @@
+import type { H3Event } from "h3";
 import { getAuth } from "firebase-admin/auth";
 
-export default defineEventHandler(async (event:any) => {
+export default defineEventHandler(async (event: H3Event) => {
   const { idToken } = await readBody(event);
   const auth = getAuth();
-  const expiresIn = 60 * 60 * 24 * 14 * 1000;
 
   await auth
     .verifySessionCookie(idToken)
     .then((decodedClaims) => {
       deleteCookie(event, "__token");
-
-      return auth.revokeRefreshTokens(decodedClaims.sub);
+      auth.revokeRefreshTokens(decodedClaims.sub);
+      return true;
     })
     .catch((err) => {
       console.log(err);

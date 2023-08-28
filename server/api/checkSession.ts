@@ -1,19 +1,19 @@
+import type { H3Event } from "h3";
 import { getAuth } from "firebase-admin/auth";
 
-export default defineEventHandler(async (event:any) => {
+export default defineEventHandler(async (event: H3Event) => {
   const { test } = await readBody(event);
-  let papa;
+
   let res = false;
   if (test) {
-    papa = await getAuth()
-      .verifySessionCookie(test, true)
-      .then((work) => {
-        return (res = true);
-      })
-      .catch((err) => {
-       
-        return (res = false);
-      });
+    try {
+      const papa = getAuth();
+      const verifySession = await papa.verifySessionCookie(test, true);
+      const user = papa.getUser(verifySession.uid);
+      return user;
+    } catch (err) {
+      res = false;
+    }
   }
-  return res;
+  return false;
 });

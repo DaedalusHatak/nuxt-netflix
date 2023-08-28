@@ -1,61 +1,147 @@
 <script setup lang="ts">
-const { data } = await useFetch("/api/getData");
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { Movie } from "~/types";
+
 const arrOfPaths = ref<string[]>([
-  "/3/movie/popular",
-  "/3/movie/top_rated",
-  "/3/tv/popular",
-  "/3/tv/top_rated",
+  "3/movie/popular",
+  "3/movie/top_rated",
+  "3/tv/popular",
+  "3/tv/top_rated",
 ]);
-const arrOfMovies = ref<any[]>([]);
-async function apiCall(movies: string[]) {
-  let l = 0;
-  for (const i of movies) {
-    const { data } = await useFetch("/api/getMovies", {
-      method: "POST",
-      body: i,
-    });
-    arrOfMovies.value.push(data.value);
+const arrOfHeaders = ref<string[]>([
+  "Popular movies",
+  "Top rated movies",
+  "Popular TV series",
+  "Top rated TV series",
+]);
+const userProfile = useState('userProfile')
+
+console.log((userProfile.value))
+
+const firestoreClient = ref({
+  avatar: userProfile.value.photo,
+  email: userProfile.value.email,
+});
+
+async function updatePhoto(photo: string) {
+  firestoreClient.value.avatar = photo;
+  await getStore(photo);
+}
+const currElement = ref();
+function currElementHandler(e: Movie) {
+  isHovering.value = true;
+  if (!currElement.value) currElement.value = e;
+}
+const currPosition = ref();
+function currPositionHandler(e: DOMRect) {
+  if (!currPosition.value) currPosition.value = e;
+}
+const scaledWidth = ref<number>();
+const centerPosition = computed(() => {
+  let x, y, width: number;
+
+  if (currPosition.value) {
+    x = currPosition.value.x + currPosition.value.width / 2;
+    // 86 is from navbar moving it down a little
+    y = currPosition.value.top + window.scrollY;
+    // y =
+    //   currPosition.value.y +
+    //   currPosition.value.height / 2 +
+    //   window.scrollY -
+    //   86;
+    if (scaledWidth.value) {
+      width = scaledWidth.value;
+      return { x, y, width };
+    }
+
+    return { x, y };
+  }
+});
+function onBeforeEnter() {
+  scaledWidth.value = currPosition.value.width;
+}
+function onAfterLeave() {
+  currElement.value = undefined;
+}
+function onMouseLeave() {
+  scaledWidth.value = 75;
+  setTimeout(() => {
+    isHovering.value = false;
+    currElement.value = undefined;
+    scaledWidth.value = 0;
+    currPosition.value = undefined;
+  }, 1);
+}
+const isHovering = ref();
+
+function setHeader(id: string | number) {
+  if (typeof id === "number") return arrOfHeaders.value[id];
+  else {
+    return "";
   }
 }
-onNuxtReady(async () => {
-  apiCall(arrOfPaths.value);
-});
-onBeforeMount(async () => {});
-// definePageMeta({
-//   middleware: "auth",
-// });
 </script>
 <template>
   <Head>
     <Meta name="description" content="Movie database" />
   </Head>
+  <NavBar :av="firestoreClient"></NavBar>
+
   <div class="flex-center">
-    <button @click="signOutUser()">Sign Out</button>
-    <button @click="navigateTo('/')">Go Home, should not take you there</button>
+    <p></p>
+    <button @click="updatePhoto('raiden.png')">Raiden</button>
+    <button @click="updatePhoto('kokomi.png')">kokomi</button>
     <div class="movie-wrapper">
-      <MovieCard
-        v-for="movie in arrOfMovies"
-        :size="3"
-        :sm="4"
-        :md="5"
-        :lg="6"
-        :xl="7"
-        :xxl="8"
-        :data="movie"
+      <section
+        class="movie-section"
+        v-for="(movie, index) in arrOfPaths"
+        :key="movie"
       >
-      </MovieCard>
+        <h2>{{ setHeader(index) }}</h2>
+
+        <MovieList :list="movie" />
+      </section>
     </div>
+    <Transition @before-enter="onBeforeEnter" @after-leave="onAfterLeave">
+      <MovieCard
+        class="trans"
+        v-if="isHovering && centerPosition"
+        @mouseleave="onMouseLeave()"
+        :slide="currElement"
+        :position="currPosition"
+        :style="{
+          left: `${centerPosition.x}px`,
+          top: `${centerPosition.y}px`,
+          width: `${centerPosition.width}px`,
+        }"
+      ></MovieCard>
+    </Transition>
   </div>
 </template>
 
 <style scoped>
+.trans {
+  width: 70px;
+
+  transition: all 0.25s ease-in;
+}
+
+.v-leave-to {
+  width: 100px;
+}
+h2 {
+  font-size: 2vw;
+}
 .movie-wrapper {
   display: grid;
   gap: 50px;
 }
+.movie-section {
+  text-align: left;
+}
 .flex-center {
   text-align: center;
-  padding: 2rem 3rem;
+  padding: 2rem 1rem;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -76,9 +162,24 @@ button {
   font-weight: 500;
   min-height: 3.5rem;
   padding: 0.75rem 1.5rem;
-  background: rgb(51, 26, 187, 0.9);
+  background: #331abbe6;
   cursor: pointer;
   color: rgb(255, 255, 255);
   border-radius: 1rem;
+}
+
+@media screen and (min-width: 420px) {
+  .flex-center {
+    text-align: center;
+    padding: 2rem 3rem;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+}
+@media screen and (max-width: 800px) {
+  h2 {
+    font-size: 16px;
+  }
 }
 </style>

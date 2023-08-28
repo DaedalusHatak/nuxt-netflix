@@ -1,21 +1,18 @@
 @import "./base.css";
 
 * {
-  font-family: sans-serif;
+  font-family: Netflix Sans,Helvetica Neue,Segoe UI,Roboto,Ubuntu,sans-serif;
 
   line-height: 1.12em;
 }
-#__nuxt {
+main {
   background-color: rgb(15, 11, 15);
   color: white;
   margin: 0 auto;
-
+  min-height: 100vh;
   font-weight: normal;
 }
 body {
   overflow-x: hidden;
 }
-main {
 
-  min-height: 100vh;
-}

@@ -1,3 +1,10 @@
+import { FirebaseError } from "firebase/app";
+import {
+  Auth,
+  updateCurrentUser,
+  updatePassword,
+  updateProfile,
+} from "firebase/auth";
 import {
   getAuth,
   createUserWithEmailAndPassword,
@@ -6,39 +13,47 @@ import {
   signOut,
   sendSignInLinkToEmail,
 } from "firebase/auth";
+import { Firestore, collection, getDocs } from "firebase/firestore";
 
-export const createUser = async (email: string) => {
-  const actionCodeSettings = {
-    url: "http://localhost:3000/",
-    handleCodeInApp: true,
-  };
+export const getStore = async (photo: any) => {
   const auth = getAuth();
-  sendSignInLinkToEmail(auth, email, actionCodeSettings);
+  await updateProfile(auth.currentUser!, { photoURL: photo });
+};
+
+export const createUser = async (email: string, password: string) => {
+  const auth = getAuth();
+  try {
+    const createuser = await createUserWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
+    await $fetch("/api/session", { method: "POST", body: { email: "" } });
+  } catch (err) {
+    if (err instanceof FirebaseError) {
+      return err.message;
+    }
+  }
+};
+export const updateUser = async (pass: string) => {
+  const auth = getAuth();
+  updatePassword(auth.currentUser!, pass);
+  navigateTo("/browse");
 };
 export const signIn = async (email: string, password: string) => {
-  console.log("signIn");
   const auth = getAuth();
-  const credentials = await signInWithEmailAndPassword(
-    auth,
-    email,
-    password
-  ).catch((err) => {
-    alert("Check your data!");
-    return err;
-  });
+  const credentials = await signInWithEmailAndPassword(auth, email, password);
+
   return credentials;
 };
 
 export const signOutUser = async () => {
   const auth = getAuth();
-  const result = await auth.signOut();
-
   const idToken = useCookie("__token");
   await useFetch("/api/signOut", {
     method: "POST",
     body: { idToken },
   });
-
-  navigateTo("/");
+  const result = await auth.signOut();
   return result;
 };

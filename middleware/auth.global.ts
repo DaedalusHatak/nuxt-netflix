@@ -1,18 +1,24 @@
+import { userInfo } from "os";
+interface APISession {
+  photoURL: string,
+  email: string,
+}
+
 export default defineNuxtRouteMiddleware(async (to, from) => {
   const test = useCookie("__token");
-  let firebase;
-  await $fetch("/api/checkSession", {
+  const { data } = await useFetch<APISession>("/api/checkSession", {
     method: "POST",
     body: { test: test.value },
-  }).then((set) => {
-    firebase = set;
-    return firebase;
   });
-  if (firebase) {
-    if (to.path !== "/browse") {
+  const userInfo = useState('userProfile')
+  userInfo.value = {photo: data.value!.photoURL, email: data.value!.email};
+  if (data.value) {
+    if (to.path === "/YourAccount") {
+      return;
+    } else if (to.path !== "/browse") {
       return navigateTo("/browse");
     }
-  } else if (!firebase && to.path === "/browse") {
+  } else if (!data.value && to.path === "/browse") {
     return navigateTo("/login");
   }
 });

@@ -1,18 +1,18 @@
-import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
+import { FirebaseApp, initializeApp } from "firebase/app";
+import { Auth, getAuth } from "firebase/auth";
+import { RuntimeConfig } from "nuxt/schema";
+import { FirebaseClient } from "~/types";
+import { getFirestore } from "firebase/firestore";
 
 export default defineNuxtPlugin(async (nuxtApp) => {
-
-  const config = useRuntimeConfig();
-  const firebaseConfig = {
-    apiKey: config.public.firebase.apiKey,
-  };
+  const config: RuntimeConfig = useRuntimeConfig();
+  const firebase = config.public.firebase;
   // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth();
+  const app: FirebaseApp = initializeApp(firebase);
+  const auth: Auth = getAuth();
+  const db = getFirestore(app);
 
-  // await initUser();
-
-   nuxtApp.vueApp.provide("auth", auth);
-   nuxtApp.provide("auth", auth);
+  useState("firebaseApp", () => app);
+  useState("auth", () => auth);
+  useState("db", () => db);
 });
