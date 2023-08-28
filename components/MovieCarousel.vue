@@ -24,7 +24,14 @@
         alt=""
       />
     </button>
-    <div v-else-if="isMobile && wasTriggered" class="handle left-handle"></div>
+    <div
+      v-else-if="isMobile && wasTriggered"
+      :style="{
+        right: `${props.buttonPadding}rem`,
+        width: `${props.buttonWidth}rem`,
+      }"
+      class="handle left-handle"
+    ></div>
     <div
       :class="carouselMove === 1 || carouselMove === -1 ? 'animate' : ''"
       :style="{ transform: transform }"
@@ -72,7 +79,14 @@
         alt=""
       />
     </button>
-    <div v-else class="handle right-handle"></div>
+    <div
+      v-else
+      :style="{
+        right: `${props.buttonPadding}rem`,
+        width: `${props.buttonWidth}rem`,
+      }"
+      class="handle right-handle"
+    ></div>
   </div>
 </template>
 
