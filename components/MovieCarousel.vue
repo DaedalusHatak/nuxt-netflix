@@ -78,6 +78,17 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted, onBeforeUnmount } from "vue";
+interface MediaItem {
+  [k: string]: any;
+}
+interface TouchMovement {
+  start: number;
+  end: number;
+}
+const emit = defineEmits<{
+  (e: "hovElement", value: MediaItem): void;
+  (e: "positionElement", value: DOMRect): void;
+}>();
 const props = defineProps<{
   data: MediaItem[];
   size: number;
@@ -94,13 +105,6 @@ const props = defineProps<{
   xl?: number;
   xxl?: number;
 }>();
-interface MediaItem {
-  [k: string]: any;
-}
-interface TouchMovement {
-  start: number;
-  end: number;
-}
 
 let hoverTimer: any;
 
@@ -128,10 +132,6 @@ function currElement(e: MouseEvent, slide: MediaItem) {
 function cancelHover() {
   clearTimeout(hoverTimer);
 }
-const emit = defineEmits<{
-  (e: "hovElement", value: MediaItem): void;
-  (e: "positionElement", value: DOMRect): void;
-}>();
 
 //Defines if hover occurs
 const hoverButtons = ref<boolean>();

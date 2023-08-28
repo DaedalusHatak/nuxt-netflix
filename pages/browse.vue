@@ -1,7 +1,5 @@
 <script setup lang="ts">
-import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { Movie } from "~/types";
-
 const arrOfPaths = ref<string[]>([
   "3/movie/popular",
   "3/movie/top_rated",
@@ -15,7 +13,6 @@ const arrOfHeaders = ref<string[]>([
   "Top rated TV series",
 ]);
 const userProfile = useProfile();
-
 
 const firestoreClient = ref({
   avatar: userProfile.value.photo,
@@ -41,6 +38,7 @@ const centerPosition = computed(() => {
 
   if (currPosition.value) {
     x = currPosition.value.x + currPosition.value.width / 2;
+
     // 86 is from navbar moving it down a little
     y = currPosition.value.top + window.scrollY;
     // y =
@@ -50,6 +48,11 @@ const centerPosition = computed(() => {
     //   86;
     if (scaledWidth.value) {
       width = scaledWidth.value;
+      if (x >= window.innerWidth - width) {
+        x = x - 48;
+      } else if (x - width <= 0) {
+        x = x + 48;
+      }
       return { x, y, width };
     }
 
@@ -86,22 +89,28 @@ function setHeader(id: string | number) {
   </Head>
   <NavBar :av="firestoreClient"></NavBar>
 
-
   <div class="flex-center">
     <p></p>
     <button @click="updatePhoto('raiden.png')">Raiden</button>
     <button @click="updatePhoto('kokomi.png')">kokomi</button>
     <div class="movie-wrapper">
-      <NuxtPage/>
+      <NuxtPage
+        @hov-element="currElementHandler"
+        @position-element="currPositionHandler"
+      />
       <section
-      v-if="!$route.params.id"
+        v-if="!$route.params.id"
         class="movie-section"
         v-for="(movie, index) in arrOfPaths"
         :key="movie"
       >
         <h2>{{ setHeader(index) }}</h2>
 
-        <MovieList :list="movie" />
+        <MovieList
+          @hov-element="currElementHandler"
+          @position-element="currPositionHandler"
+          :list="movie"
+        />
       </section>
     </div>
     <Transition @before-enter="onBeforeEnter" @after-leave="onAfterLeave">
@@ -123,13 +132,13 @@ function setHeader(id: string | number) {
 
 <style scoped>
 .trans {
-  width: 70px;
+  width: 60px;
 
-  transition: all 0.25s ease-in;
+  transition: all 0.2s ease-in;
 }
 
 .v-leave-to {
-  width: 100px;
+  width: 150px;
 }
 h2 {
   font-size: 2vw;
