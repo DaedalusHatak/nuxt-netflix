@@ -27,7 +27,7 @@
     <div
       v-else-if="isMobile && wasTriggered"
       :style="{
-        right: `${props.buttonPadding}rem`,
+        left: `${props.buttonPadding}rem`,
         width: `${props.buttonWidth}rem`,
       }"
       class="handle left-handle"
