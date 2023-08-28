@@ -18,8 +18,7 @@ export default defineNuxtConfig({
   },
   modules: ["@nuxt/image"],
   routeRules: {
-    '/': { prerender: true },
-    '/browse': { prerender: true },
+    "/": { prerender: true },
   },
   css: ["~/assets/main.css", "~/assets/base.css"],
 
