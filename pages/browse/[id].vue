@@ -1,5 +1,6 @@
 <template>
   <section>
+    {{ test }}
     <div
       v-if="arrOfDynamicPaths.length > 0"
       class="movie-section"
@@ -11,7 +12,7 @@
       <MovieList
         @hov-element="$emit('hovElement', $event)"
         @position-element="$emit('positionElement', $event)"
-        :list="movie"
+        :list="arrOfPaths[0]"
       />
     </div>
     <div v-else><h1>No matching titles found.</h1></div>
@@ -20,6 +21,7 @@
 
 <script setup lang="ts">
 const router = useRoute();
+const test =  useHead({title:"Movies"},{tagPosition:"bodyOpen"})
 const arrOfPaths = ref<string[]>([
   "3/movie/popular",
   "3/movie/top_rated",

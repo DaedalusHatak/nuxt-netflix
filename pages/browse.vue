@@ -49,9 +49,11 @@ const centerPosition = computed(() => {
     if (scaledWidth.value) {
       width = scaledWidth.value;
       if (x >= window.innerWidth - width) {
-        x = x - 48;
+        const scrollBar = document.body.scrollWidth;
+        console.log('scroll',scrollBar)
+        x = x - 56;
       } else if (x - width <= 0) {
-        x = x + 48;
+        x = x + 56;
       }
       return { x, y, width };
     }
