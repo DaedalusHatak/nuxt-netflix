@@ -2,6 +2,7 @@
 const props = defineProps<{
   av: any;
 }>();
+const images = ref({logo:'daedalus.png', profile:props.av.avatar})
 const isHoveredMenu = ref();
 const isHoveredProfile = ref();
 const isNavigating = ref(false);
@@ -56,11 +57,15 @@ onMounted(() => {
 <template>
   <nav :style="{ backgroundColor: scroll ? '#331abbe6' : 'transparent' }">
     <div class="navbar">
-      <img
+      <nuxt-img
+      :src="images.logo"
+      preload
+      format="webp"
         height="64px"
         width="185px"
         class="logo"
-        src="@/assets/daedalus.png"
+        
+        
         alt=""
       />
       <ul class="desktop-list">
@@ -79,7 +84,7 @@ onMounted(() => {
         @mouseleave="unHoverProfile()"
         class="profile"
       >
-        <img height="40px" width="40px" :src="`${props.av.avatar}`" />
+        <nuxt-img :src="images.profile" preload format="webp" height="40px" width="40px"  />
       </div>
     </div>
     <div
