@@ -26,6 +26,7 @@ async function updatePhoto(photo: string) {
 const currElement = ref();
 function currElementHandler(e: Movie) {
   isHovering.value = true;
+
   if (!currElement.value) currElement.value = e;
 }
 const currPosition = ref();
@@ -33,6 +34,8 @@ function currPositionHandler(e: DOMRect) {
   if (!currPosition.value) currPosition.value = e;
 }
 const scaledWidth = ref<number>();
+const isHovering = ref();
+const showText = ref(false);
 const centerPosition = computed(() => {
   let x, y, width: number;
 
@@ -50,7 +53,6 @@ const centerPosition = computed(() => {
       width = scaledWidth.value;
       if (x >= window.innerWidth - width) {
         const scrollBar = document.body.scrollWidth;
-        console.log('scroll',scrollBar)
         x = x - 56;
       } else if (x - width <= 0) {
         x = x + 56;
@@ -64,10 +66,15 @@ const centerPosition = computed(() => {
 function onBeforeEnter() {
   scaledWidth.value = currPosition.value.width;
 }
+
+function onAfterEnter() {
+  showText.value = true;
+}
 function onAfterLeave() {
   currElement.value = undefined;
 }
 function onMouseLeave() {
+  showText.value = false;
   scaledWidth.value = 75;
   setTimeout(() => {
     isHovering.value = false;
@@ -76,7 +83,6 @@ function onMouseLeave() {
     currPosition.value = undefined;
   }, 1);
 }
-const isHovering = ref();
 
 function setHeader(id: string | number) {
   if (typeof id === "number") return arrOfHeaders.value[id];
@@ -115,8 +121,13 @@ function setHeader(id: string | number) {
         />
       </section>
     </div>
-    <Transition @before-enter="onBeforeEnter" @after-leave="onAfterLeave">
+    <Transition
+      @before-enter="onBeforeEnter"
+      @after-enter="onAfterEnter"
+      @after-leave="onAfterLeave"
+    >
       <MovieCard
+        :text="showText"
         class="trans"
         v-if="isHovering && centerPosition"
         @mouseleave="onMouseLeave()"

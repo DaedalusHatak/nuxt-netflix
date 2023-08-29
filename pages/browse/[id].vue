@@ -12,7 +12,7 @@
       <MovieList
         @hov-element="$emit('hovElement', $event)"
         @position-element="$emit('positionElement', $event)"
-        :list="arrOfPaths[0]"
+        :list="movie"
       />
     </div>
     <div v-else><h1>No matching titles found.</h1></div>
@@ -21,7 +21,7 @@
 
 <script setup lang="ts">
 const router = useRoute();
-const test =  useHead({title:"Movies"},{tagPosition:"bodyOpen"})
+const test = useHead({ title: "Movies" }, { tagPosition: "bodyOpen" });
 const arrOfPaths = ref<string[]>([
   "3/movie/popular",
   "3/movie/top_rated",
