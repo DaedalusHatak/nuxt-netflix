@@ -182,7 +182,7 @@ const setClasses = computed(()=>{
 <style scoped>
 .trans {
 
-  width:120px;
+
   transform: translate(-50%,-60%);
   transition: all .2s ease-in-out;
 }
