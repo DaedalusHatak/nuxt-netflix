@@ -40,10 +40,10 @@ const centerPosition = computed(() => {
   let x, y, width: number;
 
   if (currPosition.value) {
-    x = currPosition.value.x + currPosition.value.width / 2;
+    x = currPosition.value.x + currPosition.value.width / 2  ;
 
     // 86 is from navbar moving it down a little
-    y = currPosition.value.top + window.scrollY;
+    y = currPosition.value.top - 25 + window.scrollY;
     // y =
     //   currPosition.value.y +
     //   currPosition.value.height / 2 +
@@ -75,7 +75,8 @@ function onAfterLeave() {
 }
 function onMouseLeave() {
   showText.value = false;
-  scaledWidth.value = 75;
+
+  scaledWidth.value =  110
   setTimeout(() => {
     isHovering.value = false;
     currElement.value = undefined;
@@ -145,9 +146,9 @@ function setHeader(id: string | number) {
 
 <style scoped>
 .trans {
-  width: 60px;
+width:115px;
 
-  transition: all 0.2s ease-in;
+  transition: all .2s ease-in;
 }
 
 .v-leave-to {
