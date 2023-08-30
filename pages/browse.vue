@@ -87,7 +87,7 @@ function onMouseLeave() {
     currElement.value = undefined;
     scaledWidth.value = 0;
     currPosition.value = undefined;
-  }, 1200);
+  }, 200);
 }
 
 function setHeader(id: string | number) {
@@ -153,7 +153,7 @@ function setHeader(id: string | number) {
 
   width:120px;
   transform: translate(-50%,-60%);
-  transition: all 1.2s ease-in-out;
+  transition: all .2s ease-in-out;
 }
 .trans-scale {
   transform-origin: center center; 
