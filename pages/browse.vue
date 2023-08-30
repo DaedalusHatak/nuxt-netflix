@@ -36,7 +36,7 @@ function currPositionHandler(e: DOMRect) {
 }
 const scaledWidth = ref<number>();
 const isHovering = ref();
-const showText = ref(false);
+const showText = ref();
 const centerPosition = computed(() => {
   let x, y, width: number;
 
@@ -58,36 +58,45 @@ const centerPosition = computed(() => {
       } else if (x - width <= 0) {
         x = x + 56;
       }
-      setTimeout(()=>{
-        showText.value = true;
-      },1)
+
       return { x, y, width };
+
     }
 
     return { x, y };
   }
 });
+
 function onBeforeEnter() {
-  scaledWidth.value = currPosition.value.width;
+setTimeout(()=>{
+  showText.value = false;
+},1)
+
+}
+function onEnter() {
+  setTimeout(()=>{
+  showText.value = true;
+},1)
+
 }
 
-function onAfterEnter() {
-  showText.value = true;
-}
 function onAfterLeave() {
-  currElement.value = undefined;
-}
-function onMouseLeave() {
+  setTimeout(()=>{
   showText.value = false;
+},1)
+}
+
+function onMouseLeave() {
+showText.value= false;
 
 
   setTimeout(() => {
-
+    showText.value = false;
     isHovering.value = false;
     currElement.value = undefined;
     scaledWidth.value = 0;
     currPosition.value = undefined;
-  }, 200);
+  }, 1);
 }
 
 function setHeader(id: string | number) {
@@ -129,12 +138,14 @@ function setHeader(id: string | number) {
       </section>
     </div>
 
-      <MovieCard
+<Transition @enter="onEnter" @before-enter="onBeforeEnter" @before-leave="onMouseLeave">
+  <MovieCard
         :text="showText"
         class="trans"
         ref="movieCard"
         :class="showText ? 'trans-scale' : ''"
         v-if="isHovering && centerPosition"
+        
         @mouseleave="onMouseLeave()"
         :slide="currElement"
         :position="currPosition"
@@ -144,6 +155,7 @@ function setHeader(id: string | number) {
           width: `${centerPosition.width}px`,
         }"
       ></MovieCard>
+</Transition>
 
   </div>
 </template>
@@ -160,9 +172,7 @@ function setHeader(id: string | number) {
 transform: scale(1.85) translate(-25%,-50%);
 }
 
-.v-leave-to {
-  width: 150px;
-}
+
 h2 {
   font-size: 2vw;
 }
