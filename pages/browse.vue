@@ -14,6 +14,7 @@ const arrOfHeaders = ref<string[]>([
 ]);
 const userProfile = useProfile();
 const movieCard = ref();
+const classy = ref();
 const firestoreClient = ref({
   avatar: userProfile.value.photo,
   email: userProfile.value.email,
@@ -52,13 +53,17 @@ const centerPosition = computed(() => {
     //   86;
     if (scaledWidth.value) {
       width = scaledWidth.value;
-      if (x >= window.innerWidth - width) {
-        const scrollBar = document.body.scrollWidth;
-        x = x - 56;
-      } else if (x - width <= 0) {
-        x = x + 56;
-      }
 
+      if (x >= window.innerWidth - width) {
+       classy.value = "right"
+      } else if (x - width <= 0) {
+        classy.value = "left"
+        
+      }
+      else{
+        classy.value = "center"
+      }
+      console.log(classy.value)
       return { x, y, width };
 
     }
@@ -106,6 +111,20 @@ function setHeader(id: string | number) {
   }
 }
 
+const setClasses = computed(()=>{
+  if(classy.value === "left" && showText.value){
+    return  'trans-scale left' 
+  }
+  else if(classy.value === "right"  && showText.value){
+    return 'trans-scale right' 
+  }
+  else if (showText.value) {
+    return 'trans-scale' 
+  }
+  else{
+    return ""
+  }
+})
 </script>
 <template>
   <Head>
@@ -143,7 +162,7 @@ function setHeader(id: string | number) {
         :text="showText"
         class="trans"
         ref="movieCard"
-        :class="showText ? 'trans-scale' : ''"
+        :class="setClasses"
         v-if="isHovering && centerPosition"
         
         @mouseleave="onMouseLeave()"
@@ -171,8 +190,12 @@ function setHeader(id: string | number) {
   transform-origin: center center; 
 transform: scale(1.85) translate(-25%,-50%);
 }
-
-
+.left{
+  transform-origin: left center; 
+}
+.right{
+  transform-origin: right center; 
+}
 h2 {
   font-size: 2vw;
 }
