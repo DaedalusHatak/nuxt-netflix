@@ -34,22 +34,7 @@ const props = defineProps<{
   position: DOMRect;
   text: boolean;
 }>();
-const pos = ref<any>({height: 0});
-	const elementToWatch = ref();
-onMounted(()=>{
-if(elementToWatch.value){
 
-	pos.value = elementToWatch.value.clientHeight;
-	watch(
-      elementToWatch,
-      (newHeight) => {
-        pos.value = newHeight;
-        console.log('elementToWatch height changed:', newHeight);
-      }
-    );
-}
-
-})
 
 
 const renderText = computed(() => {
@@ -85,25 +70,19 @@ const releaseDate = computed(() => {
   overflow: hidden;
 }
 
-.hidden {
 
-  .overview{
-	display: none;
-  }
-
-}
 
 h3 {
-  font-size:10px;
+  font-size:9px;
   font-weight: 300;
-  line-height: 1.1rem;
+  line-height: 17px;
   padding: 0;
   // transform:  scale( calc(1 / var(--scale-size)));
 }
 p {
-	font-size:10px;
+	font-size:8px;
   font-weight: 300;
-  padding: 0.1rem 0;
+  padding: 2px 0;
 }
 .overview {
 	font-size:10px;
@@ -111,31 +90,16 @@ p {
 .name {
   font-weight: 700;
 }
-@container (min-width: 50px) {
-   h3 {
-	font-size: calc(clamp(0.4rem, 1vw, 0.7rem) / 1.1);
-  }
-  p{
-	font-size: calc(clamp(0.3rem, 1vw, 0.7rem) / 1.1);
-  }
-  .overview {
-  font-size: calc(clamp(0.2rem, 1vw, 0.6rem) / 1.1);
-}
-}
+
 .hovered {
   line-height: normal;
   box-shadow: rgb(0 0 0 / 75%) 0px 3px 10px;
   position: absolute;
-
   display: grid;
   align-items: flex-end;
   font-weight: 400;
-  transform-origin: bottom center; 
-  transform:  scale(var(--scale-size)) translate(-25%, -12%);
   grid-template-rows: auto 1fr;
-
   gap: 0;
-
   padding: 0;
   z-index: 25;
 }

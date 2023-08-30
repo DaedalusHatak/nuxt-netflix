@@ -13,7 +13,7 @@ const arrOfHeaders = ref<string[]>([
   "Top rated TV series",
 ]);
 const userProfile = useProfile();
-
+const movieCard = ref();
 const firestoreClient = ref({
   avatar: userProfile.value.photo,
   email: userProfile.value.email,
@@ -31,6 +31,7 @@ function currElementHandler(e: Movie) {
 }
 const currPosition = ref();
 function currPositionHandler(e: DOMRect) {
+  scaledWidth.value = e.width
   if (!currPosition.value) currPosition.value = e;
 }
 const scaledWidth = ref<number>();
@@ -57,6 +58,9 @@ const centerPosition = computed(() => {
       } else if (x - width <= 0) {
         x = x + 56;
       }
+      setTimeout(()=>{
+        showText.value = true;
+      },1)
       return { x, y, width };
     }
 
@@ -76,13 +80,14 @@ function onAfterLeave() {
 function onMouseLeave() {
   showText.value = false;
 
-  scaledWidth.value =  110
+
   setTimeout(() => {
+
     isHovering.value = false;
     currElement.value = undefined;
     scaledWidth.value = 0;
     currPosition.value = undefined;
-  }, 1);
+  }, 1200);
 }
 
 function setHeader(id: string | number) {
@@ -91,6 +96,7 @@ function setHeader(id: string | number) {
     return "";
   }
 }
+
 </script>
 <template>
   <Head>
@@ -122,14 +128,12 @@ function setHeader(id: string | number) {
         />
       </section>
     </div>
-    <Transition
-      @before-enter="onBeforeEnter"
-      @after-enter="onAfterEnter"
-      @after-leave="onAfterLeave"
-    >
+
       <MovieCard
         :text="showText"
         class="trans"
+        ref="movieCard"
+        :class="showText ? 'trans-scale' : ''"
         v-if="isHovering && centerPosition"
         @mouseleave="onMouseLeave()"
         :slide="currElement"
@@ -140,15 +144,20 @@ function setHeader(id: string | number) {
           width: `${centerPosition.width}px`,
         }"
       ></MovieCard>
-    </Transition>
+
   </div>
 </template>
 
 <style scoped>
 .trans {
-width:115px;
 
-  transition: all .2s ease-in;
+  width:120px;
+  transform: translate(-50%,-60%);
+  transition: all 1.2s ease-in-out;
+}
+.trans-scale {
+  transform-origin: center center; 
+transform: scale(1.85) translate(-25%,-50%);
 }
 
 .v-leave-to {
@@ -191,7 +200,9 @@ button {
   cursor: pointer;
   color: rgb(255, 255, 255);
   border-radius: 1rem;
+ 
 }
+
 
 @media screen and (min-width: 420px) {
   .flex-center {
