@@ -1,6 +1,5 @@
 <template>
   <section>
-    {{ test }}
     <div
       v-if="arrOfDynamicPaths.length > 0"
       class="movie-section"
