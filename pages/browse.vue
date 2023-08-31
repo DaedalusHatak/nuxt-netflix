@@ -16,7 +16,7 @@ const userProfile = useProfile();
 const movieCard = ref();
 const classy = ref();
 const firestoreClient = ref({
-  avatar: userProfile.value.photo,
+  avatar: userProfile.value.photoURL || "raiden.png",
   email: userProfile.value.email,
 });
 
@@ -130,7 +130,7 @@ const setClasses = computed(()=>{
   <Head>
     <Meta name="description" content="Movie database" />
   </Head>
-  <NavBar :av="firestoreClient"></NavBar>
+  <NavBar :is-account="false" :av="firestoreClient"></NavBar>
 
   <div class="flex-center">
     <p></p>

@@ -2,31 +2,42 @@
 const props = defineProps<{
   message: string | undefined;
 }>();
+const inputCode = ref();
 const emit = defineEmits<{
   (e: "closeModal", status: any): void;
 }>();
 function closeModal() {
-  if (props.message !== "success") {
-    emit("closeModal", false);
-  } else {
-    emit("closeModal", true);
+  if(props.message === "Enter verification code"){
+    emit("closeModal", inputCode.value);
   }
+  else if (props.message === "success") {
+    emit("closeModal", true);
+  } 
+  else {
+    emit("closeModal", false);
+  }
+
 }
 </script>
 
 <template>
   <div class="modal-backdrop" style="">
     <div class="modal">
-      <header class="modal-header" v-if="message !== 'success'">Error</header>
-      <header class="modal-header" v-else>Success</header>
-      <section class="modal-body" v-if="message !== 'success'">
+      <header class="modal-header" v-if="message !== 'success' && message !== 'Enter verification code'">Error</header>
+      <header class="modal-header" v-else-if="message === 'success'">Success</header>
+      <header class="modal-header" v-else>Verification</header>
+      <section class="modal-body" v-if="message !== 'success' && message !== 'Enter verification code'">
         Sorry. Something went wrong
         <span class="error">Error: {{ message }}</span>
       </section>
-      <section class="modal-body" v-else>You may now log in.</section>
+      <section class="modal-body" v-else-if="message === 'success'">You may now log in.</section>
+      <section class="modal-body" v-else>Enter verification code: <input v-model="inputCode" /></section>
       <footer class="modal-footer">
         <button @click="closeModal" type="button" class="btn-green">
           Confirm
+        </button>
+        <button v-if="props.message === 'Enter verification code'" @click="emit('closeModal', false)" type="button" class="btn-green">
+          Cancel
         </button>
       </footer>
     </div>

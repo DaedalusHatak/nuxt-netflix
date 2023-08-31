@@ -1,6 +1,14 @@
 interface APISession {
   photoURL: string;
   email: string;
+  providerData: ProviderData[]
+}interface ProviderData {
+	displayName: string | null;
+	email: string | null;
+	phoneNumber: string | null;
+	photoURL: string | null;
+	providerId: string;
+	uid: string;
 }
 
 export default defineNuxtRouteMiddleware(async (to, from) => {
@@ -12,7 +20,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
   });
   const userInfo = useProfile();
   if (data.value) {
-    userInfo.value = { photo: data.value!.photoURL, email: data.value!.email };
+    userInfo.value = data.value
   }
   if (data.value) {
     if (to.path === "/YourAccount") {

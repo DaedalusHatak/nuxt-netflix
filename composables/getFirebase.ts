@@ -1,8 +1,11 @@
 import { FirebaseError } from "firebase/app";
 import {
   Auth,
+  PhoneAuthProvider,
+  RecaptchaVerifier,
   updateCurrentUser,
   updatePassword,
+  updatePhoneNumber,
   updateProfile,
 } from "firebase/auth";
 import {
@@ -17,6 +20,7 @@ import { Firestore, collection, getDocs } from "firebase/firestore";
 
 export const getStore = async (photo: any) => {
   const auth = getAuth();
+
   await updateProfile(auth.currentUser!, { photoURL: photo });
 };
 
@@ -39,6 +43,9 @@ export const updateUser = async (pass: string) => {
   const auth = getAuth();
   updatePassword(auth.currentUser!, pass);
   navigateTo("/browse");
+};
+export const updatPhone = async (verificationCode: any) => {
+  
 };
 export const signIn = async (email: string, password: string) => {
   const auth = getAuth();

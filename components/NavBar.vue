@@ -1,6 +1,7 @@
 <script setup lang="ts">
 const props = defineProps<{
   av: any;
+  isAccount: boolean;
 }>();
 const images = ref({logo:'daedalus.png', profile:props.av.avatar})
 const isHoveredMenu = ref();
@@ -58,6 +59,7 @@ onMounted(() => {
   <nav :style="{ backgroundColor: scroll ? '#331abbe6' : 'transparent' }">
     <div class="navbar">
       <nuxt-img
+      v-if="!props.isAccount"
       :src="images.logo"
       preload
       format="webp"
@@ -68,17 +70,29 @@ onMounted(() => {
         
         alt=""
       />
-      <ul class="desktop-list">
+      <nuxt-img
+      v-else
+      @click="navigateTo('/browse')"
+      :style="{cursor: 'pointer'}"
+      :src="images.logo"
+      preload
+      format="webp"
+        height="64px"
+        width="185px"
+        class="logo"
+
+      />
+      <ul  v-if="!props.isAccount" class="desktop-list">
         <RouterLink to="/browse">Main Page</RouterLink>
         <RouterLink to="/browse/tv">Series</RouterLink>
         <RouterLink to="/browse/movie">Movies</RouterLink>
         <RouterLink to="/browse/popular">New and popular</RouterLink>
       </ul>
-      <button @click="hover()" @mouseover="hover()" @mouseleave="unHover()">
+      <button  v-if="!props.isAccount" @click="hover()" @mouseover="hover()" @mouseleave="unHover()">
         Browse <span>▼</span>
       </button>
 
-      <div
+      <div 
         @click="hoverProfile()"
         @mouseover="hoverProfile()"
         @mouseleave="unHoverProfile()"

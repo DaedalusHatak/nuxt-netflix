@@ -1,19 +1,28 @@
-import { ref } from "vue";
-import { Movie, UserData } from "~/types";
+import { ref } from 'vue';
+import { Movie, UserData } from '~/types';
 interface UserProfile {
-  photo: string;
-  email: string;
+	photoURL: string;
+	email: string;
+	providerData: ProviderData[];
+}
+interface ProviderData {
+	displayName: string | null;
+	email: string | null;
+	phoneNumber: string | null;
+	photoURL: string | null;
+	providerId: string;
+	uid: string;
 }
 interface MediaItem {
-  [k: string]: any;
+	[k: string]: any;
 }
 interface MovieCard {
-  element: MediaItem;
-  target: any;
+	element: MediaItem;
+	target: any;
 }
-const userProfile = { photo: "", email: "" };
+let userProfile: UserProfile;
 const movieCard: MovieCard = { element: {}, target: undefined };
 export const useProfile = () =>
-  useState<UserProfile>("userProfile", () => userProfile);
+	useState<UserProfile>('userProfile', () => userProfile);
 export const useMovieCard = () =>
-  useState<MovieCard>("movieCard", () => movieCard);
+	useState<MovieCard>('movieCard', () => movieCard);
