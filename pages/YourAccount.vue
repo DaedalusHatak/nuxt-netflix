@@ -31,28 +31,21 @@ const newNumber = ref<string>("");
 const verCode = ref<string>("");
 
 let verificationId: string;
-let applicationVerifier: RecaptchaVerifier;
+const applicationVerifier = useState<RecaptchaVerifier>("captcha");
 
+console.log(applicationVerifier.value);
 async function updatePhone(number: string) {
   //Button animates on Captcha loading
   buttonCaptcha.value = true;
   //Provider of auth
   const provider = new PhoneAuthProvider(useAuth.value);
-  //Captcha
-  if (!applicationVerifier) {
-    applicationVerifier = new RecaptchaVerifier(useAuth.value, "recap", {
-      size: "invisible",
-      callback: (response: any) => {
-        buttonCaptcha.value = false;
-      },
-    });
-  }
   try {
     //Starts verification process
     verificationId = await provider.verifyPhoneNumber(
       number,
-      applicationVerifier
+      applicationVerifier.value
     );
+
     //Shows modal for verification code
     modalMessage.value = "Enter verification code";
   } catch (err) {
@@ -64,6 +57,7 @@ async function updatePhone(number: string) {
 
 async function verifyCode(verificationCode: any) {
   //Hides modal
+  buttonCaptcha.value = false;
   showModal.value = false;
   if (verificationCode) {
     //Shows modal for new number
@@ -80,13 +74,14 @@ async function verifyNewNumber(number: any) {
   changePhone.value = false;
   //Provider of auth
   const provider = new PhoneAuthProvider(useAuth.value);
+
   //Button cancel animate
   buttonCaptcha.value = false;
   try {
     //verifies new number
     verificationId = await provider.verifyPhoneNumber(
       number,
-      applicationVerifier
+      applicationVerifier.value
     );
   } catch (err) {
     console.log("err", err);
@@ -115,7 +110,6 @@ async function setPhoneNumber() {
 </script>
 
 <template>
-  <div id="recap"></div>
   <BaseModal
     v-if="showModal"
     @closeModal="verifyCode"
