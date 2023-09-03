@@ -1,50 +1,50 @@
 <template>
   <div ref="elementToWatch" class="hovered">
-
     <nuxt-img
       :src="props.slide.image"
-      :alt="props.slide.title || props.slide.name"
+      :alt="(props.slide as Movie).title || (props.slide as TVSerie).name "
       width="250"
       height="120"
     />
-<div class="info-rel">
-	<div class="info" :class="props.text ? '' : 'hidden'">
-      <h3>
-        <span class="name">Title:</span>
-        {{ props.slide.title || props.slide.name }}
-      </h3>
-      <p><span class="name">Release date:</span> {{ releaseDate }}</p>
-      <p>
-        <span class="name">Rating</span> {{ props.slide.vote_average }}
-        <span class="name">Votes:</span> {{ props.slide.vote_count }}
-      </p>
-      <p class="overview">
-        <span class="name">Overview: </span> {{ props.slide.overview }}
-      </p>
+    <div class="info-rel">
+      <div class="info" :class="props.text ? '' : 'hidden'">
+        <h3>
+          <span class="name">Title:</span>
+          {{ (props.slide as Movie).title || (props.slide as TVSerie).name }}
+        </h3>
+        <p><span class="name">Release date:</span> {{ releaseDate }}</p>
+        <p>
+          <span class="name">Rating</span> {{ props.slide.vote_average }}
+          <span class="name">Votes:</span> {{ props.slide.vote_count }}
+        </p>
+        <p class="overview">
+          <span class="name">Overview: </span> {{ props.slide.overview }}
+        </p>
+      </div>
     </div>
-</div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { Movie } from "~/types";
+import { Movie, TVSerie } from "~/types";
 
 const props = defineProps<{
-  slide: Movie;
+  slide: Movie | TVSerie;
   position: DOMRect;
   text: boolean;
 }>();
-
-
 
 const renderText = computed(() => {
   if (props.text) return props.text;
 });
 const releaseDate = computed(() => {
-  if (props.slide.release_date) {
-    return props.slide.release_date.split("-").reverse().join("-");
+  if ((props.slide as Movie).release_date) {
+    return (props.slide as Movie).release_date.split("-").reverse().join("-");
   } else {
-    return props.slide.first_air_date.split("-").reverse().join("-");
+    return (props.slide as TVSerie).first_air_date
+      .split("-")
+      .reverse()
+      .join("-");
   }
 });
 </script>
@@ -53,14 +53,13 @@ const releaseDate = computed(() => {
 .hovered {
   --scale-size: 1.85;
 }
-.info-rel{
-	position: relative;
-	width:100%;
+.info-rel {
+  position: relative;
+  width: 100%;
 }
 .info {
-
   position: absolute;
-	width: 100%;
+  width: 100%;
   padding: 0.5rem 0.25rem;
   background-color: #181818;
   border-radius: 0 0 7px 7px;
@@ -70,22 +69,20 @@ const releaseDate = computed(() => {
   overflow: hidden;
 }
 
-
-
 h3 {
-  font-size:9px;
+  font-size: 9px;
   font-weight: 300;
   line-height: 17px;
   padding: 0;
   // transform:  scale( calc(1 / var(--scale-size)));
 }
 p {
-	font-size:8px;
+  font-size: 8px;
   font-weight: 300;
   padding: 2px 0;
 }
 .overview {
-	font-size:10px;
+  font-size: 10px;
 }
 .name {
   font-weight: 700;

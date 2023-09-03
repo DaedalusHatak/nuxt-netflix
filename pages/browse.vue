@@ -32,17 +32,17 @@ function currElementHandler(e: Movie) {
 }
 const currPosition = ref();
 function currPositionHandler(e: DOMRect) {
-  scaledWidth.value = e.width
+  scaledWidth.value = e.width;
   if (!currPosition.value) currPosition.value = e;
 }
 const scaledWidth = ref<number>();
-const isHovering = ref();
-const showText = ref();
+const isHovering = ref<boolean>(false);
+const showText = ref<boolean>(false);
 const centerPosition = computed(() => {
   let x, y, width: number;
 
   if (currPosition.value) {
-    x = currPosition.value.x + currPosition.value.width / 2  ;
+    x = currPosition.value.x + currPosition.value.width / 2;
 
     // 86 is from navbar moving it down a little
     y = currPosition.value.top - 25 + window.scrollY;
@@ -55,17 +55,14 @@ const centerPosition = computed(() => {
       width = scaledWidth.value;
 
       if (x >= window.innerWidth - width) {
-       classy.value = "right"
+        classy.value = "right";
       } else if (x - width <= 0) {
-        classy.value = "left"
-        
+        classy.value = "left";
+      } else {
+        classy.value = "center";
       }
-      else{
-        classy.value = "center"
-      }
-      console.log(classy.value)
+      console.log(classy.value);
       return { x, y, width };
-
     }
 
     return { x, y };
@@ -73,27 +70,24 @@ const centerPosition = computed(() => {
 });
 
 function onBeforeEnter() {
-setTimeout(()=>{
-  showText.value = false;
-},1)
-
+  setTimeout(() => {
+    showText.value = false;
+  }, 1);
 }
 function onEnter() {
-  setTimeout(()=>{
-  showText.value = true;
-},1)
-
+  setTimeout(() => {
+    showText.value = true;
+  }, 1);
 }
 
 function onAfterLeave() {
-  setTimeout(()=>{
-  showText.value = false;
-},1)
+  setTimeout(() => {
+    showText.value = false;
+  }, 1);
 }
 
 function onMouseLeave() {
-showText.value= false;
-
+  showText.value = false;
 
   setTimeout(() => {
     showText.value = false;
@@ -111,20 +105,17 @@ function setHeader(id: string | number) {
   }
 }
 
-const setClasses = computed(()=>{
-  if(classy.value === "left" && showText.value){
-    return  'trans-scale left' 
+const setClasses = computed(() => {
+  if (classy.value === "left" && showText.value) {
+    return "trans-scale left";
+  } else if (classy.value === "right" && showText.value) {
+    return "trans-scale right";
+  } else if (showText.value) {
+    return "trans-scale";
+  } else {
+    return "";
   }
-  else if(classy.value === "right"  && showText.value){
-    return 'trans-scale right' 
-  }
-  else if (showText.value) {
-    return 'trans-scale' 
-  }
-  else{
-    return ""
-  }
-})
+});
 </script>
 <template>
   <Head>
@@ -157,14 +148,17 @@ const setClasses = computed(()=>{
       </section>
     </div>
 
-<Transition @enter="onEnter" @before-enter="onBeforeEnter" @before-leave="onMouseLeave">
-  <MovieCard
+    <Transition
+      @enter="onEnter"
+      @before-enter="onBeforeEnter"
+      @before-leave="onMouseLeave"
+    >
+      <MovieCard
         :text="showText"
         class="trans"
         ref="movieCard"
         :class="setClasses"
         v-if="isHovering && centerPosition"
-        
         @mouseleave="onMouseLeave()"
         :slide="currElement"
         :position="currPosition"
@@ -174,27 +168,24 @@ const setClasses = computed(()=>{
           width: `${centerPosition.width}px`,
         }"
       ></MovieCard>
-</Transition>
-
+    </Transition>
   </div>
 </template>
 
 <style scoped>
 .trans {
-
-
-  transform: translate(-50%,-60%);
-  transition: all .2s ease-in-out;
+  transform: translate(-50%, -60%);
+  transition: all 0.2s ease-in-out;
 }
 .trans-scale {
-  transform-origin: center center; 
-transform: scale(1.85) translate(-25%,-50%);
+  transform-origin: center center;
+  transform: scale(1.85) translate(-25%, -50%);
 }
-.left{
-  transform-origin: left center; 
+.left {
+  transform-origin: left center;
 }
-.right{
-  transform-origin: right center; 
+.right {
+  transform-origin: right center;
 }
 h2 {
   font-size: 2vw;
@@ -233,9 +224,7 @@ button {
   cursor: pointer;
   color: rgb(255, 255, 255);
   border-radius: 1rem;
- 
 }
-
 
 @media screen and (min-width: 420px) {
   .flex-center {

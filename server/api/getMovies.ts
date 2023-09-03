@@ -1,62 +1,29 @@
-import { Movie, Movies } from "~/types";
+import { Movie, ResponseData, Result, TVSerie } from "~/types";
 import type { H3Event } from "h3";
 export default defineEventHandler(async (event: H3Event) => {
   const config = useRuntimeConfig();
   const movieLink = getQuery(event);
-  const data: Movies = await $fetch(
+  const data: ResponseData = await $fetch(
     `https://api.themoviedb.org/${movieLink._}?api_key=${config.apiSecret}`
   );
   const results = data.results;
 
   // Fetch all images for each movie
-  const moviesWithImages: Movie[] = await Promise.all(
-    results.map(async (movie: Movie) => {
-      let image;
-      let poster;
-      if (movie.backdrop_path) {
-        image = `${config.imgLink}${movie.backdrop_path}`;
-      } else {
-        image = "";
-      }
-      if (movie.poster_path) {
-        poster = `${config.imgLink}${movie.poster_path}`;
-      } else {
-        poster = "";
-      }
+  const dataWithImages: (Movie | TVSerie)[] = results.map(
+    (data: Movie | TVSerie) => {
       return {
-        ...movie,
-        image,
-        poster,
+        ...data,
+        image: data.backdrop_path
+          ? `${config.imgLink}${data.backdrop_path}`
+          : "",
+        poster: data.poster_path ? `${config.imgLink}${data.poster_path}` : "",
       };
-    })
+    }
   );
-
-  const moviesWithGenres: Movie[] = await Promise.all(
-    results.map(async (movie: Movie) => {
-      let image;
-      let poster;
-      if (movie.backdrop_path) {
-        image = `${config.imgLink}${movie.backdrop_path}`;
-      } else {
-        image = "";
-      }
-      if (movie.poster_path) {
-        poster = `${config.imgLink}${movie.poster_path}`;
-      } else {
-        poster = "";
-      }
-      return {
-        ...movie,
-        image,
-        poster,
-      };
-    })
-  );
-
-  const moviesWithNonEmptyImages = moviesWithImages.filter(
-    (movie) => movie.image !== "" && movie.poster !== ""
+  const dataWithNonEmptyImages = dataWithImages.filter(
+    (data) => data.image !== "" && data.poster !== ""
   );
   return {
-    results: moviesWithNonEmptyImages,
+    results: dataWithNonEmptyImages,
   };
 });

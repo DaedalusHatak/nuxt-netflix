@@ -3,6 +3,7 @@ import {
   Auth,
   PhoneAuthProvider,
   RecaptchaVerifier,
+  signInWithCustomToken,
   updateCurrentUser,
   updatePassword,
   updatePhoneNumber,
@@ -44,8 +45,21 @@ export const updateUser = async (pass: string) => {
   updatePassword(auth.currentUser!, pass);
   navigateTo("/browse");
 };
-export const updatPhone = async (verificationCode: any) => {
-  
+
+export const initUser = async () => {
+  const auth = getAuth();
+
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      // User is signed in, see docs for a list of available properties
+      // https://firebase.google.com/docs/reference/js/auth.user
+      const uid = user.uid;
+      // ...
+    } else {
+      // User is signed out
+      // ...
+    }
+  });
 };
 export const signIn = async (email: string, password: string) => {
   const auth = getAuth();
