@@ -107,7 +107,11 @@ async function setPhoneNumber() {
     // Updates phone number
     await updatePhoneNumber(useAuth.value.currentUser!, phoneCredential);
     //updates phone number before refresh
-    firestoreClient.value.phone = newNumber.value;
+
+    firestoreClient.value.phone = newNumber.value.replace(/\s+/g, "");;
+    if(firstTimePhone.value){
+      firestoreClient.value.phone = firstTimePhone.value.replace(/\s+/g, "");;
+    }
   } catch (err) {
     modalMessage.value = err;
     showModal.value = true;
@@ -121,15 +125,8 @@ const { data } = await useFetch("/api/deletePhone", {
   method: "POST",
   body: { test: test.value },
 });
-const user = await useAuth.value.currentUser.getIdToken(true)
-console.log(user)
-
 firestoreClient.value.phone = "";
 }
-const seeData = computed(()=>{
-	const test = firstTimePhone.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
-	return test
-})
 </script>
 
 <template>
