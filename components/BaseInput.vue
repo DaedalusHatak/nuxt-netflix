@@ -6,6 +6,7 @@ const props = defineProps<{
 	type: string;
 	modelValue: string;
 	background: boolean;
+	pattern?: string;
 	border?: boolean;
 	required?: boolean;
 	checkValid?: boolean;
@@ -66,6 +67,7 @@ function focusOut() {
 			:is-active="checkIsActive"
 			:autocomplete="props.type === 'password' ? 'current-password' : 'email'"
 			:id="props.type"
+			:pattern="props.pattern"
 			minlength="5"
 			maxlength="50"
 		/>

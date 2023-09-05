@@ -7,6 +7,7 @@ import {
   linkWithPhoneNumber,
   signInWithCredential,
   signInWithPhoneNumber,
+  updateCurrentUser,
   updatePhoneNumber,
 } from "firebase/auth";
 onNuxtReady(() => {});
@@ -35,16 +36,22 @@ const applicationVerifier = useState<RecaptchaVerifier>("captcha");
 
 console.log(applicationVerifier.value);
 async function updatePhone(number: string) {
+number = number.replace(/\s+/g, "");
+console.log((number))
   //Button animates on Captcha loading
   buttonCaptcha.value = true;
   //Provider of auth
   const provider = new PhoneAuthProvider(useAuth.value);
   try {
     //Starts verification process
-    verificationId = await provider.verifyPhoneNumber(
+const test = await applicationVerifier.value.verify()
+console.log(test)
+if(test){
+	verificationId = await provider.verifyPhoneNumber(
       number,
       applicationVerifier.value
     );
+}
 
     //Shows modal for verification code
     modalMessage.value = "Enter verification code";
@@ -107,6 +114,22 @@ async function setPhoneNumber() {
     console.log(err);
   }
 }
+async function deletePhone() {
+	const test = useCookie("__token");
+
+const { data } = await useFetch("/api/deletePhone", {
+  method: "POST",
+  body: { test: test.value },
+});
+const user = await useAuth.value.currentUser.getIdToken(true)
+console.log(user)
+
+firestoreClient.value.phone = "";
+}
+const seeData = computed(()=>{
+	const test = firstTimePhone.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+	return test
+})
 </script>
 
 <template>
@@ -145,7 +168,7 @@ async function setPhoneNumber() {
   <div class="flex-center">
     <h1>Account</h1>
     <div class="account">
-      <div>Membership and billing</div>
+      <div class="category"><h2>MEMBSERSHIP AND BILLING</h2></div>
       <div class="details">
         <div class="detail-item">
           <p>{{ firestoreClient.email }}</p>
@@ -156,14 +179,22 @@ async function setPhoneNumber() {
           <button class="change-button">Change password</button>
         </div>
 
-        <div class="detail-item">
-          <p>{{ firestoreClient.phone }}</p>
-          <div v-if="!firestoreClient.phone">
-            <input v-model="firstTimePhone" />
+        <div class="detail-item" :class="!firestoreClient.phone ? 'item-input' : ''">
+		
+<form class="item-input" ref="phoneForm" @submit.prevent="updatePhone(firstTimePhone)" v-if="!firestoreClient.phone" action="">
+	<BaseInput
+				
+      :border="true"
+      :background="true"
+      name="Phone Number"
+      type="tel"
+	  pattern="^\+\d{1,4}(\s?\d){9,12}$"
+v-model="firstTimePhone"
+required
+    />
 
-            <button
+	<button
               id="recaptcha-container"
-              @click="updatePhone(firstTimePhone)"
               :class="buttonCaptcha ? 'button-spinner' : ''"
               class="change-button"
             >
@@ -171,9 +202,13 @@ async function setPhoneNumber() {
               <div v-else class="loader">
                 <span class="loader-circle"></span>
               </div>
-            </button>
-          </div>
-          <div v-else>
+            </button></form>
+	
+
+
+          <p v-else>{{ firestoreClient.phone }}</p>
+
+          <div class="btn" v-if="firestoreClient.phone">
             <button
               id="recaptcha-container"
               @click="updatePhone(firestoreClient.phone)"
@@ -185,25 +220,67 @@ async function setPhoneNumber() {
                 <span class="loader-circle"></span>
               </div>
             </button>
+			
           </div>
         </div>
+		
       </div>
     </div>
+<div class="delete">
+	<button
+              id="recaptcha-container"
+              @click="deletePhone()"
+              :class="buttonCaptcha ? 'button-spinner' : ''"
+              class="change-button"
+            >
+              <span v-if="!buttonCaptcha">Delete phone number</span>
+              <div v-else class="loader">
+                <span class="loader-circle"></span>
+              </div>
+            </button>
+</div>
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
+
+	.item-input{
+	display: flex;
+	text-align: left;
+	width:100%;
+	justify-content: space-between;
+	.base-input{
+			max-width: 300px !important;
+
+}
+}
+span{
+	font-weight: 500;
+}
 h1 {
   font-size: 1.5em;
   text-align: left;
+  padding-bottom: 1rem;
 }
 p {
   font-size: 17px;
 }
 .account {
   display: grid;
-  grid-template-columns: 300px 2fr;
+  grid-template-columns: 120px 2fr;
+  gap:70px;
+  padding-top: 1rem;
   border-top: 1px solid #999;
+}
+.category{
+	font-size: 1.125em;
+	text-align: left;
+	color: #dbdbdb;
+	h2{
+		color: #a0a0a0;
+		font-size: 1.125em;
+		font-weight: 700;
+	}
 }
 .details {
   display: grid;
@@ -217,22 +294,24 @@ p {
   align-items: center;
 }
 .change-button {
-  display: inline-flex;
+  display: flex;
   align-items: center;
   justify-content: center;
   writing-mode: horizontal-tb !important;
-
+  white-space:nowrap;
   flex: 0 0 auto;
   border: 0px;
 
   font-size: clamp(0.5rem, 1.5vw, 1rem);
   font-weight: 500;
+  height: 100%;
   min-height: 2.5rem;
-  padding: 0.75rem 1rem;
+  max-height: 3.19rem;
+  padding: 1.2rem 1rem;
   background: rgb(51, 26, 187, 0.9);
   cursor: pointer;
   color: rgb(255, 255, 255);
-  border-radius: 1rem;
+  border-radius: 5px;
 }
 .button-spinner {
   min-width: 200px;
@@ -315,6 +394,13 @@ p {
   max-height: 20px;
   animation: spin 2s linear infinite;
 }
+.delete{
+	width:100%;
+	padding: 2rem;
+	button{
+		width:100%;
+	}
+}
 .loader span {
   background-color: rgb(51, 26, 187);
   display: block;
@@ -341,19 +427,36 @@ p {
     width: 420px;
   }
 }
-
-@media screen and (max-width: 740px) {
+@media screen and (max-width: 500px) {
   .account {
     grid-template-columns: auto;
     grid-template-rows: max-content 1fr;
+	gap:10px;
   }
   .detail-item {
     display: block;
     width: 100%;
   }
-  .change-button {
+.item-input {
+	display: block;
+	.base-input {
+	max-width: 100% !important;
+  }
+}
+.change-button {
     width: 100%;
     font-size: 17px;
   }
+}
+@media screen and (min-width:500px) and (max-width: 740px) {
+  .account {
+    grid-template-columns: auto;
+	gap:10px;
+  }
+
+  .change-button {
+    font-size: 14px;
+  }
+
 }
 </style>
