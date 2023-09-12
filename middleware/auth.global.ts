@@ -28,7 +28,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
     } else if (to.matched[0].path !== "/browse") {
       return navigateTo("/browse");
     }
-  } else if (!data.value && to.path !== "/" && to.path !== "/confirm" && to.path !== "/login") {
+  } else if (!data.value && to.path !== "/" && to.path !== "/confirm" && to.path !== "/posts" && to.path !== "/login") {
     return navigateTo("/login");
   }
 });
