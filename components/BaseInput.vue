@@ -19,6 +19,7 @@ const checkIsActive = computed(() => {
 		isActive.value = true;
 	} else isActive.value = false;
 });
+
 defineEmits(['update:modelValue']);
 
 function focusIn() {
@@ -65,7 +66,7 @@ function focusOut() {
 			@change="props.modelValue === '' ? (isActive = false) : (isActive = true)"
 			@focusin="focusIn"
 			:is-active="checkIsActive"
-			:autocomplete="props.type === 'password' ? 'current-password' : 'email'"
+			:autocomplete="props.type === 'password' ? 'current-password' : props.type"
 			:id="props.type"
 			:pattern="props.pattern"
 			minlength="5"
