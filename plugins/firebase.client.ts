@@ -4,6 +4,7 @@ import { RuntimeConfig } from "nuxt/schema";
 import { FirebaseClient } from "~/types";
 import { getDatabase } from "firebase/database";
 import { initUser } from "~/composables/getFirebase";
+import { getFirestore } from "firebase/firestore";
 
 export default defineNuxtPlugin(async (nuxtApp) => {
   const config: RuntimeConfig = useRuntimeConfig();
@@ -14,12 +15,12 @@ export default defineNuxtPlugin(async (nuxtApp) => {
   const app: FirebaseApp = initializeApp(firebase);
   const auth: Auth = getAuth();
   const db = getDatabase(app);
+  const firestore = getFirestore(app)
   user.value = auth;
-  console.log(auth);
   const applicationVerifier = new RecaptchaVerifier(auth, "recap", {
     size: "invisible",
   });
-  await initUser();
+
   useState<RecaptchaVerifier>("captcha", () => applicationVerifier);
   useState("firebaseApp", () => app);
 

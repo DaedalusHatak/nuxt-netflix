@@ -10,20 +10,20 @@ import {
   updateCurrentUser,
   updatePhoneNumber,
 } from "firebase/auth";
-onNuxtReady(() => {});
+
 const userProfile = useProfile();
-const useAuth = useUser();
-
-console.log(useAuth.value);
-
-const modalMessage = ref();
 const firestoreClient = ref({
-  avatar: userProfile.value.photoURL || "raiden.png",
+  avatar: userProfile.value.photoURL ? userProfile.value.photoURL :"raiden.png",
   email: userProfile.value.email,
   phone: userProfile.value.providerData[0].phoneNumber
     ? userProfile.value.providerData[0].phoneNumber
     : "",
 });
+const useAuth = useUser();
+
+console.log(useAuth.value);
+
+const modalMessage = ref();
 const firstTimePhone = ref<string>("");
 const showModal = ref<boolean>(false);
 const buttonCaptcha = ref<boolean>(false);
