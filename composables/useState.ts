@@ -1,4 +1,3 @@
-import { ref } from "vue";
 import { Movie, UserData } from "~/types";
 interface UserProfile {
   photoURL: string;
@@ -24,7 +23,7 @@ let userProfile: UserProfile;
 let useUserUser: any;
 const movieCard: MovieCard = { element: {}, target: undefined };
 export const useProfile = () =>
-  useState<UserProfile>("userProfile", () => userProfile);
+  useState<UserProfile>("useProfile", () => userProfile);
 export const useMovieCard = () =>
   useState<MovieCard>("movieCard", () => movieCard);
-export const useUser = () => useState("movieCard", () => useUserUser);
+export const useUser = () => useState("useUser", () => useUserUser);

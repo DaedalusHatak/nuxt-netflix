@@ -16,7 +16,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
 
   const { data } = await useFetch<APISession>("/api/checkSession", {
     method: "POST",
-    body: { test: test.value },
+    body: { test: test },
   });
   const userInfo = useProfile();
   if (data.value) {
@@ -25,10 +25,14 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
   if (data.value) {
     if (to.path === "/YourAccount") {
       return;
-    } else if (to.matched[0].path !== "/browse") {
+    }
+    else if(to.path === "/posts") {
+      return;
+    }
+    else if (to.matched[0].path !== "/browse") {
       return navigateTo("/browse");
     }
-  } else if (!data.value && to.path !== "/" && to.path !== "/confirm" && to.path !== "/posts" && to.path !== "/login") {
+  } else if (!data.value && to.path !== "/" && to.path !== "/confirm" && to.path !== "/posts" &&  to.path !== "/login") {
     return navigateTo("/login");
   }
 });

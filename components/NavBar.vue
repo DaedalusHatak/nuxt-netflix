@@ -117,6 +117,7 @@ onMounted(() => {
     >
       <ul class="right">
         <RouterLink to="/YourAccount">Account</RouterLink>
+        <RouterLink to="/posts">Posts</RouterLink>
         <a @click="signOut()" to="/">Logout</a>
       </ul>
     </div>

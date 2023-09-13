@@ -16,7 +16,7 @@ const userProfile = useProfile();
 const movieCard = ref();
 const classy = ref();
 const firestoreClient = ref({
-  avatar: userProfile.value.photoURL || "raiden.png",
+  avatar: userProfile.value.photoURL ? userProfile.value.photoURL :"raiden.png",
   email: userProfile.value.email,
 });
 

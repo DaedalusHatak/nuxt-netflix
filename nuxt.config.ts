@@ -16,7 +16,7 @@ export default defineNuxtConfig({
   nitro: {
     compressPublicAssets: true,
   },
-  modules: ["@nuxt/image"],
+  modules: ["@nuxt/image",  '@vueuse/nuxt',],
   routeRules: {
     "/": { prerender: true },
   },
