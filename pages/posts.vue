@@ -21,6 +21,7 @@ const isDataLoaded = ref(false)
 const isFirst = computed(()=>{
 	return isDataLoaded.value ? "fade" : "standard"
 })
+const isTryingToDelete = ref(false)
 const cloud = ref<any[]>([]);
 const textarea = ref();
 const isScrolling = ref(false);
@@ -71,6 +72,7 @@ setTimeout(()=>{
 const inp = ref('');
 
 async function addData(bruh: any) {
+	isActive.value = false;
     const firestore = getFirestore();
 	const timestamp = serverTimestamp()
 	const newData = {
@@ -132,9 +134,17 @@ function onBeforeEnter() {
 }
 async function deleteDocuments(element:any){
 	const firestore = getFirestore();
+if(firestoreClient.value.email === element.user)
+{
 	indexOfDeletedElement.value = cloud.value.indexOf(element)
 	const document = doc(firestore,"avatar",element.id)
 await deleteDoc(document)
+}
+else{
+	isTryingToDelete.value = true;
+}
+	
+
 }
 function showElements(){
 	console.log(newPosts.value)
@@ -148,9 +158,11 @@ newPosts.value = [];
 
 
 }
+const showMoreInfo = ref(null);
 </script>
 
 <template>
+	<BaseModal @closeModal="isTryingToDelete = false" v-if="isTryingToDelete" message="You can not delete other users posts!"></BaseModal>
 	<NavBar :isAccount="true" :av="firestoreClient"></NavBar>
 	<div class="container">
 		<div class="new-post-textarea">
@@ -179,13 +191,17 @@ newPosts.value = [];
 	
 <TransitionGroup :name="isFirst">
 
-	<div class="posts" @click="deleteDocuments(post)" v-for="post in cloud" :key="post" >
+	<div class="posts" v-for="post in cloud" :key="post" >
 			
 			<div class="post">
 			<div class="user"
 				>{{ post.user }}
 				<span class="time">{{ showTime(post.createdAt) }}</span></div
 			>{{ post.post }}
+			<button class="show-more-button" @click="showMoreInfo = post" v-if="firestoreClient.email === post.user" ><IconInfo/></button>
+			<div @mouseleave="showMoreInfo = null" class="delete-menu" v-if="showMoreInfo === post">
+			<button   @click="deleteDocuments(post)" class="delete-button">Delete</button>
+			</div>
 		</div> 
 	</div>
 </TransitionGroup>
@@ -214,6 +230,41 @@ section {
 .fade-leave-active {
   position: absolute;
 }
+.show-more-button{
+	background-color: transparent;
+	margin: 0;
+	position: absolute;
+	padding: 0.3rem;
+	height:max-content;
+    right: 0;
+    top: -10px;
+	z-index: 1;
+}
+.delete-menu{
+
+	width:150px;
+	height:70px;
+	margin: 0;
+	position: absolute;
+	padding: 0.3rem;
+
+    right: -65px;
+  top:-15px;
+	
+}
+.delete-button{
+	background-color: rgba(255, 0, 0, 0.411);
+
+
+	margin: 0;
+	position: absolute;
+	padding: 0.3rem 1.2rem;
+
+    right: 65px;
+  top:35px;
+	
+}
+
 .posts {
 
 	background-color: rgb(51, 26, 187, 1);
