@@ -1,16 +1,8 @@
 <script setup lang="ts">
-import {
-	getDatabase,
-	onValue,
-	ref as dbRef,
-	update,
-	child,
-	push,
-	serverTimestamp,
-set,
-} from 'firebase/database';
 
-import { addDoc, collection, doc, getFirestore, onSnapshot, setDoc } from "firebase/firestore";
+
+import { database } from "firebase-admin";
+import { addDoc, collection, doc, getFirestore, onSnapshot, orderBy, query, setDoc,serverTimestamp, Timestamp, updateDoc, deleteDoc } from "firebase/firestore";
 
 
 
@@ -24,67 +16,100 @@ const firestoreClient = ref({
 		? userProfile.value.providerData[0].phoneNumber
 		: '',
 });
-const star = ref();
-const cloud = ref();
+const indexOfDeletedElement = ref();
+const isDataLoaded = ref(false)
+const isFirst = computed(()=>{
+	return isDataLoaded.value ? "fade" : "standard"
+})
+const cloud = ref<any[]>([]);
 const textarea = ref();
+const isScrolling = ref(false);
+const showNewElements = ref(false)
+const newPosts = ref<any[]>([]);
+function scrolling(){
+	if(window.scrollY > 0){
+		isScrolling.value =true;
+	}
+}
 onMounted(async () => {
-	const db = getDatabase();
+	window.addEventListener("scroll", scrolling);
     const firestore = getFirestore();
-    const unsub = onSnapshot(collection(firestore,"avatar"),(doc)=>{
-      console.log(doc.docs)
+	const coll = query(collection(firestore,"avatar"), orderBy("createdAt"))
+    const unsub = onSnapshot(coll,(doc)=>{
+      doc.docChanges({}).forEach(async snapshot=>{
+
+		let data = snapshot.doc.data();
+		if(snapshot.type === "modified"){
+			console.log("modified",snapshot.doc.id)
+			if(!isScrolling.value){
+				cloud.value[cloud.value.length -1].createdAt = snapshot.doc.data().createdAt
+			}
+			else{
+				newPosts.value[newPosts.value.length -1].createdAt = snapshot.doc.data().createdAt
+			}
+		}
+		else if(snapshot.type ==="added"){
+			data.id = snapshot.doc.id
+			if(!isScrolling.value){
+				cloud.value.push(data)
+				
+			}
+			else{
+				showNewElements.value = true;
+				newPosts.value.push(data)
+				
+			}
+		}else{
+			cloud.value.splice(indexOfDeletedElement.value,1)
+		}
+	  })
+setTimeout(()=>{
+	isDataLoaded.value = true;
+},1)
     })
-	const starCountRef = dbRef(db, '/');
-	console.log(starCountRef);
-	onValue(starCountRef, (snap) => {
-		const data = snap.val();
-		star.value = data;
-	});
 });
 const inp = ref('');
 
 async function addData(bruh: any) {
-	const db = getDatabase();
     const firestore = getFirestore();
-	const database = dbRef(db, '/');
-
-	
-
+	const timestamp = serverTimestamp()
 	const newData = {
 		post: bruh,
 		user: userProfile.value.email,
-		createdAt: serverTimestamp(),
+		createdAt: timestamp,
 	};
-    const newPostKey: any = push(database,newData);
-
-
 addDoc(collection(firestore, "avatar"), newData)
-	console.log('before', star.value);
-	await set(newPostKey, newData);
-	console.log('after', star.value);
 	inp.value = '';
 	textarea.value.style.height = 'auto';
 }
-function showTime(time: string) {
-	const data = new Date(time);
-	const currData = new Date();
-
-	if (currData.getDate() - data.getDate() === 0) {
-		return 'Today ' + data.getHours() + ':' + data.getMinutes();
-	} else if (currData.getDate() - data.getDate() === 1) {
-		return 'Yesterday ' + data.getHours() + ':' + data.getMinutes();
+function showTime(time: Timestamp) {
+	const data = ref()
+	if(time){
+	 data.value = new Date(time.toDate());
+	
+}
+else{
+	data.value = new Date();
+}
+const currData = new Date();
+	if (currData.getDate() - data.value.getDate() === 0) {
+		return 'Today ' + data.value.getHours().toString().padStart(2, '0') + ':' + data.value.getMinutes().toString().padStart(2, '0');
+	} else if (currData.getDate() - data.value.getDate() === 1) {
+		return 'Yesterday ' + data.value.getHours().toString().padStart(2, '0') + ':' + data.value.getMinutes().toString().padStart(2, '0');
 	} else {
 		return (
-			data.getDay().toString().padStart(2, '0') +
+			data.value.getDay().toString().padStart(2, '0') +
 			'.' +
-			data.getMonth().toString().padStart(2, '0') +
+			data.value.getMonth().toString().padStart(2, '0') +
 			'.' +
-			data.getFullYear() +
+			data.value.getFullYear() +
 			' ' +
-			data.getHours() +
+			data.value.getHours() +
 			':' +
-			data.getMinutes()
+			data.value.getMinutes()
 		);
 	}
+
 }
 
 function autoResize() {
@@ -104,6 +129,24 @@ function focusOut() {
 }
 function onBeforeEnter() {
 	console.log('HAHAHA');
+}
+async function deleteDocuments(element:any){
+	const firestore = getFirestore();
+	indexOfDeletedElement.value = cloud.value.indexOf(element)
+	const document = doc(firestore,"avatar",element.id)
+await deleteDoc(document)
+}
+function showElements(){
+	console.log(newPosts.value)
+	showNewElements.value = false;
+	for (const item of newPosts.value) {
+  cloud.value.push(item);
+}
+window.scrollTo(0,0)
+isScrolling.value = false;
+newPosts.value = [];
+
+
 }
 </script>
 
@@ -129,33 +172,23 @@ function onBeforeEnter() {
 			>
 		</div>
 		<button @click="addData(inp)">Add a new post</button>
+		
 	</div>
-    <div class="posts" v-for="post in cloud" :key="post">
-			<transition @beforeEnter="onBeforeEnter" name="fade">
-                <div class="post">
-				<div class="user"
-					>
-					</div
-				>{{ post }}
-			</div>
-            </transition>
-            
-		</div>
+	<div class="container"><button @click="showElements()" class="new-posts" v-if="showNewElements">Click me to show new Elements {{ newPosts.length }}</button></div>
 	<section>
- 
-        <!-- <TransitionGroup name="fade"> -->
-		<div class="posts" v-for="post in star" :key="post">
-			<transition @beforeEnter="onBeforeEnter" name="fade">
-                <div class="post">
-				<div class="user"
-					>{{ post.user }}
-					<span class="time">{{ showTime(post.createdAt) }}</span></div
-				>{{ post.post }}
-			</div>
-            </transition>
-            
-		</div>
-    <!-- </TransitionGroup> -->
+	
+<TransitionGroup :name="isFirst">
+
+	<div class="posts" @click="deleteDocuments(post)" v-for="post in cloud" :key="post" >
+			
+			<div class="post">
+			<div class="user"
+				>{{ post.user }}
+				<span class="time">{{ showTime(post.createdAt) }}</span></div
+			>{{ post.post }}
+		</div> 
+	</div>
+</TransitionGroup>
 	</section>
 </template>
 
@@ -169,18 +202,20 @@ section {
 	padding-bottom: 20px;
 }
 .fade-enter-active,
+.fade-move,
 .fade-leave-active {
-	transition: all 5s ease;
+	transition: all 0.3s ease;
 }
 .fade-enter-from,
 .fade-leave-to {
 	opacity: 0;
 	transform: translateX(30px);
 }
-.post{
-    transition: all 1s;
+.fade-leave-active {
+  position: absolute;
 }
 .posts {
+
 	background-color: rgb(51, 26, 187, 1);
 	margin-bottom: 5px;
 	border-radius: 10px;
@@ -191,6 +226,12 @@ section {
 	margin: 0.2rem auto;
 	padding-bottom: 10px;
 	word-break: break-word;
+}
+.new-posts{
+	position: absolute;
+	inset: 0;
+	max-width: 1000px;
+	width:70vw;
 }
 .user {
 	display: flex;
