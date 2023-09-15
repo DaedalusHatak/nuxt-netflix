@@ -3,7 +3,16 @@ const props = defineProps<{
   av: any;
   isAccount: boolean;
 }>();
-const images = ref({ logo: "daedalus.png", profile: props.av.avatar });
+const user = useProfile();
+const photo = computed(() => {
+  if (user.value.photoURL) {
+    return user.value.photoURL;
+  } else {
+    return "raiden.png";
+  }
+});
+
+const logo = "daedalus.png";
 const isHoveredMenu = ref();
 const isHoveredProfile = ref();
 const isNavigating = ref(false);
@@ -45,8 +54,8 @@ async function signOut() {
   isNavigating.value = true;
   isHoveredMenu.value = false;
   isHoveredProfile.value = false;
-  await signOutUser();
-  navigateTo("/");
+  const team = await signOutUser();
+  await navigateTo("/");
 }
 onMounted(() => {
   scr.value = window.innerWidth;
@@ -60,7 +69,7 @@ onMounted(() => {
     <div class="navbar">
       <nuxt-img
         v-if="!props.isAccount"
-        :src="images.logo"
+        :src="logo"
         preload
         format="webp"
         height="64px"
@@ -72,13 +81,14 @@ onMounted(() => {
         v-else
         @click="navigateTo('/browse')"
         :style="{ cursor: 'pointer' }"
-        :src="images.logo"
+        :src="logo"
         preload
         format="webp"
         height="64px"
         width="185px"
         class="logo"
       />
+
       <ul v-if="!props.isAccount" class="desktop-list">
         <RouterLink to="/browse">Main Page</RouterLink>
         <RouterLink to="/browse/tv">Series</RouterLink>
@@ -101,7 +111,7 @@ onMounted(() => {
         class="profile"
       >
         <nuxt-img
-          :src="images.profile"
+          :src="photo"
           preload
           format="webp"
           height="40px"
@@ -117,6 +127,7 @@ onMounted(() => {
     >
       <ul class="right">
         <RouterLink to="/YourAccount">Account</RouterLink>
+        <RouterLink to="/posts">Posts</RouterLink>
         <a @click="signOut()" to="/">Logout</a>
       </ul>
     </div>

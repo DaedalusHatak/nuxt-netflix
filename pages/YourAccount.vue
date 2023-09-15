@@ -10,53 +10,56 @@ import {
   updateCurrentUser,
   updatePhoneNumber,
 } from "firebase/auth";
-onNuxtReady(() => {});
+
 const userProfile = useProfile();
-const useAuth = useUser();
-
-console.log(useAuth.value);
-
-const modalMessage = ref();
 const firestoreClient = ref({
-  avatar: userProfile.value.photoURL || "raiden.png",
+  avatar: userProfile.value.photoURL
+    ? userProfile.value.photoURL
+    : "raiden.png",
   email: userProfile.value.email,
   phone: userProfile.value.providerData[0].phoneNumber
     ? userProfile.value.providerData[0].phoneNumber
     : "",
 });
+const useAuth = useUser();
+
+const modalMessage = ref();
 const firstTimePhone = ref<string>("");
 const showModal = ref<boolean>(false);
 const buttonCaptcha = ref<boolean>(false);
 const changePhone = ref<boolean>(false);
 const newNumber = ref<string>("");
 const verCode = ref<string>("");
-
+const newProfilePicture = ref(["keqing.png", "kokomi.png", "raiden.png"]);
 let verificationId: string;
 const applicationVerifier = useState<RecaptchaVerifier>("captcha");
 
-console.log(applicationVerifier.value);
+async function updatePhoto(photo: string) {
+  firestoreClient.value.avatar = photo;
+  await updatePicture(photo);
+}
+
 async function updatePhone(number: string) {
-number = number.replace(/\s+/g, "");
-console.log((number))
+  number = number.replace(/\s+/g, "");
+
   //Button animates on Captcha loading
   buttonCaptcha.value = true;
   //Provider of auth
   const provider = new PhoneAuthProvider(useAuth.value);
   try {
     //Starts verification process
-const test = await applicationVerifier.value.verify()
-console.log(test)
-if(test){
-	verificationId = await provider.verifyPhoneNumber(
-      number,
-      applicationVerifier.value
-    );
-}
+    const test = await applicationVerifier.value.verify();
+
+    if (test) {
+      verificationId = await provider.verifyPhoneNumber(
+        number,
+        applicationVerifier.value
+      );
+    }
 
     //Shows modal for verification code
     modalMessage.value = "Enter verification code";
   } catch (err) {
-    console.log("err", err);
     modalMessage.value = "Too many requests!";
   }
   showModal.value = true;
@@ -90,9 +93,7 @@ async function verifyNewNumber(number: any) {
       number,
       applicationVerifier.value
     );
-  } catch (err) {
-    console.log("err", err);
-  }
+  } catch (err) {}
   //shows modal to enter verification code for new number
   showModal.value = true;
 }
@@ -108,24 +109,23 @@ async function setPhoneNumber() {
     await updatePhoneNumber(useAuth.value.currentUser!, phoneCredential);
     //updates phone number before refresh
 
-    firestoreClient.value.phone = newNumber.value.replace(/\s+/g, "");;
-    if(firstTimePhone.value){
-      firestoreClient.value.phone = firstTimePhone.value.replace(/\s+/g, "");;
+    firestoreClient.value.phone = newNumber.value.replace(/\s+/g, "");
+    if (firstTimePhone.value) {
+      firestoreClient.value.phone = firstTimePhone.value.replace(/\s+/g, "");
     }
   } catch (err) {
     modalMessage.value = err;
     showModal.value = true;
-    console.log(err);
   }
 }
 async function deletePhone() {
-	const test = useCookie("__token");
+  const test = useCookie("__token");
 
-const { data } = await useFetch("/api/deletePhone", {
-  method: "POST",
-  body: { test: test.value },
-});
-firestoreClient.value.phone = "";
+  const { data } = await useFetch("/api/deletePhone", {
+    method: "POST",
+    body: { test: test.value },
+  });
+  firestoreClient.value.phone = "";
 }
 </script>
 
@@ -163,9 +163,9 @@ firestoreClient.value.phone = "";
   </div>
   <NavBar :isAccount="true" :av="firestoreClient"></NavBar>
   <div class="flex-center">
-    <h1>Account</h1>
+    <h2>Account</h2>
     <div class="account">
-      <div class="category"><h2>MEMBSERSHIP AND BILLING</h2></div>
+      <div class="category"><h3>MEMBSERSHIP AND BILLING</h3></div>
       <div class="details">
         <div class="detail-item">
           <p>{{ firestoreClient.email }}</p>
@@ -176,21 +176,28 @@ firestoreClient.value.phone = "";
           <button class="change-button">Change password</button>
         </div>
 
-        <div class="detail-item" :class="!firestoreClient.phone ? 'item-input' : ''">
-		
-<form class="item-input" ref="phoneForm" @submit.prevent="updatePhone(firstTimePhone)" v-if="!firestoreClient.phone" action="">
-	<BaseInput
-				
-      :border="true"
-      :background="true"
-      name="Phone Number"
-      type="tel"
-	  pattern="^\+\d{1,4}(\s?\d){9,12}$"
-v-model="firstTimePhone"
-required
-    />
+        <div
+          class="detail-item"
+          :class="!firestoreClient.phone ? 'item-input' : ''"
+        >
+          <form
+            class="item-input"
+            ref="phoneForm"
+            @submit.prevent="updatePhone(firstTimePhone)"
+            v-if="!firestoreClient.phone"
+            action=""
+          >
+            <BaseInput
+              :border="true"
+              :background="true"
+              name="Phone Number"
+              type="tel"
+              pattern="^\+\d{1,4}(\s?\d){9,12}$"
+              v-model="firstTimePhone"
+              required
+            />
 
-	<button
+            <button
               id="recaptcha-container"
               :class="buttonCaptcha ? 'button-spinner' : ''"
               class="change-button"
@@ -199,9 +206,8 @@ required
               <div v-else class="loader">
                 <span class="loader-circle"></span>
               </div>
-            </button></form>
-	
-
+            </button>
+          </form>
 
           <p v-else>{{ firestoreClient.phone }}</p>
 
@@ -217,47 +223,101 @@ required
                 <span class="loader-circle"></span>
               </div>
             </button>
-			
           </div>
         </div>
-		
       </div>
     </div>
-<div class="delete">
-	<button
-              id="recaptcha-container"
-              @click="deletePhone()"
-              :class="buttonCaptcha ? 'button-spinner' : ''"
-              class="change-button"
-            >
-              <span v-if="!buttonCaptcha">Delete phone number</span>
-              <div v-else class="loader">
-                <span class="loader-circle"></span>
-              </div>
-            </button>
-</div>
+    <div class="delete">
+      <button
+        id="recaptcha-container"
+        @click="deletePhone()"
+        :class="buttonCaptcha ? 'button-spinner' : ''"
+        class="change-button"
+      >
+        <span v-if="!buttonCaptcha">Delete phone number</span>
+        <div v-else class="loader">
+          <span class="loader-circle"></span>
+        </div>
+      </button>
+    </div>
+    <h2>Change profile picture</h2>
+    <div class="change-pictures">
+      <img
+        class="profile-pictures"
+        v-for="picture in newProfilePicture"
+        @click="firestoreClient.avatar = picture"
+        :class="firestoreClient.avatar === picture ? 'selected' : ''"
+        :src="picture"
+        alt=""
+      />
+    </div>
+    <div class="change-pictures">
+      <button
+        @click="updatePhoto(firestoreClient.avatar)"
+        class="profile-button"
+      >
+        Save changes
+      </button>
+    </div>
   </div>
 </template>
 
 <style scoped lang="scss">
+.change-pictures {
+  display: flex;
+  gap: 20px;
+  margin-top: 20px;
+  justify-content: center;
+  justify-items: center;
+}
+.profile-pictures {
+  background-color: #5555554d;
+  cursor: pointer;
 
-	.item-input{
-	display: flex;
-	text-align: left;
-	width:100%;
-	justify-content: space-between;
-	.base-input{
-			max-width: 300px !important;
-
+  border-radius: 5px;
+  max-height: 82px;
 }
+.selected {
+  border: 1px solid #ffffff;
 }
-span{
-	font-weight: 500;
+.profile-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  writing-mode: horizontal-tb !important;
+  white-space: nowrap;
+  flex: 0 0 auto;
+  border: 0px;
+  max-width: 200px;
+  justify-self: center;
+  font-size: 1.2rem;
+  font-weight: 500;
+  height: 100%;
+  min-height: 2.5rem;
+  max-height: 3.19rem;
+  padding: 1.2rem 1rem;
+  background: rgb(51, 26, 187, 0.9);
+  cursor: pointer;
+  color: rgb(255, 255, 255);
+  border-radius: 5px;
 }
-h1 {
+.item-input {
+  display: flex;
+  text-align: left;
+  width: 100%;
+  justify-content: space-between;
+  .base-input {
+    max-width: 300px !important;
+  }
+}
+span {
+  font-weight: 500;
+}
+h2 {
   font-size: 1.5em;
   text-align: left;
   padding-bottom: 1rem;
+  border-bottom: 1px solid #999;
 }
 p {
   font-size: 17px;
@@ -265,19 +325,18 @@ p {
 .account {
   display: grid;
   grid-template-columns: 120px 2fr;
-  gap:70px;
+  gap: 70px;
   padding-top: 1rem;
-  border-top: 1px solid #999;
 }
-.category{
-	font-size: 1.125em;
-	text-align: left;
-	color: #dbdbdb;
-	h2{
-		color: #a0a0a0;
-		font-size: 1.125em;
-		font-weight: 700;
-	}
+.category {
+  font-size: 1.125em;
+  text-align: left;
+  color: #dbdbdb;
+  h3 {
+    color: #a0a0a0;
+    font-size: 1.125em;
+    font-weight: 700;
+  }
 }
 .details {
   display: grid;
@@ -295,7 +354,7 @@ p {
   align-items: center;
   justify-content: center;
   writing-mode: horizontal-tb !important;
-  white-space:nowrap;
+  white-space: nowrap;
   flex: 0 0 auto;
   border: 0px;
 
@@ -391,12 +450,12 @@ p {
   max-height: 20px;
   animation: spin 2s linear infinite;
 }
-.delete{
-	width:100%;
-	padding: 2rem;
-	button{
-		width:100%;
-	}
+.delete {
+  width: 100%;
+  padding: 2rem;
+  button {
+    width: 100%;
+  }
 }
 .loader span {
   background-color: rgb(51, 26, 187);
@@ -428,32 +487,31 @@ p {
   .account {
     grid-template-columns: auto;
     grid-template-rows: max-content 1fr;
-	gap:10px;
+    gap: 10px;
   }
   .detail-item {
     display: block;
     width: 100%;
   }
-.item-input {
-	display: block;
-	.base-input {
-	max-width: 100% !important;
+  .item-input {
+    display: block;
+    .base-input {
+      max-width: 100% !important;
+    }
   }
-}
-.change-button {
+  .change-button {
     width: 100%;
     font-size: 17px;
   }
 }
-@media screen and (min-width:500px) and (max-width: 740px) {
+@media screen and (min-width: 500px) and (max-width: 740px) {
   .account {
     grid-template-columns: auto;
-	gap:10px;
+    gap: 10px;
   }
 
   .change-button {
     font-size: 14px;
   }
-
 }
 </style>

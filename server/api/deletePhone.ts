@@ -14,7 +14,7 @@ export default defineEventHandler(async (event: H3Event) => {
         papa.updateUser(user.uid, {providersToUnlink:['phone']})
       return user;
     } catch (err) {
-        console.log(err)
+    
       res = false;
     }
   }

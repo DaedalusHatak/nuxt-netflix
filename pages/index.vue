@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import EnjoyTv from "@/components/comp-img/EnjoyTv.vue";
+import { getDatabase,ref as dbRef, onValue } from "firebase/database";
 import DownloadImg from "~/components/comp-img/DownloadImg.vue";
 import EverywhereImg from "~/components/comp-img/EverywhereImg.vue";
 import KidsImg from "~/components/comp-img/KidsImg.vue";
@@ -37,9 +38,11 @@ const sections: Section[] = [
 // definePageMeta({
 //   middleware: "auth",
 // });
+
 </script>
 
 <template>
+
   <section class="hero-image">
     <HeroNetflix />
   </section>

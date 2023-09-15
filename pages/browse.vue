@@ -16,13 +16,13 @@ const userProfile = useProfile();
 const movieCard = ref();
 const classy = ref();
 const firestoreClient = ref({
-  avatar: userProfile.value.photoURL || "raiden.png",
+  avatar: userProfile.value.photoURL ? userProfile.value.photoURL :"raiden.png",
   email: userProfile.value.email,
 });
 
 async function updatePhoto(photo: string) {
   firestoreClient.value.avatar = photo;
-  await getStore(photo);
+  await updatePicture(photo);
 }
 const currElement = ref();
 function currElementHandler(e: Movie) {
@@ -61,7 +61,6 @@ const centerPosition = computed(() => {
       } else {
         classy.value = "center";
       }
-      console.log(classy.value);
       return { x, y, width };
     }
 

@@ -11,7 +11,6 @@ export default defineEventHandler(async (event:H3Event) => {
 
    }
    else{
-    console.log("else token")
     const baba = await setCookie(event,'signUp',email);
    
    }
