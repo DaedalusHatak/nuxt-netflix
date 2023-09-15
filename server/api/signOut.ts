@@ -5,15 +5,13 @@ export default defineEventHandler(async (event: H3Event) => {
   const { idToken } = await readBody(event);
   const auth = getAuth();
 
-  await auth
-    .verifySessionCookie(idToken)
-    .then((decodedClaims) => {
-      deleteCookie(event, "__token");
-      auth.revokeRefreshTokens(decodedClaims.sub);
-      return true;
-    })
-    .catch((err) => {
-      setResponseStatus(event, 401, "Something went wrong");
-    });
-  return send(event);
+  try {
+    const verifySession = await auth.verifySessionCookie(idToken, true);
+    const revokeToken = await auth.revokeRefreshTokens(verifySession.uid);
+
+    deleteCookie(event, "__token");
+    return true;
+  } catch (err) {
+    return false;
+  }
 });

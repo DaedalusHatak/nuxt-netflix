@@ -21,7 +21,8 @@ import { Firestore, collection, getDocs } from "firebase/firestore";
 
 export const updatePicture = async (photo: any) => {
   const auth = getAuth();
-  console.log(photo)
+  const userProfile = useProfile();
+  userProfile.value.photoURL = photo;
   await updateProfile(auth.currentUser!, { photoURL: photo });
 };
 
@@ -54,8 +55,8 @@ export const initUser = async () => {
       // User is signed in, see docs for a list of available properties
       // https://firebase.google.com/docs/reference/js/auth.user
       const uid = user.uid;
-      const phone = user.phoneNumber
-      const prov = user.providerData
+      const phone = user.phoneNumber;
+      const prov = user.providerData;
       return prov;
       // ...
     } else {
@@ -74,10 +75,10 @@ export const signIn = async (email: string, password: string) => {
 export const signOutUser = async () => {
   const auth = getAuth();
   const idToken = useCookie("__token");
-  await useFetch("/api/signOut", {
+  await auth.signOut();
+  const { data } = await useFetch("/api/signOut", {
     method: "POST",
     body: { idToken },
   });
-  const result = await auth.signOut();
-  return result;
+  return data.value;
 };
