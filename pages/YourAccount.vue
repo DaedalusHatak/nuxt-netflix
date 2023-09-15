@@ -21,7 +21,7 @@ const firestoreClient = ref({
 });
 const useAuth = useUser();
 
-console.log(useAuth.value);
+
 
 const modalMessage = ref();
 const firstTimePhone = ref<string>("");
@@ -30,14 +30,18 @@ const buttonCaptcha = ref<boolean>(false);
 const changePhone = ref<boolean>(false);
 const newNumber = ref<string>("");
 const verCode = ref<string>("");
-
+const newProfilePicture = ref(["keqing.png","kokomi.png","raiden.png"])
 let verificationId: string;
 const applicationVerifier = useState<RecaptchaVerifier>("captcha");
 
-console.log(applicationVerifier.value);
+async function updatePhoto(photo:string){
+  firestoreClient.value.avatar = photo;
+await updatePicture(photo)
+}
+
 async function updatePhone(number: string) {
 number = number.replace(/\s+/g, "");
-console.log((number))
+
   //Button animates on Captcha loading
   buttonCaptcha.value = true;
   //Provider of auth
@@ -45,7 +49,7 @@ console.log((number))
   try {
     //Starts verification process
 const test = await applicationVerifier.value.verify()
-console.log(test)
+
 if(test){
 	verificationId = await provider.verifyPhoneNumber(
       number,
@@ -56,7 +60,6 @@ if(test){
     //Shows modal for verification code
     modalMessage.value = "Enter verification code";
   } catch (err) {
-    console.log("err", err);
     modalMessage.value = "Too many requests!";
   }
   showModal.value = true;
@@ -91,7 +94,6 @@ async function verifyNewNumber(number: any) {
       applicationVerifier.value
     );
   } catch (err) {
-    console.log("err", err);
   }
   //shows modal to enter verification code for new number
   showModal.value = true;
@@ -115,7 +117,6 @@ async function setPhoneNumber() {
   } catch (err) {
     modalMessage.value = err;
     showModal.value = true;
-    console.log(err);
   }
 }
 async function deletePhone() {
@@ -236,6 +237,7 @@ required
               </div>
             </button>
 </div>
+<div><img v-for="picture in newProfilePicture" @click="updatePhoto(picture)" :src="picture" alt=""></div>
   </div>
 </template>
 

@@ -13,7 +13,6 @@ export default defineEventHandler(async (event: H3Event) => {
       return true;
     })
     .catch((err) => {
-      console.log(err);
       setResponseStatus(event, 401, "Something went wrong");
     });
   return send(event);

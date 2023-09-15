@@ -22,7 +22,7 @@ const firestoreClient = ref({
 
 async function updatePhoto(photo: string) {
   firestoreClient.value.avatar = photo;
-  await getStore(photo);
+  await updatePicture(photo);
 }
 const currElement = ref();
 function currElementHandler(e: Movie) {
@@ -61,7 +61,6 @@ const centerPosition = computed(() => {
       } else {
         classy.value = "center";
       }
-      console.log(classy.value);
       return { x, y, width };
     }
 

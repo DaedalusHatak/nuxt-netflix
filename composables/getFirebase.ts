@@ -19,9 +19,9 @@ import {
 } from "firebase/auth";
 import { Firestore, collection, getDocs } from "firebase/firestore";
 
-export const getStore = async (photo: any) => {
+export const updatePicture = async (photo: any) => {
   const auth = getAuth();
-
+  console.log(photo)
   await updateProfile(auth.currentUser!, { photoURL: photo });
 };
 
