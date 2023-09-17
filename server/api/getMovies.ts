@@ -7,7 +7,6 @@ export default defineEventHandler(async (event: H3Event) => {
     `https://api.themoviedb.org/${movieLink._}?api_key=${config.apiSecret}`
   );
   const results = data.results;
-
   // Fetch all images for each movie
   const dataWithImages: (Movie | TVSerie)[] = results.map(
     (data: Movie | TVSerie) => {

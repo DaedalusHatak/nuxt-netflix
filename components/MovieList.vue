@@ -12,8 +12,14 @@
 const props = defineProps<{
   list: string;
 }>();
-
-const { data } = await useFetch(`/api/getMovies?_=${props.list}`);
+const errorCount = ref(0);
+const { data, refresh, error } = await useFetch(
+  `/api/getMovies?_=${props.list}`
+);
+if (error.value && errorCount.value < 5) {
+  errorCount.value++;
+  await refresh();
+}
 </script>
 
 <template>
