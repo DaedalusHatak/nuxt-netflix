@@ -68,25 +68,15 @@ onMounted(() => {
   <nav :style="{ backgroundColor: scroll ? '#331abbe6' : 'transparent' }">
     <div class="navbar">
       <nuxt-img
-        v-if="!props.isAccount"
+        @click="isAccount ? navigateTo('/browse') : ''"
+        :style="{ cursor: isAccount ? 'pointer' : '' }"
         :src="logo"
         preload
         format="webp"
         height="64px"
         width="185px"
         class="logo"
-        alt=""
-      />
-      <nuxt-img
-        v-else
-        @click="navigateTo('/browse')"
-        :style="{ cursor: 'pointer' }"
-        :src="logo"
-        preload
-        format="webp"
-        height="64px"
-        width="185px"
-        class="logo"
+        alt="Daedalus logo"
       />
 
       <ul v-if="!props.isAccount" class="desktop-list">
@@ -125,7 +115,7 @@ onMounted(() => {
       @mouseover="hoverProfile()"
       class="mobile-list"
     >
-      <ul class="right">
+      <ul class="account">
         <RouterLink to="/YourAccount">Account</RouterLink>
         <RouterLink to="/posts">Posts</RouterLink>
         <a @click="signOut()" to="/">Logout</a>
@@ -137,7 +127,7 @@ onMounted(() => {
       @mouseleave="unHover()"
       @mouseover="hover()"
     >
-      <ul class="left">
+      <ul class="list">
         <RouterLink to="/browse">Main Page</RouterLink>
         <RouterLink to="/browse/tv">Series</RouterLink>
         <RouterLink to="/browse/movie">Movies</RouterLink>
@@ -163,10 +153,10 @@ button {
     font-size: 0.75rem;
   }
 }
-.left {
+.list {
   left: 0;
 }
-.right {
+.account {
   right: 0;
   transition: all;
   opacity: 1;
