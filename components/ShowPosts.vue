@@ -92,7 +92,6 @@ function showTime(time: Timestamp) {
   const data = ref();
   if (time) {
     data.value = new Date(time.toDate());
-    console.log(data.value)
   } else {
     data.value = new Date();
   }
@@ -110,7 +109,6 @@ function showTime(time: Timestamp) {
     ":" +
     data.value.getMinutes().toString().padStart(2, "0");
 
-    console.log(formattedData + formattedTime)
   if (currData.getDate() - data.value.getDate() === 0) {
     return "Today " + formattedTime;
   } else if (currData.getDate() - data.value.getDate() === 1) {

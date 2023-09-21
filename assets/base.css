@@ -61,8 +61,10 @@
 
 body {
   min-height: 100vh;
-  color: var(--color-text);
-  background: var(--color-background);
+
+  background: rgb(15, 11, 15);
+  color: white;
+
   transition: color 0.5s, background-color 0.5s;
   line-height: 1.6;
   font-size: 15px;
@@ -70,8 +72,15 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+.dark{
+  background:rgb(15, 11, 15);;
+}
+.white{
+  min-height: 100dvh;
+  background-color: white;
+  color: black;
 
-
+}
 
 /* 
 @font-face {

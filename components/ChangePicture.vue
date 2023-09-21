@@ -1,5 +1,10 @@
 <script setup lang="ts">
-const newProfilePicture = ref(['keqing.png', 'kokomi.png', 'raiden.png']);
+const imgs = import.meta.glob("@/public/*.webp")
+const newProfilePicture = ref<string[]>([]);
+for(const img in imgs){
+    newProfilePicture.value.push(img.replace(("/public/"), ''))
+}
+
 
 const userProfile = useProfile();
 const firestoreClient = ref({
@@ -36,8 +41,12 @@ async function updatePhoto(photo: string) {
 
 <style scoped lang="scss">
 .change-pictures {
-	display: flex;
-	gap: 20px;
+    width:100%;
+	display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(82px, 1fr));
+	gap: 10px;
+    max-width: 600px;
+    margin-inline: auto;
 	margin-top: 20px;
 	justify-content: center;
 	justify-items: center;

@@ -1,4 +1,7 @@
 <script setup lang="ts">
+useHead({
+  bodyAttrs: {class:'white'}
+})
 let runtime: any;
 onNuxtReady(() => {
   runtime = useRuntimeConfig();
@@ -32,7 +35,7 @@ async function closeModal(e: any) {
     @closeModal="closeModal"
     :message="isModal"
   ></BaseModal>
-  <div class="confirm-page">
+
     <NavBarRegistration> </NavBarRegistration>
     <p v-if="runtime">{{ runtime.apierLink }}</p>
     <div class="centered">
@@ -43,7 +46,7 @@ async function closeModal(e: any) {
         <p>Create a password to start watching Daedalus.</p>
         <button @click="updatePage">Next</button>
       </div>
-    </div>
+
   </div>
 </template>
 
@@ -60,15 +63,7 @@ p {
   margin-bottom: 5px;
   font-size: 19px;
 }
-.confirm-page {
-  position: relative;
-  display: flex;
 
-  flex-direction: column;
-  min-height: 100dvh;
-  background-color: white;
-  color: black;
-}
 .register-info {
   max-width: 420px;
   text-align: center;
@@ -80,7 +75,7 @@ p {
   justify-content: center;
   align-items: center;
   padding: 2rem;
-  height: 100%;
+  min-height: calc(100dvh - 6rem);
   width: 100%;
   flex: 1;
   overflow-y: hidden;
