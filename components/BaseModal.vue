@@ -33,10 +33,10 @@ function closeModal() {
       <section class="modal-body" v-else-if="message === 'success'">You may now log in.</section>
       <section class="modal-body" v-else>Enter verification code: <input v-model="inputCode" /></section>
       <footer class="modal-footer">
-        <button @click="closeModal" type="button" class="btn-green">
+        <button @click="closeModal" type="button" class="btn-input">
           Confirm
         </button>
-        <button v-if="props.message === 'Enter verification code'" @click="emit('closeModal', false)" type="button" class="btn-green">
+        <button v-if="props.message === 'Enter verification code'" @click="emit('closeModal', false)" type="button" class="btn-input">
           Cancel
         </button>
       </footer>
@@ -94,7 +94,7 @@ function closeModal() {
   color: red;
 }
 
-.btn-green {
+.btn-input {
   color: #fff;
   cursor: pointer;
 

@@ -12,42 +12,13 @@ const firestoreClient = ref({
     : "",
 });
 const useAuth = useUser();
-const modalMessage = ref();
-const firstTimePhone = ref<string>("");
-const showModal = ref<boolean>(false);
-const buttonCaptcha = ref<boolean>(false);
-const changePhone = ref<boolean>(false);
-const newNumber = ref<string>("");
-const verCode = ref<string>("");
+const phone = usePhone();
+const modal = useModal();
 
 const applicationVerifier = useState<RecaptchaVerifier>("captcha");
-let verificationId: string;
+  phone.value.applicationVerifier = applicationVerifier.value;
 
-async function updatePhone(number: string) {
-  number = number.replace(/\s+/g, "");
-
-  //Button animates on Captcha loading
-  buttonCaptcha.value = true;
-  //Provider of auth
-  const provider = new PhoneAuthProvider(useAuth.value);
-  try {
-    //Starts verification process
-    const test = await applicationVerifier.value.verify();
-
-    if (test) {
-      verificationId = await provider.verifyPhoneNumber(
-        number,
-        applicationVerifier.value
-      );
-    }
-
-    //Shows modal for verification code
-    modalMessage.value = "Enter verification code";
-  } catch (err) {
-    modalMessage.value = "Too many requests!";
-  }
-  showModal.value = true;
-}
+console.log(phone.value)
 
 
 
@@ -68,13 +39,13 @@ async function updatePhone(number: string) {
 
         <div
           class="detail-item"
-          :class="!firestoreClient.phone ? 'item-input' : ''"
+          :class="!phone.number ? 'item-input' : ''"
         >
           <form
             class="item-input"
             ref="phoneForm"
-            @submit.prevent="updatePhone(firstTimePhone)"
-            v-if="!firestoreClient.phone"
+            @submit.prevent="updatePhone(phone.firstNumber)"
+            v-if="!phone.number"
             action=""
           >
             <BaseInput
@@ -83,32 +54,32 @@ async function updatePhone(number: string) {
               name="Phone Number"
               type="tel"
               pattern="^\+\d{1,4}(\s?\d){9,12}$"
-              v-model="firstTimePhone"
+              v-model="phone.firstNumber"
               required
             />
 
             <button
               id="recaptcha-container"
-              :class="buttonCaptcha ? 'button-spinner' : ''"
+              :class="phone.buttonCaptcha ? 'button-spinner' : ''"
               class="change-button"
             >
-              <span v-if="!buttonCaptcha">Change phone number</span>
+              <span v-if="!phone.buttonCaptcha">Change phone number</span>
               <div v-else class="loader">
                 <span class="loader-circle"></span>
               </div>
             </button>
           </form>
 
-          <p v-else>{{ firestoreClient.phone }}</p>
+          <p v-else>{{ phone.number }}</p>
 
-          <div class="btn" v-if="firestoreClient.phone">
+          <div class="btn" v-if="phone.number">
             <button
               id="recaptcha-container"
-              @click="updatePhone(firestoreClient.phone)"
-              :class="buttonCaptcha ? 'button-spinner' : ''"
+              @click="updatePhone(phone.number)"
+              :class="phone.buttonCaptcha ? 'button-spinner' : ''"
               class="change-button"
             >
-              <span v-if="!buttonCaptcha">Change phone number</span>
+              <span v-if="!phone.buttonCaptcha">Change phone number</span>
               <div v-else class="loader">
                 <span class="loader-circle"></span>
               </div>
@@ -120,4 +91,111 @@ async function updatePhone(number: string) {
 </template>
 
 <style scoped lang="scss">
+.account {
+  display: grid;
+  grid-template-columns: 120px 2fr;
+  gap: 70px;
+  padding-top: 1rem;
+}
+.category {
+  font-size: 1.125em;
+  text-align: left;
+  color: #dbdbdb;
+  h3 {
+    color: #a0a0a0;
+    font-size: 1.125em;
+    font-weight: 700;
+  }
+}
+.details {
+  display: grid;
+  grid-template-columns: 1fr;
+  justify-content: space-between;
+}
+.detail-item {
+  display: flex;
+  margin-top: 1rem;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.button-spinner {
+  min-width: 200px;
+}
+
+
+
+.loader {
+  border: 11px solid #f3f3f3; /* Light grey */
+  border-top: 11px solid #3498db; /* Blue */
+  border-radius: 100%;
+  position: relative;
+  height: 100%;
+  max-height: 20px;
+  animation: spin 2s linear infinite;
+}
+
+.loader span {
+  background-color: rgb(51, 26, 187);
+  display: block;
+  position: absolute;
+  inset: 0;
+  left: -12px;
+  top: -12px;
+  border-radius: 100%;
+  height: 24px;
+  width: 24px;
+
+  transform: scale(0.75, 0.75);
+}
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.item-input {
+  display: flex;
+  text-align: left;
+  width: 100%;
+  justify-content: space-between;
+  .base-input {
+    max-width: 300px !important;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .account {
+    grid-template-columns: auto;
+    grid-template-rows: max-content 1fr;
+    gap: 10px;
+  }
+  .detail-item {
+    display: block;
+    width: 100%;
+  }
+  .item-input {
+    display: block;
+    .base-input {
+      max-width: 100% !important;
+    }
+  }
+  .change-button {
+    width: 100%;
+    font-size: 17px;
+  }
+}
+@media screen and (min-width: 500px) and (max-width: 740px) {
+  .account {
+    grid-template-columns: auto;
+    gap: 10px;
+  }
+
+  .change-button {
+    font-size: 14px;
+  }
+}
 </style>
