@@ -1,22 +1,10 @@
-interface APISession {
-  photoURL: string;
-  email: string;
-  providerData: ProviderData[];
-}
-interface ProviderData {
-  displayName: string | null;
-  email: string | null;
-  phoneNumber: string | null;
-  photoURL: string | null;
-  providerId: string;
-  uid: string;
-}
+import { APISession } from "~/types";
 
 export default defineNuxtRouteMiddleware(async (to, from) => {
   const cookie = useCookie("__token");
   const { data } = await useFetch<APISession>("/api/checkSession", {
     method: "POST",
-    body: { test: cookie },
+    body: { cookieID: cookie },
   });
 
   const userInfo = useProfile();

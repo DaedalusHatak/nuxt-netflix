@@ -1,5 +1,9 @@
 <script setup lang="ts">
 import { Movie } from "~/types";
+
+useHead({
+  bodyAttrs: {class: 'dark'}
+})
 const arrOfPaths = ref<string[]>([
   "3/movie/popular",
   "3/movie/top_rated",
@@ -16,7 +20,9 @@ const userProfile = useProfile();
 const movieCard = ref();
 const classy = ref();
 const firestoreClient = ref({
-  avatar: userProfile.value.photoURL ? userProfile.value.photoURL :"raiden.png",
+  avatar: userProfile.value.photoURL
+    ? userProfile.value.photoURL
+    : "raiden.png",
   email: userProfile.value.email,
 });
 
@@ -191,6 +197,7 @@ h2 {
 }
 .movie-wrapper {
   display: grid;
+  
   gap: 50px;
 }
 .movie-section {
@@ -201,7 +208,7 @@ h2 {
   padding: 2rem 1rem;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+
 }
 button {
   display: inline-flex;
@@ -231,7 +238,7 @@ button {
     padding: 2rem 3rem;
     display: flex;
     flex-direction: column;
-    overflow: hidden;
+
   }
 }
 @media screen and (max-width: 800px) {

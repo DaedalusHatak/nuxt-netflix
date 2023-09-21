@@ -113,7 +113,7 @@ const sendData = async (email: string, password: string) => {
 }
 h1 {
   text-align: left;
-  margin-bottom: 50px;
+  margin-bottom: 2rem;
 }
 
 nav {
@@ -134,16 +134,21 @@ nav {
   background: rgb(0 0 0 / 40%);
 }
 .hero-wrapper {
+
   margin: auto;
 }
 .hero-img {
   display: none;
 }
 .flex-hero {
-  padding: 9.875rem 0 4rem;
-  min-height: 43.75rem;
+  display: flex;
+  flex-direction: column;
+  
+justify-content: center;
+  min-height: 100vh;
 }
 .login-form {
+  padding-bottom: 5rem;
   flex-grow: 1;
 }
 .reg-link {
@@ -178,15 +183,15 @@ a:hover {
 .form-hero {
   display: flex;
   flex-direction: column;
-  min-height: 660px;
-  padding: 4rem 1rem;
-  margin: 0 auto;
+
+  padding: 4rem 1rem 0 1rem;
+
   color: white;
   text-align: center;
 }
 form {
   display: flex;
-  gap: 20px;
+  gap: 1rem;
 
   flex-direction: column;
   justify-content: center;
@@ -248,8 +253,6 @@ form {
   .flex-hero {
     max-width: 450px;
     margin: auto;
-    padding: 9.875rem 0 4rem;
-    min-height: 43.75rem;
   }
   .form-hero {
     min-width: 500px;

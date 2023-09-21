@@ -66,7 +66,7 @@ const releaseDate = computed(() => {
   margin: -1px 0;
   transition: all 0.2s;
   height: max-content;
-  overflow: hidden;
+ 
 }
 
 h3 {

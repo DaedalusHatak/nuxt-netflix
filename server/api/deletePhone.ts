@@ -3,13 +3,13 @@ import { getAuth } from "firebase-admin/auth";
 
 
 export default defineEventHandler(async (event: H3Event) => {
-  const { test } = await readBody(event);
+  const { cookieID } = await readBody(event);
 
   let res = false;
-  if (test) {
+  if (cookieID) {
     try {
       const papa = getAuth();
-      const verifySession = await papa.verifySessionCookie(test, true);
+      const verifySession = await papa.verifySessionCookie(cookieID, true);
       const user = await papa.getUser(verifySession.uid);
         papa.updateUser(user.uid, {providersToUnlink:['phone']})
       return user;

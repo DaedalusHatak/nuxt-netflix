@@ -1,6 +1,43 @@
+import { Timestamp } from "firebase/firestore";
+
+export interface APISession {
+  photoURL: string;
+  email: string;
+  providerData: ProviderData[];
+}
+export interface ProviderData {
+  displayName: string | null;
+  email: string | null;
+  phoneNumber: string | null;
+  photoURL: string | null;
+  providerId: string;
+  uid: string;
+}
+
 export interface ResponseData {
   results: Array<Movie | TVSerie>;
 }
+export interface Post {
+  user: string;
+  createdAt: Timestamp;
+  post: string;
+  id?: string;
+}
+export interface UserProfile {
+  photoURL?: string;
+  email: string;
+  phoneNumber?: string;
+  providerData?: ProviderData[];
+}
+
+export interface MediaItem {
+  [k: string]: any;
+}
+export interface MovieCard {
+  element: MediaItem;
+  target: any;
+}
+
 export interface Result {
   id: number;
   backdrop_path: string;

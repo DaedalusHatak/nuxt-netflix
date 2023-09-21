@@ -2,13 +2,13 @@ import type { H3Event } from "h3";
 import { getAuth } from "firebase-admin/auth";
 
 export default defineEventHandler(async (event: H3Event) => {
-  const { test } = await readBody(event);
+  const { cookieID } = await readBody(event);
 
   let res = false;
-  if (test) {
+  if (cookieID) {
     try {
       const auth = getAuth();
-      const verifySession = await auth.verifySessionCookie(test, true);
+      const verifySession = await auth.verifySessionCookie(cookieID, true);
       const user = await auth.getUser(verifySession.uid);
       return user;
     } catch (err) {

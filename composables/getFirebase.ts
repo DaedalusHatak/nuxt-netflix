@@ -1,12 +1,6 @@
 import { FirebaseError } from "firebase/app";
 import {
-  Auth,
-  PhoneAuthProvider,
-  RecaptchaVerifier,
-  signInWithCustomToken,
-  updateCurrentUser,
   updatePassword,
-  updatePhoneNumber,
   updateProfile,
 } from "firebase/auth";
 import {
@@ -15,16 +9,8 @@ import {
   signInWithEmailAndPassword,
   onAuthStateChanged,
   signOut,
-  sendSignInLinkToEmail,
 } from "firebase/auth";
-import { Firestore, collection, getDocs } from "firebase/firestore";
 
-export const updatePicture = async (photo: any) => {
-  const auth = getAuth();
-  const userProfile = useProfile();
-  userProfile.value.photoURL = photo;
-  await updateProfile(auth.currentUser!, { photoURL: photo });
-};
 
 export const createUser = async (email: string, password: string) => {
   const auth = getAuth();
@@ -40,11 +26,6 @@ export const createUser = async (email: string, password: string) => {
       return err.message;
     }
   }
-};
-export const updateUser = async (pass: string) => {
-  const auth = getAuth();
-  updatePassword(auth.currentUser!, pass);
-  navigateTo("/browse");
 };
 
 export const initUser = async () => {
@@ -65,6 +46,21 @@ export const initUser = async () => {
     }
   });
 };
+
+export const updateUser = async (pass: string) => {
+  const auth = getAuth();
+  updatePassword(auth.currentUser!, pass);
+  navigateTo("/browse");
+};
+
+export const updatePicture = async (photo: any) => {
+  const auth = getAuth();
+  const userProfile = useProfile();
+  userProfile.value.photoURL = photo;
+  await updateProfile(auth.currentUser!, { photoURL: photo });
+};
+
+
 export const signIn = async (email: string, password: string) => {
   const auth = getAuth();
   const credentials = await signInWithEmailAndPassword(auth, email, password);
@@ -75,7 +71,7 @@ export const signIn = async (email: string, password: string) => {
 export const signOutUser = async () => {
   const auth = getAuth();
   const idToken = useCookie("__token");
-  await auth.signOut();
+  await signOut(auth)
   const { data } = await useFetch("/api/signOut", {
     method: "POST",
     body: { idToken },
