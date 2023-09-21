@@ -90,6 +90,116 @@ const sendData = async (email: string, password: string) => {
 </template>
 
 <style scoped lang="scss">
+//basic
+h1 {
+  text-align: left;
+  margin-bottom: 2rem;
+}
+
+nav {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  height: 5.375rem;
+  margin: auto;
+  width: 100%;
+  position: absolute;
+  left: 0;
+  right: 0;
+}
+
+form {
+  display: flex;
+  gap: 1rem;
+
+  flex-direction: column;
+  justify-content: center;
+  text-align: left;
+  position: relative;
+}
+
+a {
+  color: white;
+  font-size: 16px;
+  font-weight: 400;
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+//classes
+.hero-img {
+  display: none;
+}
+.shadow-hero-image {
+  background: rgb(0 0 0 / 40%);
+  background-image: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.8) 0,
+    rgba(0, 0, 0, 0) 60%,
+    rgba(0, 0, 0, 0.8) 100%
+  );
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+.hero-wrapper {
+  margin: auto;
+}
+.logo-span {
+  margin-right: auto;
+}
+
+.flex-hero {
+  display: flex;
+  flex-direction: column;
+
+  justify-content: center;
+  min-height: 100vh;
+}
+
+.form-hero {
+  display: flex;
+  flex-direction: column;
+
+  padding: 3rem 1rem 0 1rem;
+
+  color: white;
+  text-align: center;
+}
+
+.login-form {
+  padding-bottom: 2rem;
+  flex-grow: 1;
+}
+
+.reg-link {
+  text-align: left;
+  font-size: 16px;
+  color: rgb(150, 150, 150);
+}
+
+.get-started-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  writing-mode: horizontal-tb !important;
+  width: 100%;
+  margin-top: 1rem;
+  flex: 0 0 auto;
+  border: 0px;
+
+  font-size: 1.5rem;
+  font-weight: 500;
+  min-height: 3.5rem;
+  padding: 0.75rem 1.5rem;
+  background: rgb(51, 26, 187, 0.9);
+  cursor: pointer;
+  color: rgb(255, 255, 255);
+  border-radius: 1rem;
+}
 .loader {
   border: 15px solid #f3f3f3; /* Light grey */
   border-top: 15px solid #3498db; /* Blue */
@@ -111,123 +221,7 @@ const sendData = async (email: string, password: string) => {
   width: 32px;
   transform: scale(0.75, 0.75);
 }
-h1 {
-  text-align: left;
-  margin-bottom: 2rem;
-}
 
-nav {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  height: 5.375rem;
-  margin: auto;
-  width: 100%;
-  position: absolute;
-  left: 0;
-  right: 0;
-}
-.logo-span {
-  margin-right: auto;
-}
-.hero-image {
-  background: rgb(0 0 0 / 40%);
-}
-.hero-wrapper {
-
-  margin: auto;
-}
-.hero-img {
-  display: none;
-}
-.flex-hero {
-  display: flex;
-  flex-direction: column;
-  
-justify-content: center;
-  min-height: 100vh;
-}
-.login-form {
-  padding-bottom: 5rem;
-  flex-grow: 1;
-}
-.reg-link {
-  text-align: left;
-  font-size: 16px;
-  color: rgb(150, 150, 150);
-}
-a {
-  color: white;
-  font-size: 16px;
-  font-weight: 400;
-  text-decoration: none;
-}
-a:hover {
-  text-decoration: underline;
-}
-
-.shadow-hero-image {
-  background: rgb(0 0 0 / 40%);
-  background-image: linear-gradient(
-    to top,
-    rgba(0, 0, 0, 0.8) 0,
-    rgba(0, 0, 0, 0) 60%,
-    rgba(0, 0, 0, 0.8) 100%
-  );
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-}
-.form-hero {
-  display: flex;
-  flex-direction: column;
-
-  padding: 4rem 1rem 0 1rem;
-
-  color: white;
-  text-align: center;
-}
-form {
-  display: flex;
-  gap: 1rem;
-
-  flex-direction: column;
-  justify-content: center;
-  text-align: left;
-  position: relative;
-}
-.subtitle-hero {
-  margin: 1rem 0 0;
-}
-
-.logo {
-  width: 9.25rem;
-  height: 2.5rem;
-  color: rgba(229, 9, 20, 1);
-  fill: currentColor;
-  display: block;
-}
-.get-started-button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  writing-mode: horizontal-tb !important;
-  width: 100%;
-  margin-top: 1rem;
-  flex: 0 0 auto;
-  border: 0px;
-
-  font-size: 1.5rem;
-  font-weight: 500;
-  min-height: 3.5rem;
-  padding: 0.75rem 1.5rem;
-  background: rgb(51, 26, 187, 0.9);
-  cursor: pointer;
-  color: rgb(255, 255, 255);
-  border-radius: 1rem;
-}
 @keyframes spin {
   0% {
     transform: rotate(0deg);
@@ -236,6 +230,8 @@ form {
     transform: rotate(360deg);
   }
 }
+
+//media
 @media screen and (min-width: 600px) {
   nav {
     max-width: calc(100% - 4rem);
@@ -256,7 +252,8 @@ form {
   }
   .form-hero {
     min-width: 500px;
-    padding: 4rem 4rem;
+    padding: 3rem 4rem;
+    flex-grow: 0.3;
     max-width: calc(100% - 4rem);
     margin: 0 auto;
     color: white;
@@ -269,10 +266,16 @@ form {
   nav {
     max-width: calc(83.33333333333334% - 6rem);
   }
+  .form-hero {
+    flex-grow: 0.07;
+  }
 }
 @media screen and (min-width: 1920px) {
   nav {
     max-width: calc(66.66666666666666% - 6rem);
+  }
+  .form-hero {
+    flex-grow: 0.05;
   }
 }
 

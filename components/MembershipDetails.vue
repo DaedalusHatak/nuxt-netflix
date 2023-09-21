@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { PhoneAuthProvider, RecaptchaVerifier } from 'firebase/auth';
+import { RecaptchaVerifier } from "firebase/auth";
 
 const userProfile = useProfile();
 const firestoreClient = ref({
@@ -7,87 +7,75 @@ const firestoreClient = ref({
     ? userProfile.value.photoURL
     : "raiden.png",
   email: userProfile.value.email,
-  phone: userProfile.value.phoneNumber
-    ? userProfile.value.phoneNumber
-    : "",
+  phone: userProfile.value.phoneNumber ? userProfile.value.phoneNumber : "",
 });
-const useAuth = useUser();
 const phone = usePhone();
-const modal = useModal();
 
 const applicationVerifier = useState<RecaptchaVerifier>("captcha");
-  phone.value.applicationVerifier = applicationVerifier.value;
-
-console.log(phone.value)
-
-
-
+phone.value.applicationVerifier = applicationVerifier.value;
 </script>
 
 <template>
- <div class="account">
-      <div class="category"><h3>MEMBSERSHIP AND BILLING</h3></div>
-      <div class="details">
-        <div class="detail-item">
-          <p>{{ firestoreClient.email }}</p>
-          <button class="change-button">Change your email address</button>
-        </div>
-        <div class="detail-item">
-          <p>Password: ********</p>
-          <button class="change-button">Change password</button>
-        </div>
+  <div class="account">
+    <div class="category"><h3>MEMBSERSHIP AND BILLING</h3></div>
+    <div class="details">
+      <div class="detail-item">
+        <p>{{ firestoreClient.email }}</p>
+        <button class="change-button">Change your email address</button>
+      </div>
+      <div class="detail-item">
+        <p>Password: ********</p>
+        <button class="change-button">Change password</button>
+      </div>
 
-        <div
-          class="detail-item"
-          :class="!phone.number ? 'item-input' : ''"
+      <div class="detail-item" :class="!phone.number ? 'item-input' : ''">
+        <form
+          class="item-input"
+          ref="phoneForm"
+          @submit.prevent="updatePhone(phone.firstNumber)"
+          v-if="!phone.number"
+          action=""
         >
-          <form
-            class="item-input"
-            ref="phoneForm"
-            @submit.prevent="updatePhone(phone.firstNumber)"
-            v-if="!phone.number"
-            action=""
+          <BaseInput
+            :border="true"
+            :background="true"
+            name="Phone Number"
+            type="tel"
+            pattern="^\+\d{1,4}(\s?\d){9,12}$"
+            v-model="phone.firstNumber"
+            required
+          />
+
+          <button
+            id="recaptcha-container"
+            :class="phone.buttonCaptcha ? 'button-spinner' : ''"
+            class="change-button"
           >
-            <BaseInput
-              :border="true"
-              :background="true"
-              name="Phone Number"
-              type="tel"
-              pattern="^\+\d{1,4}(\s?\d){9,12}$"
-              v-model="phone.firstNumber"
-              required
-            />
+            <span v-if="!phone.buttonCaptcha">Change phone number</span>
+            <div v-else class="loader">
+              <span class="loader-circle"></span>
+            </div>
+          </button>
+        </form>
 
-            <button
-              id="recaptcha-container"
-              :class="phone.buttonCaptcha ? 'button-spinner' : ''"
-              class="change-button"
-            >
-              <span v-if="!phone.buttonCaptcha">Change phone number</span>
-              <div v-else class="loader">
-                <span class="loader-circle"></span>
-              </div>
-            </button>
-          </form>
+        <p v-else>{{ phone.number }}</p>
 
-          <p v-else>{{ phone.number }}</p>
-
-          <div class="btn" v-if="phone.number">
-            <button
-              id="recaptcha-container"
-              @click="updatePhone(phone.number)"
-              :class="phone.buttonCaptcha ? 'button-spinner' : ''"
-              class="change-button"
-            >
-              <span v-if="!phone.buttonCaptcha">Change phone number</span>
-              <div v-else class="loader">
-                <span class="loader-circle"></span>
-              </div>
-            </button>
-          </div>
+        <div class="btn" v-if="phone.number">
+          <button
+            id="recaptcha-container"
+            @click="updatePhone(phone.number)"
+            :class="phone.buttonCaptcha ? 'button-spinner' : ''"
+            class="change-button"
+          >
+            <span v-if="!phone.buttonCaptcha">Change phone number</span>
+            <div v-else class="loader">
+              <span class="loader-circle"></span>
+            </div>
+          </button>
         </div>
       </div>
     </div>
+  </div>
 </template>
 
 <style scoped lang="scss">
@@ -122,8 +110,6 @@ console.log(phone.value)
 .button-spinner {
   min-width: 200px;
 }
-
-
 
 .loader {
   border: 11px solid #f3f3f3; /* Light grey */

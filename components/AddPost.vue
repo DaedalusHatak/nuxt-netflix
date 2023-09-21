@@ -1,9 +1,14 @@
 <script setup lang="ts">
-import { addDoc, collection, getFirestore, serverTimestamp } from 'firebase/firestore';
-import { UserProfile } from '~/types';
+import {
+  addDoc,
+  collection,
+  getFirestore,
+  serverTimestamp,
+} from "firebase/firestore";
+import { UserProfile } from "~/types";
 const props = defineProps<{
-    firestoreClient: UserProfile;
-}>()
+  firestoreClient: UserProfile;
+}>();
 const userProfile = useProfile();
 const textarea = ref<HTMLTextAreaElement | null>(null);
 const isScrolling = ref<boolean>(false);
@@ -23,7 +28,6 @@ function focusOut() {
     isActive.value = false;
   }
 }
-
 
 async function addData(bruh: string) {
   isScrolling.value = false;
@@ -51,7 +55,7 @@ async function addData(bruh: string) {
         v-model="post"
         @input="autoResize"
         ref="textarea"
-        name="post-area"
+        id="post-area"
       />
       <label
         class="label"
@@ -171,6 +175,4 @@ textarea:-webkit-autofill + .label {
   right: 1rem;
   top: 0.5rem;
 }
-
-
 </style>

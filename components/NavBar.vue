@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { NuxtLinkOptions, NuxtLinkProps } from "nuxt/app";
+
 const props = defineProps<{
   av: any;
   isAccount: boolean;
@@ -13,9 +15,10 @@ const photo = computed(() => {
 });
 
 const logo = "daedalus.png";
-const isHoveredMenu = ref();
-const isHoveredProfile = ref();
-const isNavigating = ref(false);
+const isHoveredMenu = ref<boolean>(false);
+const isHoveredProfile = ref<boolean>(false);
+const isKeyboardNavigating = ref<boolean>(false);
+const isNavigating = ref<boolean>(false);
 let timer: any;
 let timerProfile: any;
 const scr = ref();
@@ -39,7 +42,10 @@ function unHover() {
     isHoveredMenu.value = false;
   }, 200);
 }
-function hoverProfile() {
+function hoverProfile(keyboardNavigate: boolean) {
+  if (keyboardNavigate) {
+    isKeyboardNavigating.value = true;
+  }
   clearTimeout(timerProfile);
   if (!isNavigating.value) {
     isHoveredProfile.value = true;
@@ -49,6 +55,12 @@ function unHoverProfile() {
   timerProfile = setTimeout(() => {
     isHoveredProfile.value = false;
   }, 200);
+}
+const account = ref<HTMLAnchorElement>();
+function arrowKeys() {
+  if (isHoveredProfile.value) {
+    console.log(account.value);
+  }
 }
 async function signOut() {
   isNavigating.value = true;
@@ -80,10 +92,10 @@ onMounted(() => {
       />
 
       <ul v-if="!props.isAccount" class="desktop-list">
-        <RouterLink to="/browse">Main Page</RouterLink>
-        <RouterLink to="/browse/tv">Series</RouterLink>
-        <RouterLink to="/browse/movie">Movies</RouterLink>
-        <RouterLink to="/browse/popular">New and popular</RouterLink>
+        <NuxtLink to="/browse">Main Page</NuxtLink>
+        <NuxtLink to="/browse/tv">Series</NuxtLink>
+        <NuxtLink to="/browse/movie">Movies</NuxtLink>
+        <NuxtLink to="/browse/popular">New and popular</NuxtLink>
       </ul>
       <button
         v-if="!props.isAccount"
@@ -95,8 +107,14 @@ onMounted(() => {
       </button>
 
       <div
-        @click="hoverProfile()"
-        @mouseover="hoverProfile()"
+        tabindex="0"
+        aria-haspopup="true"
+        aria-controls="menu"
+        @keydown.space.exact="hoverProfile(true)"
+        @keydown.esc.exact="unHoverProfile()"
+        @keydown.up.exact.prevent="arrowKeys()"
+        @keydown.down.exact.prevent="arrowKeys()"
+        @mouseover="hoverProfile(false)"
         @mouseleave="unHoverProfile()"
         class="profile"
       >
@@ -110,28 +128,39 @@ onMounted(() => {
       </div>
     </div>
     <div
+      @keydown.esc.exact="unHoverProfile()"
       v-if="isHoveredProfile"
       @mouseleave="unHoverProfile()"
-      @mouseover="hoverProfile()"
+      @mouseover="hoverProfile(false)"
       class="mobile-list"
     >
       <ul class="account">
-        <RouterLink to="/YourAccount">Account</RouterLink>
-        <RouterLink to="/posts">Posts</RouterLink>
-        <a @click="signOut()" to="/">Logout</a>
+        <NuxtLink
+          ref="account"
+          @keydown.shift.tab="unHoverProfile()"
+          to="/YourAccount"
+          >Account</NuxtLink
+        >
+        <NuxtLink to="/posts">Posts</NuxtLink>
+        <NuxtLink
+          @keydown.tab.exact="unHoverProfile()"
+          @click="signOut()"
+          to="/"
+          >Logout</NuxtLink
+        >
       </ul>
     </div>
     <div
       class="mobile-list"
       v-if="isHoveredMenu"
-      @mouseleave="unHover()"
+      @focus="hoverProfile(true)"
       @mouseover="hover()"
     >
       <ul class="list">
-        <RouterLink to="/browse">Main Page</RouterLink>
-        <RouterLink to="/browse/tv">Series</RouterLink>
-        <RouterLink to="/browse/movie">Movies</RouterLink>
-        <RouterLink to="/browse/popular">New and popular</RouterLink>
+        <NuxtLink to="/browse">Main Page</NuxtLink>
+        <NuxtLink to="/browse/tv">Series</NuxtLink>
+        <NuxtLink to="/browse/movie">Movies</NuxtLink>
+        <NuxtLink to="/browse/popular">New and popular</NuxtLink>
       </ul>
     </div>
   </nav>

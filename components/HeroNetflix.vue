@@ -13,11 +13,6 @@ import { RouterLink } from "vue-router";
       <RouterLink to="/login" class="sign-in-button">Sign In</RouterLink>
     </nav>
     <div class="flex-hero">
-      <div class="info">
-        <h1>THIS IS NOT OFFICAL PAGE</h1>
-        <h1>IT IS ONLY DEMONSTRATION PURPOSE</h1>
-        <h3>DON'T USE YOUR ACTUAL OFFICAL DATA</h3>
-      </div>
       <div class="header-hero">
         <h1>Unlimited movies, TV shows, and more</h1>
 

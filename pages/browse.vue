@@ -2,8 +2,8 @@
 import { Movie } from "~/types";
 
 useHead({
-  bodyAttrs: {class: 'dark'}
-})
+  bodyAttrs: { class: "dark" },
+});
 const arrOfPaths = ref<string[]>([
   "3/movie/popular",
   "3/movie/top_rated",
@@ -129,9 +129,6 @@ const setClasses = computed(() => {
   <NavBar :is-account="false" :av="firestoreClient"></NavBar>
 
   <div class="flex-center">
-    <p></p>
-    <button @click="updatePhoto('raiden.png')">Raiden</button>
-    <button @click="updatePhoto('kokomi.png')">kokomi</button>
     <div class="movie-wrapper">
       <NuxtPage
         @hov-element="currElementHandler"
@@ -197,7 +194,7 @@ h2 {
 }
 .movie-wrapper {
   display: grid;
-  
+
   gap: 50px;
 }
 .movie-section {
@@ -208,7 +205,6 @@ h2 {
   padding: 2rem 1rem;
   display: flex;
   flex-direction: column;
-
 }
 button {
   display: inline-flex;
@@ -238,7 +234,6 @@ button {
     padding: 2rem 3rem;
     display: flex;
     flex-direction: column;
-
   }
 }
 @media screen and (max-width: 800px) {
