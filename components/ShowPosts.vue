@@ -39,10 +39,10 @@ onClickOutside(menu, (event) => {
       } else if (snapshot.type === "added") {
         data.id = snapshot.doc.id;
         if (!isScrolling.value) {
-          firestoreDatabase.value.push(data);
+          firestoreDatabase.value.unshift(data);
         } else {
           showNewElements.value = true;
-          newPosts.value.push(data);
+          newPosts.value.unshift(data);
         }
       } else {
         const index = (element: any) => element.id === snapshot.doc.id;
@@ -65,15 +65,21 @@ function scrolling() {
   if (window.scrollY > 0) {
     isScrolling.value = true;
   }
+  else if(window.scrollY === 0 && showNewElements.value){
+    
+    isScrolling.value = false;
+    showNewElements.value = false;
+  }
 }
 
 
 function showElements() {
-  showNewElements.value = false;
   for (const item of newPosts.value) {
-    firestoreDatabase.value.push(item);
-  }
-  window.scrollTo(0, 0);
+    firestoreDatabase.value.unshift(item);
+  }  
+  
+  window.scrollTo(0,0);
+ 
   newPosts.value = [];
 }
 
@@ -166,7 +172,7 @@ function showTime(time: Timestamp) {
 }
 section {
   display: flex;
-  flex-direction: column-reverse;
+  flex-direction: column;
   margin: 0 auto;
   text-align: left;
 
