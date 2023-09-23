@@ -1,3 +1,4 @@
+import { RecaptchaVerifier } from "firebase/auth";
 import { Timestamp } from "firebase/firestore";
 
 export interface APISession {
@@ -13,7 +14,34 @@ export interface ProviderData {
   providerId: string;
   uid: string;
 }
+export interface Question {
+  name: string;
+  answer: string;
+  isActive: boolean;
+}
 
+export interface Modal {
+  show: boolean;
+  message: string;
+}
+
+export interface Phone {
+  applicationVerifier?: RecaptchaVerifier;
+  changePhone: boolean;
+  buttonCaptcha: boolean;
+  verificationId: string;
+  number: string;
+  newNumber: string;
+  firstNumber: string;
+  verCode: string;
+}
+
+export interface Section {
+  header: string;
+  desc: string;
+  comp: Component;
+  reverse?: boolean;
+}
 export interface ResponseData {
   results: Array<Movie | TVSerie>;
 }

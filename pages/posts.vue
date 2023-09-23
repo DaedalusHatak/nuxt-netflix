@@ -1,9 +1,7 @@
 <script setup lang="ts">
-
-import { Post, UserProfile } from "~/types";
+import { UserProfile } from "~/types";
 
 const isTryingToDelete = ref<boolean>(false);
-
 
 const userProfile = useProfile();
 const firestoreClient = ref<UserProfile>({
@@ -15,20 +13,19 @@ const firestoreClient = ref<UserProfile>({
     ? userProfile.value.phoneNumber
     : "",
 });
-
 </script>
 
 <template>
   <BaseModal
-    @closeModal="isTryingToDelete = false"
     v-if="isTryingToDelete"
+    @closeModal="isTryingToDelete = false"
     message="You can not delete other users posts!"
   ></BaseModal>
   <NavBar :isAccount="true" :av="firestoreClient"></NavBar>
   <h1>Posts with realtime update</h1>
-<AddPost :firestore-client="firestoreClient" />
+  <AddPost :firestore-client="firestoreClient" />
 
-<ClientOnly> <ShowPosts/></ClientOnly>
+  <ClientOnly> <ShowPosts /></ClientOnly>
 </template>
 
 <style scoped lang="scss">
@@ -39,9 +36,4 @@ h1 {
   text-align: center;
   font-size: 1.7rem;
 }
-
-
-
-
-
 </style>

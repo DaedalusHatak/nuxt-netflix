@@ -1,4 +1,3 @@
-
 import type { H3Event } from "h3";
 export default defineEventHandler(async (event: H3Event) => {
   const config = useRuntimeConfig();
@@ -8,7 +7,6 @@ export default defineEventHandler(async (event: H3Event) => {
     `https://api.themoviedb.org/3/genre/${movieLink}/list?api_key=c54e012f26022e6ad00735cc83d37781`
   );
   const results = data.genres;
-return results;
+  return results;
   // Fetch all images for each movie
-
 });

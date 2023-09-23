@@ -1,8 +1,5 @@
 import { FirebaseError } from "firebase/app";
-import {
-  updatePassword,
-  updateProfile,
-} from "firebase/auth";
+import { updatePassword, updateProfile } from "firebase/auth";
 import {
   getAuth,
   createUserWithEmailAndPassword,
@@ -10,7 +7,6 @@ import {
   onAuthStateChanged,
   signOut,
 } from "firebase/auth";
-
 
 export const createUser = async (email: string, password: string) => {
   const auth = getAuth();
@@ -60,7 +56,6 @@ export const updatePicture = async (photo: any) => {
   await updateProfile(auth.currentUser!, { photoURL: photo });
 };
 
-
 export const signIn = async (email: string, password: string) => {
   const auth = getAuth();
   const credentials = await signInWithEmailAndPassword(auth, email, password);
@@ -71,7 +66,7 @@ export const signIn = async (email: string, password: string) => {
 export const signOutUser = async () => {
   const auth = getAuth();
   const idToken = useCookie("__token");
-  await signOut(auth)
+  await signOut(auth);
   const { data } = await useFetch("/api/signOut", {
     method: "POST",
     body: { idToken },
