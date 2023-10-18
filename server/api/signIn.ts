@@ -12,8 +12,9 @@ export default defineEventHandler(async (event: H3Event) => {
     });
     setCookie(event, "__token", sessionCookie, options);
     setResponseStatus(event, 200, "OK");
+    return true;
   } catch (err) {
     setResponseStatus(event, 401, "Not authorised");
+    return false;
   }
-  return send(event);
 });
