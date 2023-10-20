@@ -1,6 +1,4 @@
 <script setup lang="ts">
-  import { Movie } from "~/types";
-
   useHead({
     bodyAttrs: { class: "dark" },
   });

@@ -3,7 +3,6 @@
   import DownloadImg from "~/components/comp-img/DownloadImg.vue";
   import EverywhereImg from "~/components/comp-img/EverywhereImg.vue";
   import KidsImg from "~/components/comp-img/KidsImg.vue";
-  import { Section } from "~/types";
 
   const sections: Section[] = [
     {

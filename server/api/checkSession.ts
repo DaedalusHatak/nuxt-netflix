@@ -7,7 +7,7 @@ export default defineEventHandler(async (event: H3Event) => {
   let res = false;
   if (cookieID) {
     try {
-      const auth = getAuth();
+      const auth = await getAuth();
       const verifySession = await auth.verifySessionCookie(cookieID, true);
       const user = await auth.getUser(verifySession.uid);
       return user;
