@@ -1,7 +1,6 @@
 import { cert, getApps, initializeApp } from "firebase-admin/app";
 import { Auth, getAuth } from "firebase-admin/auth";
 import { RuntimeConfig } from "nuxt/schema";
-import { FirebaseServer } from "~/types";
 
 export default defineNuxtPlugin(async (nuxtApp) => {
   const config: RuntimeConfig = useRuntimeConfig();

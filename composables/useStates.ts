@@ -1,6 +1,3 @@
-import { RecaptchaVerifier } from "firebase/auth";
-import { Modal, MovieCard, Phone, UserProfile } from "~/types";
-
 let userProfile: UserProfile;
 let useUserUser: any;
 let modalValue: Modal = { show: false, message: "" };

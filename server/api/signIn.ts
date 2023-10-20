@@ -1,9 +1,10 @@
 import type { H3Event } from "h3";
 import { getAuth } from "firebase-admin/auth";
+import { authAdmin } from "../utils/utils";
 
 export default defineEventHandler(async (event: H3Event) => {
   const { idToken } = await readBody(event);
-  const auth = await getAuth();
+  const auth = authAdmin;
   const expiresIn = 60 * 60 * 24 * 14 * 1000;
   const options = { maxAge: expiresIn };
   try {
