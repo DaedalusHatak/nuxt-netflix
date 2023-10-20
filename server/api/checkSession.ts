@@ -12,7 +12,7 @@ export default defineEventHandler(async (event: H3Event) => {
       const user = await auth.getUser(verifySession.uid);
       return user;
     } catch (err) {
-      res = false;
+      return err;
     }
   }
   return false;
