@@ -13,13 +13,17 @@ export default defineNuxtConfig({
       htmlAttrs: { lang: "en" },
     },
   },
+
   nitro: {
     compressPublicAssets: true,
   },
+
   modules: ["@nuxt/image",  '@vueuse/nuxt',],
+
   routeRules: {
     "/": { prerender: true },
   },
+
   css: ["~/assets/main.css", "~/assets/base.css"],
 
   components: [
@@ -28,7 +32,9 @@ export default defineNuxtConfig({
       pathPrefix: false,
     },
   ],
+
   dev: true,
+
   runtimeConfig: {
     apiSecret: "",
     apiLink: "",
@@ -56,4 +62,6 @@ export default defineNuxtConfig({
       apiBase: "/api",
     },
   },
+
+  compatibilityDate: "2024-10-26",
 });

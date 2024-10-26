@@ -7,7 +7,7 @@
   } from "firebase/firestore";
   import { UserProfile } from "~/types";
 
-  const userProfile = useProfile();
+  const userProfile = await useProfile();
   const textarea = ref<HTMLTextAreaElement | null>(null);
   const isScrolling = ref<boolean>(false);
   const post = ref<string>("");

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  const userProfile = useProfile();
+  const userProfile = await useProfile();
 
   const imgs = import.meta.glob("@/public/*.webp");
   const newProfilePicture = ref<string[]>([]);

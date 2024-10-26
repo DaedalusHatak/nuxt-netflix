@@ -7,7 +7,7 @@ export default defineEventHandler(async (event: H3Event) => {
 
   try {
     const verifySession = await auth.verifySessionCookie(idToken, true);
-    const revokeToken = await auth.revokeRefreshTokens(verifySession.uid);
+     await auth.revokeRefreshTokens(verifySession.uid);
 
     deleteCookie(event, "__token");
     return true;

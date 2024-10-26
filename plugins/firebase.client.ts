@@ -1,13 +1,13 @@
-import { FirebaseApp, initializeApp } from "firebase/app";
-import { Auth, RecaptchaVerifier, getAuth } from "firebase/auth";
-import { RuntimeConfig } from "nuxt/schema";
-import { FirebaseClient } from "~/types";
+import {  initializeApp } from "firebase/app";
+import type { FirebaseApp } from "firebase/app";
+import type { Auth } from "firebase/auth";
+import { RecaptchaVerifier, getAuth } from "firebase/auth";
 import { getDatabase } from "firebase/database";
 import { initUser } from "~/composables/useFirebase";
 import { getFirestore } from "firebase/firestore";
 
 export default defineNuxtPlugin(async (nuxtApp) => {
-  const config: RuntimeConfig = useRuntimeConfig();
+  const config = useRuntimeConfig();
   const firebase = config.public.firebase;
   const user = useUser();
   // Initialize Firebase

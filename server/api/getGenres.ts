@@ -3,6 +3,7 @@ export default defineEventHandler(async (event: H3Event) => {
   const config = useRuntimeConfig();
   const movieLink = await readBody(event);
 
+  
   const data: any = await $fetch(
     `https://api.themoviedb.org/3/genre/${movieLink}/list?api_key=c54e012f26022e6ad00735cc83d37781`
   );

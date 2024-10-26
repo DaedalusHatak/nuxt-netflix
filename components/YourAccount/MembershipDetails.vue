@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { RecaptchaVerifier } from "firebase/auth";
 
-  const userProfile = useProfile();
+  const userProfile = await useProfile();
   const phone = usePhone();
   const firestoreClient = ref({
     avatar: userProfile.value.photoURL

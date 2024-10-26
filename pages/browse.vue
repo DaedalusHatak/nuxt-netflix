@@ -14,7 +14,7 @@
     "Popular TV series",
     "Top rated TV series",
   ]);
-  const userProfile = useProfile();
+  const userProfile = await useProfile();
 
   const firestoreClient = ref({
     avatar: userProfile.value.photoURL

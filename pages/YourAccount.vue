@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  const userProfile = useProfile();
+  const userProfile = await useProfile();
   const firestoreClient = ref({
     avatar: userProfile.value.photoURL
       ? userProfile.value.photoURL

@@ -14,12 +14,15 @@
       const signingIn = await signIn(email, password);
       if (signingIn.user) {
         const idToken = await signingIn.user.getIdToken();
-        const scrfToken = useCookie("__token");
+
         const signIn = await useFetch("/api/signIn", {
           method: "POST",
           body: { idToken },
         });
-        await navigateTo("/browse");
+
+
+          await navigateTo("/browse");
+
       }
     } catch (err) {
       isSent.value = false;

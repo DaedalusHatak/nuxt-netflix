@@ -51,7 +51,7 @@ export const updateUser = async (pass: string) => {
 
 export const updatePicture = async (photo: any) => {
   const auth = getAuth();
-  const userProfile = useProfile();
+  const userProfile = await useProfile();
   userProfile.value.photoURL = photo;
   await updateProfile(auth.currentUser!, { photoURL: photo });
 };
@@ -64,12 +64,14 @@ export const signIn = async (email: string, password: string) => {
 };
 
 export const signOutUser = async () => {
-  const auth = getAuth();
-  const idToken = useCookie("__token");
-  await signOut(auth);
-  const { data } = await useFetch("/api/signOut", {
-    method: "POST",
-    body: { idToken },
+  await callOnce(async () => {
+    const auth = getAuth();
+    const idToken = useCookie("__token");
+    await signOut(auth);
+    const { data } = await useFetch("/api/signOut", {
+      method: "POST",
+      body: { idToken },
+    });
+    await navigateTo('/')
   });
-  return data.value;
 };

@@ -1,13 +1,13 @@
-import { APISession } from "~/types";
-
 export default defineNuxtRouteMiddleware(async (to, from) => {
+
+try{
   const cookie = useCookie("__token");
-  const { data } = await useFetch<APISession>("/api/checkSession", {
+  const { data } = await useFetch<UserProfile>("/api/checkSession", {
     method: "POST",
     body: { cookieID: cookie },
   });
 
-  const userInfo = useProfile();
+  const userInfo =  useProfile();
   if (data.value && cookie.value) {
     userInfo.value = data.value;
     if (to.path === "/YourAccount") {
@@ -21,8 +21,15 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
     !data.value &&
     to.path !== "/" &&
     to.path !== "/confirm" &&
-    to.path !== "/login"
+    to.path !== "/login" &&
+    to.path !== "/test"
   ) {
     return navigateTo("/login");
   }
+}
+catch(err){
+  console.log(err)
+}
+
+
 });

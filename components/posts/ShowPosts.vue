@@ -11,7 +11,7 @@
   } from "firebase/firestore";
   import { Post } from "~/types";
 
-  const userProfile = useProfile();
+  const userProfile = await useProfile();
   const showNewElements = ref<boolean>(false);
   const isScrolling = ref<boolean>(false);
   //menu ref

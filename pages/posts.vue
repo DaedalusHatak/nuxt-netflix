@@ -3,7 +3,7 @@ import { UserProfile } from "~/types";
 
 const isTryingToDelete = ref<boolean>(false);
 
-const userProfile = useProfile();
+const userProfile = await useProfile();
 const firestoreClient = ref<UserProfile>({
   photoURL: userProfile.value.photoURL
     ? userProfile.value.photoURL

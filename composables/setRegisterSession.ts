@@ -1,5 +1,5 @@
 export const updateUserSession = async (email: any, step?: boolean) => {
-  await $fetch("/api/session", {
+  await useFetch("/api/session", {
     method: "POST",
     body: { email: email, secondStep: step },
   });

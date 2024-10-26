@@ -3,8 +3,6 @@ import { authAdmin } from "../utils/utils";
 
 export default defineEventHandler(async (event: H3Event) => {
   const { cookieID } = await readBody(event);
-
-  let res = false;
   if (cookieID) {
     try {
       const auth = authAdmin;
@@ -15,5 +13,5 @@ export default defineEventHandler(async (event: H3Event) => {
       return err;
     }
   }
-  return false;
+
 });

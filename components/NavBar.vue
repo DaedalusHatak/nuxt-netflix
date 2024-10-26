@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { ComponentPublicInstance } from "nuxt/dist/app/compat/capi";
 
-  const user = useProfile();
+  const user = await useProfile();
   const props = defineProps<{
     av: any;
     isAccount: boolean;
@@ -112,8 +112,8 @@
     isNavigating.value = true;
     isHoveredMenu.value = false;
     isHoveredProfile.value = false;
-    const team = await signOutUser();
-    await navigateTo("/");
+    await signOutUser();
+
   }
 </script>
 

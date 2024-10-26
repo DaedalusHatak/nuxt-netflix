@@ -46,20 +46,22 @@
       isActive.value = true;
     }
   }
+
+
 </script>
 
 <template>
   <div class="base-input">
     <input
       :class="{ background, border, invalid: invalid }"
-      :type="props.type"
+      :type="props.type || 'text'"
       :required="props.required"
       :value="props.modelValue"
       :is-active="checkIsActive"
       :autocomplete="
         props.type === 'password' ? 'current-password' : props.type
       "
-      :id="props.type"
+      :id="props.type || 'text'"
       :pattern="props.pattern"
       @input="
         $emit('update:modelValue', ($event.target as HTMLInputElement).value)
