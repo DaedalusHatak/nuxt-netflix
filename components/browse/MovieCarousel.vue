@@ -1,6 +1,5 @@
 <script setup lang="ts">
   import { ref, computed, onMounted, onBeforeUnmount } from "vue";
-  import { MediaItem, TouchMovement } from "~/types";
 
   const props = defineProps<{
     data: MediaItem[];
@@ -183,6 +182,10 @@
   function setVariable() {
     const touchDevice = isTouchDevice();
     isMobile.value = touchDevice;
+    if(isMobile.value){
+      screenVariable.value = props.size;
+      return;
+    }
     if (window.innerWidth >= 1536 && props.xxl) {
       screenVariable.value = props.xxl;
     } else if (

@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { Movie, TVSerie } from "~/types";
 
   const props = defineProps<{
     slide: Movie | TVSerie;

@@ -203,6 +203,7 @@
     padding: 2rem 1rem;
     display: flex;
     flex-direction: column;
+    overflow: hidden;
   }
   button {
     display: inline-flex;
