@@ -4,16 +4,15 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
 try{
   const cookie = useCookie("__token");
 
-  const { data } = await useFetch<UserProfile>("/api/checkSession", {
+  const data = await $fetch<UserProfile>("/api/checkSession", {
     method: "POST",
-    body: { cookieID: cookie },
-  timeout:120000
+    body: { cookieID: cookie.value },
+    cache:'no-store'
   });
 
-
   const userInfo = useProfile();
-  if (data.value && cookie.value) {
-    userInfo.value = data.value;
+  if (data && cookie.value) {
+    userInfo.value = data;
     if (to.path === "/YourAccount") {
       return;
     } else if (to.path === "/posts") {
@@ -22,7 +21,7 @@ try{
       return navigateTo("/browse");
     }
   } else if (
-    !data.value &&
+    !data &&
     to.path !== "/" &&
     to.path !== "/confirm" &&
     to.path !== "/login" &&
