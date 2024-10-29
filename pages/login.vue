@@ -18,7 +18,7 @@
         const signIn = await $fetch("/api/signIn", {
           method: "POST",
           body: { idToken },
-          cache:"no-store"
+          cache:"no-cache"
         });
 
           if(signIn){
