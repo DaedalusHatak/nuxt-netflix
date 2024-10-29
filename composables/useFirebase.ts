@@ -72,7 +72,7 @@ export const signOutUser = async () => {
       method: "POST",
       body: { idToken:idToken.value },
     });
-    console.log('signOutUser',data)
+
     if(data) {
       await navigateTo('/')
     }

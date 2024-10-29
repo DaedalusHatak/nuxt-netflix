@@ -14,10 +14,9 @@
     "Popular TV series",
     "Top rated TV series",
   ]);
-  const userProfile = await useProfile();
-
+  const userProfile =  useProfile();
   const firestoreClient = ref({
-    avatar: userProfile.value.photoURL
+    avatar: userProfile?.value.photoURL
       ? userProfile.value.photoURL
       : "raiden.png",
     email: userProfile.value.email,

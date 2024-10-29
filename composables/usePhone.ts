@@ -46,7 +46,6 @@ export async function setPhoneNumber() {
   const phone = usePhone();
   const modal = useModal();
   const useAuth = useUser();
-  console.log("cycki");
   modal.value.show = false;
   try {
     //sets phone credentials

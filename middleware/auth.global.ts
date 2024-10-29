@@ -1,6 +1,6 @@
 
 export default defineNuxtRouteMiddleware(async (to, from) => {
-if(import.meta.client) return;
+
 try{
   const cookie = useCookie("__token");
   const { data } = await useFetch<UserProfile>("/api/checkSession", {
@@ -8,7 +8,7 @@ try{
     body: { cookieID: cookie },
   });
 
-  const userInfo =   useProfile();
+  const userInfo = useProfile();
   if (data.value && cookie.value) {
     userInfo.value = data.value;
     if (to.path === "/YourAccount") {
