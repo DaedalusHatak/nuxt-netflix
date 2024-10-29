@@ -21,9 +21,9 @@
           cache:"no-cache"
         });
 
-          if(signIn){
+     
             await navigateTo("/browse");
-          }
+         
 
       }
     } catch (err) {
