@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-  const user = await useProfile();
+  const user = useProfile();
   const props = defineProps<{
     av: any;
     isAccount: boolean;
@@ -218,6 +218,7 @@
         <nuxt-img
           :src="photo"
           preload
+          loading="eager"
           format="webp"
           height="40px"
           width="40px"

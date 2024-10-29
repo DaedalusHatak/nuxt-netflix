@@ -6,6 +6,11 @@ export default defineNuxtConfig({
       charset: "utf-8",
       viewport: "width=device-width, initial-scale=1",
       title: "Daedalus",
+      script:[{
+        src:" https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1227600212000715",
+        async:true,
+        crossorigin:'anonymous'
+      }],
       meta: [
         { name: "keywords", content: "HTML, CSS, JavaScript, Vue.js, Nuxt.js" },
         { name: "author", content: "Paweł Kiciński" },
@@ -13,7 +18,15 @@ export default defineNuxtConfig({
       htmlAttrs: { lang: "en" },
     },
   },
-
+vite:{
+  css:{
+    preprocessorOptions:{
+      scss:{
+        api: 'modern-compiler'
+      }
+    }
+  }
+},
   nitro: {
     compressPublicAssets: true,
   },

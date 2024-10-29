@@ -3,10 +3,13 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
 
 try{
   const cookie = useCookie("__token");
+
   const { data } = await useFetch<UserProfile>("/api/checkSession", {
     method: "POST",
     body: { cookieID: cookie },
+  timeout:120000
   });
+
 
   const userInfo = useProfile();
   if (data.value && cookie.value) {
