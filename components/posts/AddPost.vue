@@ -5,7 +5,6 @@
     getFirestore,
     serverTimestamp,
   } from "firebase/firestore";
-  import { UserProfile } from "~/types";
 
   const userProfile = await useProfile();
   const textarea = ref<HTMLTextAreaElement | null>(null);

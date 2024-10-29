@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { UserProfile } from "~/types";
 
 const isTryingToDelete = ref<boolean>(false);
 

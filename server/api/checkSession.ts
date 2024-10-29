@@ -13,5 +13,6 @@ export default defineEventHandler(async (event: H3Event) => {
       return err;
     }
   }
+  else return false
 
 });

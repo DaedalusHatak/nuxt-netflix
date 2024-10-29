@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { ref } from "vue";
   import GetStartedForm from "./GetStartedForm.vue";
-  import { Question } from "~/types";
+
   const note = ref<string>("Note that this is only demonstration website!");
 
   const arrOfQuestions = ref<Question[]>([

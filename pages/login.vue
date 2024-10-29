@@ -15,9 +15,10 @@
       if (signingIn.user) {
         const idToken = await signingIn.user.getIdToken();
 
-        const signIn = await useFetch("/api/signIn", {
+        const signIn = await $fetch("/api/signIn", {
           method: "POST",
           body: { idToken },
+          cache:"no-store"
         });
 
 

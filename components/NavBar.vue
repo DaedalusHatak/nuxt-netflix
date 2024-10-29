@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { ComponentPublicInstance } from "nuxt/dist/app/compat/capi";
 
   const user = await useProfile();
   const props = defineProps<{

@@ -38,7 +38,7 @@ export default defineNuxtConfig({
   runtimeConfig: {
     apiSecret: "",
     apiLink: "",
-    apierLink: "wert",
+
     imgLink: "",
     firebaseAdmin: {
       projectId: process.env.FIREBASE_SA_PROJECT_ID,

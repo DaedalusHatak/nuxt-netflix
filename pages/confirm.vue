@@ -37,7 +37,6 @@
   ></BaseModal>
 
   <NavBarRegistration> </NavBarRegistration>
-  <p v-if="runtime">{{ runtime.apierLink }}</p>
   <div class="centered">
     <FirstStep
       v-if="secondStep"

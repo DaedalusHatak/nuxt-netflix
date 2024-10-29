@@ -9,7 +9,6 @@
     orderBy,
     query,
   } from "firebase/firestore";
-  import { Post } from "~/types";
 
   const userProfile = await useProfile();
   const showNewElements = ref<boolean>(false);

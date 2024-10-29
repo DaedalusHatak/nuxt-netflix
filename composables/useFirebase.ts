@@ -64,14 +64,17 @@ export const signIn = async (email: string, password: string) => {
 };
 
 export const signOutUser = async () => {
-  await callOnce(async () => {
+
     const auth = getAuth();
     const idToken = useCookie("__token");
     await signOut(auth);
-    const { data } = await useFetch("/api/signOut", {
+    const data = await $fetch("/api/signOut", {
       method: "POST",
-      body: { idToken },
+      body: { idToken:idToken.value },
     });
-    await navigateTo('/')
-  });
+    console.log('signOutUser',data)
+    if(data) {
+      await navigateTo('/')
+    }
+
 };
