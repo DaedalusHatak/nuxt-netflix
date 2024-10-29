@@ -1,3 +1,5 @@
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1227600212000715"
+     crossorigin="anonymous"></script>
 <template>
   <main>
     <div id="recap"></div>
@@ -6,6 +8,7 @@
       </main>
 </template>
 <script setup></script>
+
 <style scoped>
 iframe{
   overflow: hidden !important;
