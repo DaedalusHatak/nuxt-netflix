@@ -114,6 +114,23 @@
     await signOutUser();
 
   }
+
+  function handleAvatarError(event: string | Event){
+    console.log(event)
+   
+    if(typeof event !== "string" && event.target){
+      const target = event.target as HTMLImageElement;
+      target.src = '/' + photo
+    }
+  }
+  function handleLogoError(event: string | Event){
+    console.log(event)
+   
+    if(typeof event !== "string" && event.target){
+      const target = event.target as HTMLImageElement;
+      target.src = '/' + logo
+    }
+  }
 </script>
 
 <template>
@@ -127,6 +144,7 @@
         @keydown.space.exact.prevent="isAccount ? navigateTo('/browse') : ''"
         @keydown.enter.exact="isAccount ? navigateTo('/browse') : ''"
         @click="isAccount ? navigateTo('/browse') : ''"
+        @error="handleLogoError"
         format="webp"
         height="64px"
         width="185px"
@@ -219,6 +237,8 @@
           :src="photo"
           preload
           loading="eager"
+
+          @error="handleAvatarError"
           format="webp"
           height="40px"
           width="40px"

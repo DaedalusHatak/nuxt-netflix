@@ -10,7 +10,7 @@ export default defineEventHandler(async (event: H3Event) => {
       const user = await auth.getUser(verifySession.uid);
       return user;
     } catch (err) {
-      return err;
+      return false;
     }
   }
   else return false
