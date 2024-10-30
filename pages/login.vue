@@ -4,9 +4,9 @@
   const emailInput = ref<string>("");
   const password = ref<string>("");
   const isError = ref<boolean>(false);
-  onMounted(() => {
-    isPageReady.value = true;
-  });
+onMounted(()=>{
+  isPageReady.value = true;
+})
   const isSent = ref<boolean>(false);
   const sendData = async (email: string, password: string) => {
     isSent.value = true;
@@ -15,15 +15,16 @@
       if (signingIn.user) {
         const idToken = await signingIn.user.getIdToken();
 
-        const signIn = await $fetch("/api/signIn", {
+        const {data,pending} = await useFetch("/api/signIn", {
           method: "POST",
           body: { idToken },
-          cache:"no-cache"
-        });
+          cache: "no-store"
+        })
 
-     
-            await navigateTo("/browse");
-         
+    
+          if(data.value){
+            navigateTo("/browse");
+          }
 
       }
     } catch (err) {
@@ -79,26 +80,26 @@
               />
             </div>
             <button
-              v-if="isPageReady"
+               :disabled="!isPageReady"
               class="get-started-button"
             >
-              <span v-if="!isSent">Sign In</span>
-              <div
-                v-else
-                class="loader"
-              >
+            <span v-if="!isSent && isPageReady ">Login</span>
+            <div
+              v-if="isSent || !isPageReady"
+              class="loader"
+            >
                 <span class="loader-circle"></span>
               </div>
             </button>
           </form>
           <button
-            v-if="isPageReady"
+            :disabled="!isPageReady"
             @click="sendData('test@test.com', 'test1234')"
             class="get-started-button"
           >
-            <span v-if="!isSent">Test login</span>
+            <span v-if="!isSent && isPageReady ">Test login</span>
             <div
-              v-else
+              v-if="isSent || !isPageReady"
               class="loader"
             >
               <span class="loader-circle"></span>
@@ -120,7 +121,12 @@
     text-align: left;
     margin-bottom: 2rem;
   }
-
+button:disabled{
+  background: rgba(88, 66, 156, 0.7);
+}
+button:disabled:hover{
+  cursor:default;
+}
   nav {
     display: flex;
     align-items: center;
@@ -233,6 +239,18 @@
     height: 100%;
 
     animation: spin 2s linear infinite;
+  }
+  button:disabled .loader span{
+    background-color: rgba(88, 66, 156);
+    display: block;
+    position: absolute;
+    inset: 0;
+    left: -16px;
+    top: -16px;
+    border-radius: 100%;
+    height: 32px;
+    width: 32px;
+    transform: scale(0.75, 0.75);
   }
   .loader span {
     background-color: rgb(51, 26, 187);

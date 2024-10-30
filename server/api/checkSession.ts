@@ -5,12 +5,14 @@ export default defineEventHandler(async (event: H3Event) => {
   const { cookieID } = await readBody(event);
   if (cookieID) {
     try {
+ 
       const auth = authAdmin;
       const verifySession = await auth.verifySessionCookie(cookieID, true);
       const user = await auth.getUser(verifySession.uid);
       return user;
-    } catch (err) {
-      return false;
+    } catch (err:any) {
+console.log(err.code)
+    return err.code
     }
   }
   else return false
