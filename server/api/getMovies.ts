@@ -4,8 +4,9 @@ export default defineEventHandler(async (event: H3Event) => {
   const config = useRuntimeConfig();
   const movieLink = getQuery(event);
   const data: ResponseData = await $fetch(
-    `https://api.themoviedb.org/${movieLink._}?api_key=${config.apiSecret}`
+    `https://api.themoviedb.org/${movieLink._}?language=${movieLink.lang}&page=${1}&api_key=${config.apiSecret}`
   );
+
   const results = data.results;
   // Fetch all images for each movie
   const dataWithImages: (Movie | TVSerie)[] = results.map(

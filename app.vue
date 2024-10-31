@@ -7,9 +7,14 @@
       <NuxtPage />
       </main>
 </template>
-<script setup></script>
+<script setup>
+const lang = useBrowserLocale();
+console.log('lang',lang)
+</script>
 
 <style scoped>
+
+
 iframe{
   overflow: hidden !important;
   overflow-y: hidden !important;

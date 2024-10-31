@@ -6,6 +6,14 @@
     text: boolean;
   }>();
 
+const scroll = ref(props.position.y + window.scrollY)
+
+const calculateTopPosition = () => {
+      if (props.position.y && props.position.height) {
+        const center = props.position.y + props.position.height / 2;
+        scroll.value =center - 48 + window.scrollY;
+      }}
+
   const releaseDate = computed(() => {
     if ((props.slide as Movie).release_date) {
       return (props.slide as Movie).release_date.split("-").reverse().join("-");
@@ -22,6 +30,7 @@
   <div
     ref="elementToWatch"
     class="hovered"
+    
   >
     <nuxt-img
       :src="props.slide.image"

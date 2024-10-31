@@ -164,14 +164,25 @@
   function touchEnd() {
     if (
       touchMovement.value.start > touchMovement.value.end &&
+      touchMovement.value.start - touchMovement.value.end > 30 &&
       touchMovement.value.end > 0
     )
-      forward();
+      {
+        touchMovement.value.start = 0;
+        touchMovement.value.end = 0;
+        forward();
+      }
     else if (
       touchMovement.value.start < touchMovement.value.end &&
+      touchMovement.value.start - touchMovement.value.end < 30 && 
       touchMovement.value.end > 0
     )
+    {
+      touchMovement.value.start = 0;
+      touchMovement.value.end = 0;
       back();
+    }
+     
   }
   //Sets variable based on defined props and screen sizes
   //Sets second variable to true or false if screen is smaller than 640px
