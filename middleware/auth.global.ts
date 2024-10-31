@@ -20,16 +20,21 @@ if(cookie.value){
     } else if (to.matched[0].path !== "/browse") {
       return navigateTo("/browse");
     }
-  } else if (
-  
-    to.matched[0].path === "/browse"
-  ) {
-    await $fetch("/api/signOut", {
-      method: "POST",
-      body: { idToken:cookie.value },
-    });
+  } else if (to.matched[0].path === "/browse") {
+   cookie.value = undefined
     return navigateTo("/login");
+
   }
+  else{
+    cookie.value = undefined
+  }
+}
+
+
+
+
+else if(to.matched[0].path === "/browse"){
+  return navigateTo("/login");
 }
 }
 catch(err){
