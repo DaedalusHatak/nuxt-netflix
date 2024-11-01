@@ -4,12 +4,15 @@
     slide: Movie | TVSerie;
     position: DOMRect;
     text: boolean;
+    isMobile?: boolean;
+
   }>();
 const elementToWatch = ref();
 
 const emit = defineEmits<{
    
     (e: "cardElement", value: DOMRect): void;
+    (e: "mouseLeave",value:boolean):void;
   }>();
 
 
@@ -73,13 +76,23 @@ const emit = defineEmits<{
         </p>
       </div>
     </div>
+    <button class="button-class" @click="emit('mouseLeave',true)" v-if="props.isMobile">Close</button>
   </div>
 </template>
 
 <style scoped lang="scss">
+.button-class{
+background-color: red;
+position: absolute;
+bottom: 0;
+z-index: 25;
+transform: translateY(calc(100% + 10px));
+padding-top: 10px;
+}
   .hovered {
     position: relative;
     --scale-size: 1.85;
+    z-index: 26;
   }
   .info-rel {
  
@@ -127,7 +140,27 @@ const emit = defineEmits<{
     padding: 0;
     z-index: 25;
   }
+  button {
+	display: inline-flex;
+	align-self: center;
+	align-items: center;
+	justify-content: center;
+	writing-mode: horizontal-tb !important;
+	width: 100%;
+	max-width: 30rem;
+	margin-top: 1rem;
+	flex: 0 0 auto;
+	border: 0px;
+	
+	font-size: 1.5rem;
+	font-weight: 500;
 
+	padding: 0.55rem 1rem;
+	background: #331abbe6;
+	cursor: pointer;
+	color: rgb(255, 255, 255);
+	border-radius: 1rem;
+}
   img {
     object-fit: fill;
     width: 100%;
