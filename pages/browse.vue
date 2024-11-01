@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { disablePersistentCacheIndexAutoCreation } from 'firebase/firestore';
+
 useHead({
 	bodyAttrs: { class: 'dark' },
 });
@@ -23,7 +25,8 @@ const firestoreClient = ref({
 });
 
 const movieCard = ref();
-const classy = ref();
+const XAxis = ref();
+const YAxis = ref();
 const currElement = ref();
 const scaledWidth = ref<number>();
 const scaledHeight = ref<number>();
@@ -32,35 +35,37 @@ const showText = ref<boolean>(false);
 const currPosition = ref();
 const centerPosition = computed(() => {
 	let x, y,height:number, width: number;
-
+	if(!scaledHeight.value) scaledHeight.value = currPosition.value.height
 	if (currPosition.value) {
-		x = currPosition.value.x + currPosition.value.width / 2;
+		
+		x = currPosition.value.x;
+	
+
 
 		// 86 is from navbar moving it down a little
-		y = currPosition.value.top + window.scrollY;
-		// y =
-		//   currPosition.value.y +
-		//   currPosition.value.height / 2 +
-		//   window.scrollY -
-		//   86;
+		y = currPosition.value.top - (scaledHeight.value! /4) + window.scrollY;
 		if (scaledWidth.value && scaledHeight.value) {
 			width = scaledWidth.value;
-      height = scaledHeight.value;
-			if (x >= window.innerWidth - width) {
-				classy.value = 'right';
+			height = scaledHeight.value;
+			if (x + currPosition.value.width >= window.innerWidth - width) {
+				XAxis.value = 'right';
 			} else if (x - width <= 0) {
-				classy.value = 'left';
+				XAxis.value = 'left';
 			} else {
-				classy.value = 'center';
+				XAxis.value = 'center';
 			}
       
-
+			if (y - (currPosition.value.top + scaledHeight.value)  < 0 && currPosition.value.top + scaledHeight.value > window.innerHeight) {
+				YAxis.value = 'bottom';
+			} else if (( currPosition.value.top - scaledHeight.value /2)     < 0) {
+				
+				YAxis.value = 'top';
+			
+			} else {
+				YAxis.value = 'center';
+			}
  
-  if (y >= window.innerHeight - height) {
-			classy.value += ' bottom';
-		} else if (y - height <= 0) {
-			classy.value += ' top';
-		} 
+
 			return { x, y, width,height };
 		}
 
@@ -68,18 +73,31 @@ const centerPosition = computed(() => {
 		return { x, y };
 	}
 });
-
-const setClasses = computed(() => {
-	if (classy.value === 'left' && showText.value) {
-		
-	} else if (classy.value === 'right' && showText.value) {
-		return 'trans-scale right';
-	} else if (showText.value) {
-		return 'trans-scale';
-	} else {
-		return '';
-	}
+const setStyles = computed(() => {
+  if (centerPosition.value) {
+    return {
+      left: `${centerPosition.value.x}px`,
+      top: YAxis.value === "center" ? `${centerPosition.value.y}px` : null,
+      bottom: YAxis.value === "bottom" ? 0 : null,
+      width: `${centerPosition.value.width}px`,
+      transformOrigin: `${XAxis.value} ${YAxis.value}`
+    };
+  }
 });
+const setClasses = computed(() => {
+if(showText.value){
+	if(YAxis.value === "bottom")
+	return `trans-scale bottom`
+if( YAxis.value ==="top")
+	return `trans-scale top`
+else return 'trans-scale'
+}
+});
+
+function handleCardElement(e:DOMRect){
+scaledHeight.value = e.height  * 1.85
+}
+
 //Proper title header
 function setHeader(id: string | number) {
 	if (typeof id === 'number') return arrOfHeaders.value[id];
@@ -97,7 +115,6 @@ function currElementHandler(e: Movie) {
 
 function currPositionHandler(e: DOMRect) {
 	scaledWidth.value = e.width;
-	scaledHeight.value = e.height;
 	if (!currPosition.value) currPosition.value = e;
 }
 //Transition functions
@@ -111,6 +128,13 @@ function onEnter() {
 		showText.value = true;
 	}, 1);
 }
+watch(isHovering, (newVal) => {
+  if (!newVal) {
+    scaledWidth.value = 0;
+    scaledHeight.value = 0;
+    currPosition.value = undefined;
+  }
+});
 //Hide & clear hovered element
 function onMouseLeave() {
 	showText.value = false;
@@ -120,6 +144,7 @@ function onMouseLeave() {
 		isHovering.value = false;
 		currElement.value = undefined;
 		scaledWidth.value = 0;
+		scaledHeight.value = 0;
 		currPosition.value = undefined;
 	}, 1);
 }
@@ -153,24 +178,21 @@ function onMouseLeave() {
 		</div>
 
 		<Transition
+		class="relative"
 			@enter="onEnter"
 			@before-enter="onBeforeEnter"
 			@before-leave="onMouseLeave"
 		>
 			<MovieCard
-				v-if="isHovering && centerPosition"
+				v-if="isHovering && centerPosition "
 				ref="movieCard"
 				:class="setClasses"
 				:text="showText"
 				:slide="currElement"
 				:position="currPosition"
-				:style="{
-					left: `${centerPosition.x}px`,
-					top: `${centerPosition.y}px`,
-					width: `${centerPosition.width}px`,
-          height:`${centerPosition.height}px`
-				}"
+				:style="setStyles"
 				@mouseleave="onMouseLeave()"
+				@card-element="handleCardElement"
 				class="trans"
 			></MovieCard>
 		</Transition>
@@ -178,20 +200,22 @@ function onMouseLeave() {
 </template>
 
 <style scoped>
-.trans {
-	transform: translate(-50%, -60%);
-	transition: all 0.2s ease-in-out;
+.relative{
+	position: absolute;
 }
+.trans {
+
+	transition: all 0.2s ease-in-out;
+	
+}
+
 .trans-scale {
 	transform-origin: center center;
-	transform: scale(1.85) translate(-25%, -50%);
+	scale:1.85;
 }
-.left {
-	transform-origin: left center;
-}
-.right {
-	transform-origin: right center;
-}
+
+
+
 h2 {
 	font-size: 2vw;
 }
@@ -204,11 +228,13 @@ h2 {
 	text-align: left;
 }
 .flex-center {
+	position: relative;
 	text-align: center;
 	padding: 2rem 1rem;
 	display: flex;
 	flex-direction: column;
-	height: 100%;
+	
+	flex-grow: 1;
 	overflow: hidden;
 }
 button {

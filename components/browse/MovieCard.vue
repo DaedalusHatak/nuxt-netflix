@@ -5,14 +5,29 @@
     position: DOMRect;
     text: boolean;
   }>();
+const elementToWatch = ref();
 
-const scroll = ref(props.position.y + window.scrollY)
+const emit = defineEmits<{
+   
+    (e: "cardElement", value: DOMRect): void;
+  }>();
 
-const calculateTopPosition = () => {
-      if (props.position.y && props.position.height) {
-        const center = props.position.y + props.position.height / 2;
-        scroll.value =center - 48 + window.scrollY;
-      }}
+
+  onMounted(async () => {
+  await nextTick();
+
+  const resizeObserver = new ResizeObserver((entries) => {
+    for (let entry of entries) {
+      const rect = entry.contentRect;
+      emit('cardElement', rect); // Emit updated dimensions
+    }
+  });
+
+  // Start observing
+  if (elementToWatch.value) {
+    resizeObserver.observe(elementToWatch.value);
+  }
+})
 
   const releaseDate = computed(() => {
     if ((props.slide as Movie).release_date) {
@@ -33,6 +48,7 @@ const calculateTopPosition = () => {
     
   >
     <nuxt-img
+    preload
       :src="props.slide.image"
       :alt="(props.slide as Movie).title || (props.slide as TVSerie).name "
       width="250"
@@ -62,14 +78,15 @@ const calculateTopPosition = () => {
 
 <style scoped lang="scss">
   .hovered {
+    position: relative;
     --scale-size: 1.85;
   }
   .info-rel {
-    position: relative;
+ 
     width: 100%;
+    
   }
   .info {
-    position: absolute;
     width: 100%;
     padding: 0.5rem 0.25rem;
     background-color: #181818;
@@ -84,7 +101,7 @@ const calculateTopPosition = () => {
     font-weight: 300;
     line-height: 17px;
     padding: 0;
-    // transform:  scale( calc(1 / var(--scale-size)));
+    transform:  scale( calc(2 / var(--scale-size)));
   }
   p {
     font-size: 8px;

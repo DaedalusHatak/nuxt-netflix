@@ -9,7 +9,6 @@
 </template>
 <script setup>
 const lang = useBrowserLocale();
-console.log('lang',lang)
 </script>
 
 <style scoped>

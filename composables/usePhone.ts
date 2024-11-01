@@ -24,7 +24,6 @@ export async function verifyNewNumber(number: any) {
 }
 
 export async function verifyCode(verificationCode: any) {
-  console.log(verificationCode);
   const phone = usePhone();
   const modal = useModal();
   const useAuth = useUser();

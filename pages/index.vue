@@ -60,6 +60,7 @@
     padding: 2rem;
   }
   .hero-image {
+    height: 100%;
     overflow: hidden;
   }
   section {
