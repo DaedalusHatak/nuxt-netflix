@@ -23,7 +23,6 @@ const firestoreClient = ref({
 		: 'raiden.png',
 	email: userProfile.value.email,
 });
-
 const movieCard = ref();
 const XAxis = ref();
 const YAxis = ref();
