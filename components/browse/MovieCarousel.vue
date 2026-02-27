@@ -17,10 +17,19 @@
     xl?: number;
     xxl?: number;
   }>();
-
+type WindowRect =  {
+  top:number,
+  bottom:number,
+  height:number,
+  width:number,
+  x:number,
+  y:number,
+  left:number,
+  right:number,
+}
   const emit = defineEmits<{
     (e: "hovElement", value: MediaItem): void;
-    (e: "positionElement", value: DOMRect): void;
+    (e: "positionElement", value: DOMRect | WindowRect ): void;
   }>();
 
   const win = ref();
@@ -92,6 +101,22 @@
           if (e.target && hoverElement.value)
             emit("positionElement", target.getBoundingClientRect());
         }, timer);
+      }
+      else{
+        const rect = target.getBoundingClientRect()
+        const returnRect:WindowRect = {
+bottom:rect.bottom,
+height:window.innerHeight,
+left:rect.left,
+right:rect.right,
+top:rect.top,
+width:window.innerWidth,
+x:rect.x,
+y:rect.y,}
+        hoverElement.value = slide;
+        if (hoverElement.value) emit("hovElement", hoverElement.value);
+        console.log(window.innerWidth)
+        emit("positionElement", returnRect);
       }
     }
   }
