@@ -15,6 +15,7 @@ export default defineEventHandler(async (event: H3Event) => {
     setResponseStatus(event, 200, "OK");
     return true;
   } catch (err) {
+    console.error(err);
     setResponseStatus(event, 401, "Not authorised");
     return false;
   }
