@@ -2,14 +2,18 @@ import {
   cert,
   initializeApp,
   getApps,
-  ServiceAccount,
 } from "firebase-admin/app";
 import { getAuth } from "firebase-admin/auth";
 import { getFirestore } from "firebase-admin/firestore";
 import { RuntimeConfig } from "nuxt/schema";
+import type { ServiceAccount } from "firebase-admin";
 const config: RuntimeConfig = useRuntimeConfig();
-const firebaseConfig = config.firebaseAdmin as FirebaseServer;
-
+const firebaseConfig = {
+  projectId: config.firebaseAdmin.projectId,
+  clientEmail: config.firebaseAdmin.clientEmail,
+  privateKey: config.firebaseAdmin.privateKey?.replace(/\\n/g, "\n"),
+};
+console.log(firebaseConfig)
 const app = getApps().length
   ? getApps()[0]
   : initializeApp({
@@ -17,4 +21,5 @@ const app = getApps().length
     });
 
 export const authAdmin = getAuth(app);
-export const firestoreAdmin = getFirestore(app);
+export const firestoreAdmin = getFirestore(app!);
+

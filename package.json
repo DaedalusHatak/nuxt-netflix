@@ -9,26 +9,27 @@
     "postinstall": "nuxt prepare"
   },
   "devDependencies": {
-    "@nuxt/image": "^1.8.1",
-    "@nuxt/kit": "^3.13.2",
+    "@nuxt/image": "^2.0.0",
+    "@nuxt/kit": "^4.3.1",
     "@nuxt/typescript-runtime": "^3.0.2",
-    "@nuxtjs/i18n": "^8.5.5",
-    "@types/node": "^22.8.1",
-    "@vueuse/core": "^11.1.0",
-    "@vueuse/nuxt": "^11.1.0",
-    "nuxt": "^3.13.2"
+    "@nuxtjs/i18n": "^10.2.3",
+    "@types/node": "^25.3.2",
+    "@vueuse/core": "^14.2.1",
+    "@vueuse/nuxt": "^14.2.1",
+    "nuxt": "^4.3.1",
+    "vite": "^7.3.1"
   },
   "dependencies": {
-    "@pinia/nuxt": "^0.5.5",
-    "axios": "^1.7.7",
-    "body-parser": "^1.20.3",
-    "firebase": "^11.0.1",
-    "firebase-admin": "^12.7.0",
+    "@pinia/nuxt": "^0.11.3",
+    "axios": "^1.13.6",
+    "body-parser": "^2.2.2",
+    "firebase": "^12.10.0",
+    "firebase-admin": "^13.7.0",
     "node-jsonwebtoken": "^0.0.1",
-    "nuxi": "^3.15.0",
-    "pinia": "^2.2.4",
-    "sass": "^1.80.4",
-    "sass-loader": "^16.0.2",
+    "nuxi": "^3.33.1",
+    "pinia": "^3.0.4",
+    "sass": "^1.97.3",
+    "sass-loader": "^16.0.7",
     "vue-multi-slider": "^0.2.2"
   },
   "overrides": {
