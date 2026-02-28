@@ -4,33 +4,15 @@
     slide: Movie | TVSerie;
     position: DOMRect;
     text: boolean;
-    isMobile?: boolean;
-
-  }>();
-const elementToWatch = ref();
-
-const emit = defineEmits<{
-   
-    (e: "cardElement", value: DOMRect): void;
-    (e: "mouseLeave",value:boolean):void;
   }>();
 
+const scroll = ref(props.position.y + window.scrollY)
 
-  onMounted(async () => {
-  await nextTick();
-
-  const resizeObserver = new ResizeObserver((entries) => {
-    for (let entry of entries) {
-      const rect = entry.contentRect;
-      emit('cardElement', rect); // Emit updated dimensions
-    }
-  });
-
-  // Start observing
-  if (elementToWatch.value) {
-    resizeObserver.observe(elementToWatch.value);
-  }
-})
+const calculateTopPosition = () => {
+      if (props.position.y && props.position.height) {
+        const center = props.position.y + props.position.height / 2;
+        scroll.value =center - 48 + window.scrollY;
+      }}
 
   const releaseDate = computed(() => {
     if ((props.slide as Movie).release_date) {
@@ -51,7 +33,6 @@ const emit = defineEmits<{
     
   >
     <nuxt-img
-    preload
       :src="props.slide.image"
       :alt="(props.slide as Movie).title || (props.slide as TVSerie).name "
       width="250"
@@ -76,30 +57,19 @@ const emit = defineEmits<{
         </p>
       </div>
     </div>
-    <button class="button-class" @click="emit('mouseLeave',true)" v-if="props.isMobile">Close</button>
   </div>
 </template>
 
 <style scoped lang="scss">
-.button-class{
-background-color: red;
-position: absolute;
-bottom: 0;
-z-index: 25;
-transform: translateY(calc(100% + 10px));
-padding-top: 10px;
-}
   .hovered {
-    position: relative;
     --scale-size: 1.85;
-    z-index: 26;
   }
   .info-rel {
- 
+    position: relative;
     width: 100%;
-    
   }
   .info {
+    position: absolute;
     width: 100%;
     padding: 0.5rem 0.25rem;
     background-color: #181818;
@@ -114,7 +84,7 @@ padding-top: 10px;
     font-weight: 300;
     line-height: 17px;
     padding: 0;
-    transform:  scale( calc(2 / var(--scale-size)));
+     transform:  scale( calc(1 / var(--scale-size)));
   }
   p {
     font-size: 8px;
@@ -140,27 +110,7 @@ padding-top: 10px;
     padding: 0;
     z-index: 25;
   }
-  button {
-	display: inline-flex;
-	align-self: center;
-	align-items: center;
-	justify-content: center;
-	writing-mode: horizontal-tb !important;
-	width: 100%;
-	max-width: 30rem;
-	margin-top: 1rem;
-	flex: 0 0 auto;
-	border: 0px;
-	
-	font-size: 1.5rem;
-	font-weight: 500;
 
-	padding: 0.55rem 1rem;
-	background: #331abbe6;
-	cursor: pointer;
-	color: rgb(255, 255, 255);
-	border-radius: 1rem;
-}
   img {
     object-fit: fill;
     width: 100%;

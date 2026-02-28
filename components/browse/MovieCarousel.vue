@@ -218,7 +218,7 @@ y:rect.y,}
   function setVariable() {
     const touchDevice = isTouchDevice();
     isMobile.value = touchDevice;
-    if(isMobile.value){
+    if(!isMobile.value){
       screenVariable.value = props.size;
       return;
     }

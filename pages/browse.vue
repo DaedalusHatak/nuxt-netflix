@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { disablePersistentCacheIndexAutoCreation } from 'firebase/firestore';
 
 useHead({
 	bodyAttrs: { class: 'dark' },
@@ -22,15 +23,6 @@ const firestoreClient = ref({
 		: 'raiden.png',
 	email: userProfile.value.email,
 });
-<<<<<<< HEAD
-=======
-
-
-function isTouchDevice(): boolean {
-    return "ontouchstart" in window || navigator.maxTouchPoints > 0;
-  }
-  const isMobile = ref<boolean>();
->>>>>>> 6ae8be236e535f28b9798dca44bcf4cd859c68dc
 const movieCard = ref();
 const XAxis = ref();
 const YAxis = ref();
@@ -40,33 +32,13 @@ const scaledHeight = ref<number>();
 const isHovering = ref<boolean>(false);
 const showText = ref<boolean>(false);
 const currPosition = ref();
-
-
-onMounted(()=>{
-	isMobile.value = isTouchDevice();
-
-	addEventListener('resize', isTouchDevice)
-})
-
 const centerPosition = computed(() => {
 	let x, y,height:number, width: number;
 	if(!scaledHeight.value) scaledHeight.value = currPosition.value.height
 	if (currPosition.value) {
-	
-		x = currPosition.value.x;
 		
-
-
-		if(currPosition.value.height === window.innerHeight && currPosition.value.width === window.innerWidth){
-			x= currPosition.value.width /4;
-			y= currPosition.value.height /4;
-			width=scaledWidth.value! / 2;
-			height=scaledHeight.value! / 2;
-			YAxis.value = 'center';
-			XAxis.value = 'center'
-			console.log(x,y,width,height)
-			return {x,y,width,height}
-		}
+		x = currPosition.value.x;
+	
 
 
 		// 86 is from navbar moving it down a little
@@ -81,11 +53,8 @@ const centerPosition = computed(() => {
 			} else {
 				XAxis.value = 'center';
 			}
-			console.log(currPosition.value)
-				console.log(scaledHeight.value)
-				console.log(window.innerHeight)
-			if ( currPosition.value.top +  (scaledHeight.value / 2)  > window.innerHeight) {
-		
+      
+			if (y - (currPosition.value.top + scaledHeight.value)  < 0 && currPosition.value.top + scaledHeight.value > window.innerHeight) {
 				YAxis.value = 'bottom';
 			} else if (( currPosition.value.top - scaledHeight.value /2)     < 0) {
 				
@@ -104,23 +73,10 @@ const centerPosition = computed(() => {
 	}
 });
 const setStyles = computed(() => {
-
   if (centerPosition.value) {
-	let top:number | string | null = centerPosition.value.y;
-
-
-if(YAxis.value === "center" ){
-	top = `${centerPosition.value.y}px` 
-}
-else {
-	top = null;
-}
-if(isMobile.value){
-top = "20px";
-}
     return {
       left: `${centerPosition.value.x}px`,
-      top: top,
+      top: YAxis.value === "center" ? `${centerPosition.value.y}px` : null,
       bottom: YAxis.value === "bottom" ? 0 : null,
       width: `${centerPosition.value.width}px`,
       transformOrigin: `${XAxis.value} ${YAxis.value}`
@@ -138,7 +94,7 @@ else return 'trans-scale'
 });
 
 function handleCardElement(e:DOMRect){
-scaledHeight.value = isMobile.value ? e.height  * 1.5 : e.height  * 1.85 
+scaledHeight.value = e.height  * 1.85
 }
 
 //Proper title header
@@ -180,8 +136,7 @@ watch(isHovering, (newVal) => {
 });
 //Hide & clear hovered element
 function onMouseLeave() {
-	
-		
+	showText.value = false;
 
 	setTimeout(() => {
 		showText.value = false;
@@ -190,14 +145,13 @@ function onMouseLeave() {
 		scaledWidth.value = 0;
 		scaledHeight.value = 0;
 		currPosition.value = undefined;
-	},20);
+	}, 1);
 }
 </script>
 <template>
 	<Head>
 		<Meta name="description" content="Movie database" />
 	</Head>
-	<div v-if="isMobile && isHovering" class="blur"></div>
 	<NavBar :is-account="false" :av="firestoreClient"></NavBar>
 
 	<div class="flex-center">
@@ -236,43 +190,28 @@ function onMouseLeave() {
 				:slide="currElement"
 				:position="currPosition"
 				:style="setStyles"
-				:is-mobile="isMobile"
-				@mouseleave="() => !isMobile ? onMouseLeave() : ''"
-				@mouse-leave="onMouseLeave()"
+				@mouseleave="onMouseLeave()"
 				@card-element="handleCardElement"
 				class="trans"
 			></MovieCard>
 		</Transition>
-
 	</div>
 </template>
 
 <style scoped>
-.blur{
-	position: absolute;
-	z-index: 25;
-	top: 0;
-	bottom: 0;
-	left: 0;
-	right: 0;
-	background-color: rgba(100,100,100,0.7);
-}
-
-
 .relative{
 	position: absolute;
 }
 .trans {
 
-	transition: all 0.3s ease-in-out;
+	transition: all 0.2s ease-in-out;
 	
 }
 
 .trans-scale {
 	transform-origin: center center;
-	scale:1.85;
+	scale:0.23;
 }
-
 
 
 
@@ -293,10 +232,9 @@ h2 {
 	padding: 2rem 1rem;
 	display: flex;
 	flex-direction: column;
-	z-index: 9999;
+	
 	flex-grow: 1;
-	overflow-y: hidden;
-	overflow-x: hidden;
+	overflow: hidden;
 }
 button {
 	display: inline-flex;
@@ -320,28 +258,12 @@ button {
 	border-radius: 1rem;
 }
 
-@media (max-width:600px) {
-.flex-center{
-	overflow-x: clip;
-	overflow-y: visible;
-}
-	.trans-scale.main{
-		background-color: red;
-	}
-
-	.trans-scale {
-	transform-origin: center center;
-	scale:1.50;
-}
-}
-
 @media screen and (min-width: 420px) {
 	.flex-center {
 		text-align: center;
 		padding: 2rem 3rem;
 		display: flex;
 		flex-direction: column;
-	
 	}
 }
 @media screen and (max-width: 800px) {
