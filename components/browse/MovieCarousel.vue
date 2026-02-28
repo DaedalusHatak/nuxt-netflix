@@ -106,11 +106,11 @@ type WindowRect =  {
         const rect = target.getBoundingClientRect()
         const returnRect:WindowRect = {
 bottom:rect.bottom,
-height:window.innerHeight,
+height:rect.height,
 left:rect.left,
 right:rect.right,
 top:rect.top,
-width:window.innerWidth,
+width:rect.width,
 x:rect.x,
 y:rect.y,}
         hoverElement.value = slide;
@@ -261,7 +261,7 @@ y:rect.y,}
     class="carousel"
   >
     <button
-      v-if="wasTriggered && !isMobile"
+      v-if="wasTriggered && isMobile"
       :style="{
         left: `${props.buttonPadding}rem`,
         width: `${props.buttonWidth}rem`,
@@ -316,7 +316,7 @@ y:rect.y,}
     </div>
 
     <button
-      v-if="!isMobile"
+      v-if="isMobile"
       :style="{
         right: `${props.buttonPadding}rem`,
         width: `${props.buttonWidth}rem`,

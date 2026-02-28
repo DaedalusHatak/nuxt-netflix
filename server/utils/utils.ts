@@ -13,7 +13,6 @@ const firebaseConfig = {
   clientEmail: config.firebaseAdmin.clientEmail,
   privateKey: config.firebaseAdmin.privateKey?.replace(/\\n/g, "\n"),
 };
-console.log(firebaseConfig)
 const app = getApps().length
   ? getApps()[0]
   : initializeApp({

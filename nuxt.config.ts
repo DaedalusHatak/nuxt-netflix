@@ -166,15 +166,7 @@ export default defineNuxtConfig({
     defaultLocale: "en-GB",
     detectBrowserLanguage: false
   },
-vite:{
-  css:{
-    preprocessorOptions:{
-      scss:{
-        api: 'modern-compiler'
-      }
-    }
-  }
-},
+
   nitro: {
     compressPublicAssets: true,
   },
@@ -197,10 +189,10 @@ vite:{
   dev: true,
 
   runtimeConfig: {
-    apiSecret: "",
-    apiLink: "",
+    apiSecret: process.env.API_SECRET_KEY,
+    apiLink: process.env.API_LINK,
 
-    imgLink: "",
+    imgLink: process.env.IMG_LINK,
     firebaseAdmin: {
       projectId: process.env.FIREBASE_SA_PROJECT_ID,
 

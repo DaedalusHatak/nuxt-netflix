@@ -134,6 +134,13 @@ watch(isHovering, (newVal) => {
     currPosition.value = undefined;
   }
 });
+watch(isHovering, (newVal) => {
+  if (!newVal) {
+	scaledWidth.value = 0;
+	scaledHeight.value = 0;
+	currPosition.value = undefined;
+  }
+});
 //Hide & clear hovered element
 function onMouseLeave() {
 	showText.value = false;
@@ -190,6 +197,7 @@ function onMouseLeave() {
 				:slide="currElement"
 				:position="currPosition"
 				:style="setStyles"
+				@mouse-leave="onMouseLeave"
 				@mouseleave="onMouseLeave()"
 				@card-element="handleCardElement"
 				class="trans"
@@ -210,7 +218,7 @@ function onMouseLeave() {
 
 .trans-scale {
 	transform-origin: center center;
-	scale:0.23;
+	scale:1.85;
 }
 
 
