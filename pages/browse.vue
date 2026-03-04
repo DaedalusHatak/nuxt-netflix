@@ -23,6 +23,14 @@ const firestoreClient = ref({
 		: 'raiden.png',
 	email: userProfile.value.email,
 });
+
+  function isTouchDevice(): boolean {
+    return "ontouchstart" in window || navigator.maxTouchPoints > 0;
+  }
+  onMounted(() => {
+	isMobile.value = isTouchDevice();
+  });
+const isMobile = ref();
 const movieCard = ref();
 const XAxis = ref();
 const YAxis = ref();
@@ -46,6 +54,12 @@ const centerPosition = computed(() => {
 		if (scaledWidth.value && scaledHeight.value) {
 			width = scaledWidth.value;
 			height = scaledHeight.value;
+			if(isMobile.value){
+				YAxis.value = 'top';
+				XAxis.value = 'center';
+				return { x: 50, y: 50, width, height };
+			}
+
 			if (x + currPosition.value.width >= window.innerWidth - width) {
 				XAxis.value = 'right';
 			} else if (x - width <= 0) {
@@ -75,11 +89,13 @@ const centerPosition = computed(() => {
 const setStyles = computed(() => {
   if (centerPosition.value) {
     return {
-      left: `${centerPosition.value.x}px`,
+      left: isMobile.value ?  '50%': `${centerPosition.value.x}px` ,
       top: YAxis.value === "center" ? `${centerPosition.value.y}px` : null,
       bottom: YAxis.value === "bottom" ? 0 : null,
       width: `${centerPosition.value.width}px`,
-      transformOrigin: `${XAxis.value} ${YAxis.value}`
+      transformOrigin: `${XAxis.value} ${YAxis.value}`,
+	  position: isMobile.value ? 'absolute' : '',
+	  transform: isMobile.value ? 'translate(-25%)' : ''
     };
   }
 });
@@ -197,9 +213,10 @@ function onMouseLeave() {
 				:slide="currElement"
 				:position="currPosition"
 				:style="setStyles"
-				@mouse-leave="onMouseLeave"
-				@mouseleave="onMouseLeave()"
+				@mouse-leave="isMobile ? null : onMouseLeave()"
+				@mouseleave="isMobile ? null : onMouseLeave()"
 				@card-element="handleCardElement"
+				@touch-click="onMouseLeave()"
 				class="trans"
 			></MovieCard>
 		</Transition>
@@ -242,7 +259,7 @@ h2 {
 	flex-direction: column;
 	
 	flex-grow: 1;
-	overflow: hidden;
+	overflow-x: hidden;
 }
 button {
 	display: inline-flex;

@@ -15,8 +15,7 @@ const lang = useBrowserLocale();
 
 
 iframe{
-  overflow: hidden !important;
-  overflow-y: hidden !important;
+
   width:50vw;
 }
 </style>

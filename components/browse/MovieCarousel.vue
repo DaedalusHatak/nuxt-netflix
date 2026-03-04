@@ -73,6 +73,7 @@ type WindowRect =  {
   });
 
   onMounted(() => {
+   
     win.value = true;
     setVariable();
     isTouchDevice();
@@ -216,9 +217,10 @@ y:rect.y,}
   }
 
   function setVariable() {
+    isMobile.value = isTouchDevice();
     const touchDevice = isTouchDevice();
     isMobile.value = touchDevice;
-    if(!isMobile.value){
+    if(isMobile.value){
       screenVariable.value = props.size;
       return;
     }
@@ -251,6 +253,7 @@ y:rect.y,}
     } else {
       screenVariable.value = props.size;
     }
+    console.log(screenVariable.value);
   }
 </script>
 
@@ -261,7 +264,7 @@ y:rect.y,}
     class="carousel"
   >
     <button
-      v-if="wasTriggered && isMobile"
+      v-if="wasTriggered && !isMobile"
       :style="{
         left: `${props.buttonPadding}rem`,
         width: `${props.buttonWidth}rem`,
@@ -308,6 +311,7 @@ y:rect.y,}
           :alt="slide.title || slide.name"
           preload
           @mouseover="currElement($event, slide)"
+          @click="currElement($event, slide)"
           @mouseleave="cancelHover()"
           height="120px"
           width="220px"
@@ -316,7 +320,7 @@ y:rect.y,}
     </div>
 
     <button
-      v-if="isMobile"
+      v-if="!isMobile"
       :style="{
         right: `${props.buttonPadding}rem`,
         width: `${props.buttonWidth}rem`,

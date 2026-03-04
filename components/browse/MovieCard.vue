@@ -8,6 +8,16 @@
 
 const scroll = ref(props.position.y + window.scrollY)
 
+  function isTouchDevice(): boolean {
+    return "ontouchstart" in window || navigator.maxTouchPoints > 0;
+  }
+  const emit = defineEmits<{
+
+    (e: "touch-click", value: boolean): void;
+  }>();
+function handleTouchClick() {
+    emit("touch-click", true);
+  }
 const calculateTopPosition = () => {
       if (props.position.y && props.position.height) {
         const center = props.position.y + props.position.height / 2;
@@ -41,9 +51,10 @@ const calculateTopPosition = () => {
     <div class="info-rel">
       <div
         :class="props.text ? '' : 'hidden'"
-        class="info"
+        class="info-container"
       >
-        <h3>
+        <div class="info">
+          <h3>
           <span class="name">Title:</span>
           {{ (props.slide as Movie).title || (props.slide as TVSerie).name }}
         </h3>
@@ -55,7 +66,12 @@ const calculateTopPosition = () => {
         <p class="overview">
           <span class="name">Overview: </span> {{ props.slide.overview }}
         </p>
+        </div>
+              <button class="close-button" v-if="isTouchDevice()" @click="handleTouchClick">
+        Close
+      </button>
       </div>
+
     </div>
   </div>
 </template>
@@ -68,19 +84,34 @@ const calculateTopPosition = () => {
     position: relative;
     width: 100%;
   }
-  .info {
+  .info-container {
     position: absolute;
     width: 100%;
-    padding: 0.5rem 0.25rem;
+  
     background-color: #181818;
     border-radius: 0 0 7px 7px;
     margin: -1px 0;
     transition: all 0.2s;
     height: max-content;
   }
+  .info{
+      padding: 0.5rem 0.25rem;
+  }
+.close-button {
+
+ 
+  height: 30px;
+  width: 100%;
+  left: 0;
+  bottom: 0;
+  border: none;
+  border-radius: 0 0 10px 10px;
+  background-color: #ff0000;
+  color: white;
+}
 
   h3 {
-    font-size: 9px;
+    font-size: 19px;
     font-weight: 300;
     line-height: 17px;
     padding: 0;
@@ -92,12 +123,23 @@ const calculateTopPosition = () => {
     padding: 2px 0;
   }
   .overview {
+ 
     font-size: 10px;
   }
   .name {
     font-weight: 700;
   }
-
+@media screen and (max-width: 420px) {
+  .info-container{
+  
+  }
+    .info{
+    padding: 0.25rem 0.125rem;
+  }
+  .overview {
+    font-size: 8px;
+  }
+}
   .hovered {
     line-height: normal;
     box-shadow: rgb(0 0 0 / 75%) 0px 3px 10px;
